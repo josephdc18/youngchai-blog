@@ -229,6 +229,12 @@
     align-items: flex-start;
     column-gap: 1.25em;
   }
+
+  .blog-sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 8rem;
+  }
 }
 /*-- -------------------------- -->
 <---    Recent Blog Articles    -->
@@ -494,10 +500,6 @@
 @media only screen and (min-width: 64em) {
   .blog-sidebar {
     max-width: 22.5em;
-    position: -webkit-sticky;
-    position: sticky;
-    top: 8rem;
-    align-self: flex-start;
   }
 }
 /*-- -------------------------- -->

@@ -106,27 +106,21 @@ h4 {
 @media (min-width: 1024px) {
     .grid-layout {
         grid-template-columns: 8fr 4fr;
-        align-items: stretch;
     }
 
     .sidebar-col {
         order: 2;
-        display: block;
-    }
-
-    .sidebar-profile {
-        margin-bottom: 2rem;
-    }
-
-    .sticky-wrapper {
-        position: -webkit-sticky;
-        position: sticky;
-        top: 8rem;
     }
 
     .feed-col {
         order: 1;
     }
+}
+
+.sticky-wrapper {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 8rem;
 }
 
 .hidden {

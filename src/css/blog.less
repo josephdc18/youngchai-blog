@@ -264,7 +264,13 @@
         flex-direction: row;
         align-items: flex-start;
         column-gap: 20/16em;
-    }   
+    }
+
+    .blog-sidebar {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 8rem;
+    }
 }
 
 /*-- -------------------------- -->
@@ -566,10 +572,6 @@
 @media only screen and (min-width: 64em) {
     .blog-sidebar {
         max-width: 360/16em;
-        position: -webkit-sticky;
-        position: sticky;
-        top: 8rem;
-        align-self: flex-start;
     }
 }
 
