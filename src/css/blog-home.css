@@ -117,9 +117,9 @@ h4 {
     }
 
     .sticky-wrapper {
-        position: -webkit-sticky;
-        position: sticky;
-        top: 8rem;
+        position: -webkit-sticky !important;
+        position: sticky !important;
+        top: 8rem !important;
     }
 }
 
