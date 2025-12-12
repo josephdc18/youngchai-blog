@@ -95,6 +95,7 @@ h4 {
     margin: 0 auto;
     max-width: var(--container-width);
     padding: 0 1.5rem;
+    width: 100%;
 }
 
 .grid-layout {

@@ -251,6 +251,40 @@ eleventyNavigation:
             });
         }
 
+        // Sticky widget for desktop
+        if (window.innerWidth >= 1024) {
+            const stickyWrapper = document.querySelector('.sidebar-col .sticky-wrapper');
+            const sidebarProfile = document.querySelector('.sidebar-col .sidebar-profile');
+            if (stickyWrapper && sidebarProfile) {
+                const navHeight = 128; // 8rem
+                let profileBottom = 0;
+                
+                function updateProfileBottom() {
+                    profileBottom = sidebarProfile.getBoundingClientRect().bottom + window.scrollY;
+                }
+                updateProfileBottom();
+                
+                function handleScroll() {
+                    const scrollY = window.scrollY;
+                    if (scrollY + navHeight >= profileBottom) {
+                        stickyWrapper.style.position = 'fixed';
+                        stickyWrapper.style.top = navHeight + 'px';
+                        stickyWrapper.style.width = stickyWrapper.parentElement.offsetWidth + 'px';
+                    } else {
+                        stickyWrapper.style.position = 'static';
+                        stickyWrapper.style.top = 'auto';
+                        stickyWrapper.style.width = 'auto';
+                    }
+                }
+                
+                window.addEventListener('scroll', handleScroll);
+                window.addEventListener('resize', () => {
+                    updateProfileBottom();
+                    handleScroll();
+                });
+            }
+        }
+
         const commentedData = [
             {% for post in collections.commented | reverse %}
                 {% if loop.index <= 4 %}
