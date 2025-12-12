@@ -106,21 +106,19 @@ h4 {
 @media (min-width: 1024px) {
     .grid-layout {
         grid-template-columns: 8fr 4fr;
+        align-items: start;
     }
 
     .sidebar-col {
         order: 2;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 8rem;
     }
 
     .feed-col {
         order: 1;
     }
-}
-
-.sticky-wrapper {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 8rem;
 }
 
 .hidden {
@@ -1033,8 +1031,9 @@ footer#footer,
         display: none;
     }
 
-    .sidebar-col.desktop-only {
-        display: block;
+    .sidebar-col {
+        flex-direction: column;
+        align-items: stretch;
     }
 }
 
