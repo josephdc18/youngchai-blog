@@ -110,6 +110,7 @@ h4 {
 
     .sidebar-col {
         order: 2;
+        display: block;
     }
 
     .feed-col {
@@ -117,9 +118,9 @@ h4 {
     }
 
     .sticky-wrapper {
-        position: -webkit-sticky !important;
-        position: sticky !important;
-        top: 8rem !important;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 8rem;
     }
 }
 
