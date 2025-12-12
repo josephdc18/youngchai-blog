@@ -1,6 +1,6 @@
 {% set profileImage = client.profileImage | default('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1000&auto=format&fit=crop') %}
 
-<div class="sidebar-col desktop-only">
+<div class="sidebar-col desktop-only" style="flex-direction: column;">
     <div class="sidebar-profile">
         <div class="profile-img">
             <img src="{{ profileImage }}" alt="{{ client.name }} profile portrait">

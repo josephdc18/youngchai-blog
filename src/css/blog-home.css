@@ -115,17 +115,11 @@ h4 {
     .feed-col {
         order: 1;
     }
-}
 
-.sticky-wrapper {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 8rem;
-}
-
-@media (min-width: 1024px) {
-    .sidebar-col.desktop-only {
-        display: block;
+    .sticky-wrapper {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 8rem;
     }
 }
 
@@ -1037,11 +1031,6 @@ footer#footer,
 
     .mobile-only {
         display: none;
-    }
-
-    .sidebar-col {
-        flex-direction: column;
-        align-items: stretch;
     }
 }
 
