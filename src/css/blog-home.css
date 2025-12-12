@@ -1033,8 +1033,8 @@ footer#footer,
         display: none;
     }
 
-    .sidebar-col {
-        flex-direction: column;
+    .sidebar-col.desktop-only {
+        display: block;
     }
 }
 
