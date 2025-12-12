@@ -110,7 +110,6 @@ h4 {
 
     .sidebar-col {
         order: 2;
-        flex-direction: column;
     }
 
     .feed-col {
@@ -1032,6 +1031,10 @@ footer#footer,
 
     .mobile-only {
         display: none;
+    }
+
+    .sidebar-col {
+        flex-direction: column;
     }
 }
 
