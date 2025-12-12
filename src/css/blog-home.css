@@ -110,6 +110,7 @@ h4 {
 
     .sidebar-col {
         order: 2;
+        flex-direction: column;
     }
 
     .feed-col {
