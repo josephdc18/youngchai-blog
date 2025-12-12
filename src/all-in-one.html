@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Young Chai</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* --- CSS Variables --- */
+        :root {
+            --color-bg: #FDFBF7;
+            --color-text: #2C2C2C;
+            --color-accent: #D48C70;
+            --color-accent-hover: #b57056;
+            --color-yellow-bg: #EFC958;
+            --color-peach-bg: #FFAB84;
+            --color-footer-bg: #EBE5D5;
+            --color-gray-light: #f3f4f6;
+            --color-gray-medium: #9ca3af;
+            --color-border: #e5e7eb;
+            
+            --font-sans: 'DM Sans', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            
+            --container-width: 1280px;
+            --header-height: 80px;
+        }
+
+        /* --- Reset & Base --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        ::selection {
+            background-color: var(--color-accent);
+            color: white;
+        }
+
+        a { text-decoration: none; color: inherit; transition: color 0.3s; }
+        a:hover { color: var(--color-accent); }
+        
+        button { background: none; border: none; cursor: pointer; font-family: inherit; color: inherit; }
+
+        img { max-width: 100%; height: auto; display: block; object-fit: cover; }
+
+        ul { list-style: none; }
+
+        /* --- Typography --- */
+        h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: normal; }
+        
+        .text-accent { color: var(--color-accent); }
+        .text-meta { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: bold; }
+        .font-serif { font-family: var(--font-serif); }
+        .italic { font-style: italic; }
+
+        /* --- Layout Utilities --- */
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+        }
+
+        @media (min-width: 1024px) {
+            .grid-layout {
+                grid-template-columns: 8fr 4fr; /* Main Content (8) Sidebar (4) */
+            }
+            .sidebar-col { order: 2; } /* Sidebar on right */
+            .feed-col { order: 1; }
+        }
+
+        .hidden { display: none !important; }
+        .opacity-0 { opacity: 0; }
+        
+        /* --- Navigation --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 50;
+            padding: 1.5rem 0;
+            background-color: transparent;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: var(--color-bg);
+            padding: 0.75rem 0;
+            border-bottom-color: var(--color-border);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .menu-icon-box {
+            padding: 0.25rem;
+            border: 1px solid var(--color-text);
+            transition: all 0.2s;
+            display: flex;
+        }
+
+        .menu-btn:hover .menu-icon-box {
+            background-color: var(--color-text);
+            color: white;
+        }
+
+        .brand-logo {
+            font-size: 1.875rem;
+            letter-spacing: 0.15em;
+            position: relative;
+        }
+
+        .brand-underline {
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 100%;
+            height: 0.75rem;
+            color: var(--color-accent);
+        }
+
+        /* --- Mobile Menu --- */
+        #mobile-menu {
+            transition: opacity 0.3s ease;
+        }
+        .mobile-menu-content {
+            display: grid;
+            gap: 2rem;
+            text-align: center;
+        }
+        .mobile-link {
+            font-family: var(--font-serif);
+            font-size: 2.25rem;
+        }
+        .mobile-link:hover {
+            color: var(--color-accent);
+            font-style: italic;
+        }
+
+        /* --- Posts (Standard) --- */
+        .post-card {
+            margin-bottom: 2rem;
+            display: block;
+        }
+        
+        .post-image-container {
+            width: 100%;
+            background-color: var(--color-gray-light);
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .aspect-hero { aspect-ratio: 16/10; }
+        .aspect-standard { aspect-ratio: 3/2; }
+        .aspect-square { aspect-ratio: 1; }
+        .aspect-portrait { aspect-ratio: 4/5; }
+        .aspect-landscape { aspect-ratio: 4/3; }
+
+        .post-image-container img {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.7s ease;
+        }
+
+        .post-card:hover .post-image-container img {
+            transform: scale(1.05);
+        }
+
+        .hero-badge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: var(--color-text);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 0.2em;
+            padding: 0.5rem 1rem;
+            text-transform: uppercase;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .category-tag {
+            color: var(--color-accent);
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-line { width: 2rem; height: 1px; background-color: var(--color-accent); }
+
+        .date-tag {
+            color: var(--color-gray-medium);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .post-title {
+            font-size: 2rem;
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s;
+        }
+        
+        .post-title-hero { font-size: 2.5rem; }
+        @media (min-width: 768px) {
+            .post-title { font-size: 2.25rem; }
+            .post-title-hero { font-size: 3rem; }
+        }
+
+        .post-card:hover .post-title { color: var(--color-accent); }
+
+        .post-excerpt {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            color: #6b7280;
+            line-height: 1.6;
+            max-width: 42rem;
+        }
+
+        .read-more {
+            margin-top: 1rem;
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--color-text);
+            padding-bottom: 0.25rem;
+            transition: all 0.3s;
+        }
+
+        .post-card:hover .read-more {
+            color: var(--color-accent);
+            border-bottom-color: var(--color-accent);
+        }
+
+        /* --- Sidebar --- */
+        .sticky-wrapper {
+            position: sticky;
+            top: 8rem;
+        }
+
+        .sidebar-profile {
+            text-align: center;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: 3rem;
+        }
+
+        .profile-img {
+            width: 6rem;
+            height: 6rem;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            overflow: hidden;
+        }
+        
+        /* FIX: Ensure image fills circle so no background color creates an 'overlay' effect */
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            color: var(--color-text);
+        }
+
+        .widget-box {
+            border: 1px solid var(--color-text);
+            padding: 2rem;
+            background-color: white;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        /* Decorative Corners */
+        .corner-tr, .corner-bl { position: absolute; width: 1rem; height: 1rem; border-color: var(--color-accent); border-style: solid; }
+        .corner-tr { top: -5px; right: -5px; border-width: 1px 1px 0 0; }
+        .corner-bl { bottom: -5px; left: -5px; border-width: 0 0 1px 1px; }
+
+        .widget-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .widget-list li {
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+        }
+
+        .widget-list-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.25rem;
+        }
+
+        .widget-num { font-size: 0.75rem; font-weight: bold; color: var(--color-gray-medium); letter-spacing: 0.1em; transition: color 0.3s; }
+        .group:hover .widget-num { color: var(--color-accent); }
+
+        .widget-tag { font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.15em; border: 1px solid var(--color-border); padding: 0 0.25rem; color: var(--color-gray-medium); }
+
+        .widget-title {
+            font-family: var(--font-serif);
+            font-size: 1.125rem;
+            line-height: 1.4;
+            display: inline-block;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+        .widget-list li:hover .widget-title { border-bottom-color: var(--color-accent); }
+
+        /* --- Full Width Sections --- */
+        .section-full {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .bg-yellow { background-color: var(--color-yellow-bg); height: 500px; }
+        .bg-peach { background-color: var(--color-peach-bg); height: 500px; }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-header h2 { font-size: 2.25rem; }
+        .section-divider {
+            width: 6rem; height: 1px; background-color: var(--color-text); margin: 2rem auto;
+        }
+        .section-divider-full {
+            width: 100%; max-width: 1280px; margin: 3rem auto; border-top: 1px solid var(--color-text); opacity: 0.8;
+        }
+
+        /* Carousel/Grid Containers */
+        .carousel-container {
+            max-width: 1152px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .carousel-content {
+            flex: 1;
+            padding: 0 3rem;
+            transition: opacity 0.3s;
+        }
+
+        /* Desktop Grid for Full Width Sections */
+        .grid-4-cols {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            opacity: 0.9;
+        }
+        
+        /* Grid divider lines */
+        .grid-4-cols > div:not(:last-child) {
+            border-right: 1px solid var(--color-text);
+        }
+
+        .grid-col-item {
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            cursor: pointer;
+        }
+        .grid-col-item h3:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+        /* Editors Picks Grid */
+        .editors-grid {
+            display: flex;
+            justify-content: space-between; /* Spans full width */
+            align-items: center;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .editor-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .editor-img-circle {
+            width: 8rem; height: 8rem;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            border: 4px solid rgba(255,255,255,0.2);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        @media (min-width: 1024px) {
+            .editor-img-circle { width: 10rem; height: 10rem; }
+        }
+
+        .editor-img-circle img {
+            width: 100%; height: 100%;
+            transition: transform 0.7s;
+            object-fit: cover;
+        }
+        .editor-item:hover .editor-img-circle img { transform: scale(1.1); }
+
+        /* --- Topics Grid --- */
+        .topics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid black;
+            padding-bottom: 1rem;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            border-left: 1px solid var(--color-border);
+        }
+        
+        @media (min-width: 768px) {
+            .topics-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .topic-card {
+            position: relative;
+            aspect-ratio: 4/5;
+            overflow: hidden;
+            background-color: white;
+            border-right: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+            cursor: pointer;
+        }
+
+        .topic-bg {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            opacity: 0.9;
+            transition: all 0.7s;
+        }
+        .topic-card:hover .topic-bg { opacity: 1; transform: scale(1.05); }
+
+        .topic-overlay {
+            position: absolute; inset: 0;
+            background-color: rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+        .topic-card:hover .topic-overlay { background-color: transparent; }
+
+        .topic-arrow {
+            position: absolute; top: 1rem; right: 1rem;
+            background: white; padding: 0.5rem;
+            opacity: 0; transform: translateY(0.5rem);
+            transition: all 0.3s;
+            z-index: 10;
+            display: flex;
+        }
+        .topic-card:hover .topic-arrow { opacity: 1; transform: translateY(0); }
+
+        .topic-content {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+            color: white;
+        }
+
+        .topic-line {
+            height: 1px; width: 0; background-color: var(--color-accent);
+            transition: width 0.5s;
+        }
+        .topic-card:hover .topic-line { width: 3rem; }
+
+        /* --- Archives Grid --- */
+        .archive-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem 2rem;
+        }
+        @media (min-width: 768px) {
+            .archive-grid { grid-template-columns: repeat(3, 1fr); gap: 4rem 2rem; }
+        }
+
+        .archive-item { cursor: pointer; display: block; }
+        .archive-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            line-height: 1.2;
+            transition: color 0.3s;
+        }
+        .archive-item:hover .archive-title { color: var(--color-accent); }
+
+        /* --- Load More Button --- */
+        .btn-load {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-gray-medium);
+            transition: color 0.3s;
+        }
+        .btn-load:hover { color: var(--color-accent); }
+        .animate-bounce { animation: bounce 1s infinite; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-25%); }
+            50% { transform: translateY(0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--color-footer-bg);
+            padding: 5rem 0 3rem;
+            border-top-left-radius: 4rem;
+            border-top-right-radius: 4rem;
+            margin-top: -4rem;
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .footer-social-link {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 3rem; height: 3rem;
+            border-radius: 50%;
+            border: 1px solid rgba(44, 44, 44, 0.1);
+            color: var(--color-text);
+            margin: 0 0.75rem;
+            transition: all 0.3s;
+        }
+        .footer-social-link:hover {
+            background-color: var(--color-accent);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-4px);
+        }
+
+        .footer-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 3rem;
+        }
+        .footer-nav a:hover { color: var(--color-accent); }
+
+        /* --- Utility Classes for JS Toggles --- */
+        .desktop-only { display: none; }
+        .mobile-only { display: flex; }
+
+        @media (min-width: 768px) {
+            .desktop-only { display: flex; }
+            .mobile-only { display: none; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="navbar">
+        <div class="container nav-content">
+            <button id="menu-btn" class="menu-btn">
+                <div id="menu-icon-container" class="menu-icon-box">
+                    <i data-lucide="menu" width="20" height="20"></i>
+                </div>
+                <span class="text-meta desktop-only">Menu</span>
+            </button>
+
+            <h1 class="brand-logo">
+                YOUNG CHAI
+                <svg class="brand-underline" viewBox="0 0 100 10" preserveAspectRatio="none">
+                    <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="2" fill="none" />
+                </svg>
+            </h1>
+
+            <button>
+                <i data-lucide="search" width="24" height="24" stroke-width="1.5"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="hidden" style="position: fixed; inset: 0; background: var(--color-bg); z-index: 40; padding-top: 8rem; padding-left: 1.5rem; padding-right: 1.5rem;">
+        <div class="mobile-menu-content">
+            <a href="#" class="mobile-link">Journal</a>
+            <a href="#" class="mobile-link">Photography</a>
+            <a href="#" class="mobile-link">Coding</a>
+            <a href="#" class="mobile-link">Shop</a>
+            <a href="#" class="mobile-link">About</a>
+        </div>
+    </div>
+
+    <!-- MAIN WRAPPER -->
+    <main style="padding-top: 8rem;">
+        
+        <!-- === PART 1: Standard Container for Feed & Sidebar === -->
+        <div class="container">
+            <div class="grid-layout">
+                
+                <!-- LEFT COLUMN: THE FEED -->
+                <div class="feed-col">
+                    
+                    <!-- Post 1 (Hero) -->
+                    <a href="#" class="post-card group">
+                        <div class="post-image-container aspect-hero">
+                            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1000&auto=format&fit=crop" alt="Finding Stillness in a Loud World">
+                            <div class="hero-badge">Latest Story</div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div class="post-meta">
+                                <span class="category-tag">
+                                    <span class="category-line"></span>
+                                    ESSAY
+                                </span>
+                                <span class="date-tag">DEC 12, 2025</span>
+                            </div>
+                            <h2 class="post-title post-title-hero">
+                                Finding Stillness in a Loud World
+                            </h2>
+                            <p class="post-excerpt">
+                                "Why doing absolutely nothing is the most productive thing I did all week. I spent 48 hours without my phone, and the silence was deafening—until it became a melody."
+                            </p>
+                            <div>
+                                <span class="read-more">Read More</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Post 2 -->
+                    <a href="#" class="post-card group">
+                        <div class="post-image-container aspect-standard">
+                            <img src="https://images.unsplash.com/photo-1445543949571-ffc3e0e2f55e?q=80&w=1000&auto=format&fit=crop" alt="A Weekend Guide to Upstate New York">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div class="post-meta">
+                                <span class="category-tag">
+                                    <span class="category-line"></span>
+                                    TRAVEL
+                                </span>
+                                <span class="date-tag">DEC 10, 2025</span>
+                            </div>
+                            <h2 class="post-title">
+                                A Weekend Guide to Upstate New York
+                            </h2>
+                            <p class="post-excerpt">
+                                "Where to stay, eat, and hike when you need to escape the city grid. We found a small cabin that smelled like cedar and rain."
+                            </p>
+                            <div>
+                                <span class="read-more">Read More</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Post 3 -->
+                    <a href="#" class="post-card group">
+                        <div class="post-image-container aspect-standard">
+                            <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?q=80&w=1000&auto=format&fit=crop" alt="The One-Pot Pasta We Can't Stop Eating">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div class="post-meta">
+                                <span class="category-tag">
+                                    <span class="category-line"></span>
+                                    FOOD
+                                </span>
+                                <span class="date-tag">DEC 08, 2025</span>
+                            </div>
+                            <h2 class="post-title">
+                                The One-Pot Pasta We Can't Stop Eating
+                            </h2>
+                            <p class="post-excerpt">
+                                "It takes fifteen minutes, three ingredients, and saves your Tuesday night. My husband actually asked for seconds, which never happens with kale."
+                            </p>
+                            <div>
+                                <span class="read-more">Read More</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Post 4 -->
+                    <a href="#" class="post-card group">
+                        <div class="post-image-container aspect-standard">
+                            <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1000&auto=format&fit=crop" alt="Why I Swapped My Smartphone for a 'Dumbphone'">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div class="post-meta">
+                                <span class="category-tag">
+                                    <span class="category-line"></span>
+                                    TECH
+                                </span>
+                                <span class="date-tag">DEC 05, 2025</span>
+                            </div>
+                            <h2 class="post-title">
+                                Why I Swapped My Smartphone for a 'Dumbphone'
+                            </h2>
+                            <p class="post-excerpt">
+                                "I was addicted to the scroll. Here is what happened to my brain (and my anxiety levels) after one month of T9 texting."
+                            </p>
+                            <div>
+                                <span class="read-more">Read More</span>
+                            </div>
+                        </div>
+                    </a>
+
+                     <!-- Post 5 -->
+                     <a href="#" class="post-card group">
+                        <div class="post-image-container aspect-standard">
+                            <img src="https://images.unsplash.com/photo-1493723843684-a63bc8303ca3?q=80&w=1000&auto=format&fit=crop" alt="A Tour of My Tiny Home Office">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div class="post-meta">
+                                <span class="category-tag">
+                                    <span class="category-line"></span>
+                                    INTERIORS
+                                </span>
+                                <span class="date-tag">DEC 01, 2025</span>
+                            </div>
+                            <h2 class="post-title">
+                                A Tour of My Tiny Home Office
+                            </h2>
+                            <p class="post-excerpt">
+                                "How I squeezed a desk, a reading nook, and way too many plants into a 6x8 foot sunroom."
+                            </p>
+                            <div>
+                                <span class="read-more">Read More</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Hidden Grid for Loaded Stories -->
+                    <div id="extra-stories-grid" class="hidden" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem 2rem;">
+                        <!-- JS will populate this -->
+                    </div>
+
+                    <div style="display: flex; justify-content: center; padding-top: 2rem; margin-bottom: 4rem;"> <!-- Added margin-bottom -->
+                        <button id="load-more-btn" class="btn-load">
+                            <span id="load-more-text">Load More Stories</span>
+                            <i data-lucide="chevron-down" class="animate-bounce" width="20" height="20"></i>
+                        </button>
+                    </div>
+
+                    <!-- Mobile Trending (Visible only on mobile) -->
+                    <div class="mobile-only" style="margin-top: 3rem;">
+                        <div class="widget-box" style="width: 100%;">
+                            <div class="corner-tr"></div>
+                            <div class="corner-bl"></div>
+            
+                            <div class="widget-header">
+                                <i data-lucide="clock" class="text-accent" width="20" height="20"></i>
+                                <h3 class="italic" style="font-size: 1.25rem;">Trending Now</h3>
+                            </div>
+            
+                            <ul class="widget-list">
+                                <li class="group">
+                                    <div class="widget-list-meta">
+                                        <span class="widget-num">01</span>
+                                        <span class="widget-tag">FOOD</span>
+                                    </div>
+                                    <h4 class="widget-title">Grandma's Authentic Recipes</h4>
+                                </li>
+                                <li class="group">
+                                    <div class="widget-list-meta">
+                                        <span class="widget-num">02</span>
+                                        <span class="widget-tag">WORK</span>
+                                    </div>
+                                    <h4 class="widget-title">Coding in Coffee Shops</h4>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: STICKY SIDEBAR -->
+                <div class="sidebar-col desktop-only" style="flex-direction: column;">
+                    <!-- Profile Section -->
+                    <div class="sidebar-profile">
+                        <div class="profile-img">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1000&auto=format&fit=crop" alt="Profile">
+                        </div>
+                        <p class="italic" style="color: var(--color-gray-medium); margin-bottom: 1.5rem;">
+                            "Hello! I'm Young Chai. I write about slowing down, coding, and finding the perfect cup of tea."
+                        </p>
+                        <div class="social-links">
+                            <i data-lucide="instagram" width="18" height="18" style="cursor:pointer;" class="text-accent"></i>
+                            <i data-lucide="twitter" width="18" height="18" style="cursor:pointer;" class="text-accent"></i>
+                        </div>
+                    </div>
+
+                    <!-- Sticky Container for Widgets -->
+                    <div class="sticky-wrapper">
+                        <div class="widget-box">
+                            <div class="corner-tr"></div>
+                            <div class="corner-bl"></div>
+
+                            <div class="widget-header">
+                                <i data-lucide="coffee" class="text-accent" width="20" height="20"></i>
+                                <h3 class="italic" style="font-size: 1.25rem;">Popular Posts</h3>
+                            </div>
+
+                            <ul class="widget-list">
+                                <li class="group">
+                                    <div class="widget-list-meta">
+                                        <span class="widget-num">01</span>
+                                        <span class="widget-tag">POPULAR</span>
+                                    </div>
+                                    <h4 class="widget-title">Grandma's Chai Recipe</h4>
+                                </li>
+                                <li class="group">
+                                    <div class="widget-list-meta">
+                                        <span class="widget-num">02</span>
+                                        <span class="widget-tag">BEAUTY</span>
+                                    </div>
+                                    <h4 class="widget-title">My Morning Skincare Routine</h4>
+                                </li>
+                                <li class="group">
+                                    <div class="widget-list-meta">
+                                        <span class="widget-num">03</span>
+                                        <span class="widget-tag">BOOKS</span>
+                                    </div>
+                                    <h4 class="widget-title">Books I Read in November</h4>
+                                </li>
+                                <li class="group">
+                                    <div class="widget-list-meta">
+                                        <span class="widget-num">04</span>
+                                        <span class="widget-tag">WORK</span>
+                                    </div>
+                                    <h4 class="widget-title">Coding in Coffee Shops</h4>
+                                </li>
+                                <li class="group">
+                                    <div class="widget-list-meta">
+                                        <span class="widget-num">05</span>
+                                        <span class="widget-tag">STYLE</span>
+                                    </div>
+                                    <h4 class="widget-title">The Perfect White T-Shirt</h4>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- === END PART 1 === -->
+
+        <!-- === FULL WIDTH SECTIONS === -->
+        
+        <!-- 1. MOST COMMENTED (Yellow) -->
+        <!-- Desktop Grid View -->
+        <div class="section-full bg-yellow desktop-only">
+            <div class="section-header">
+                <h2>Most Commented</h2>
+                <div class="section-divider-full"></div>
+            </div>
+            
+            <div class="container">
+               <div class="grid-4-cols">
+                    <div class="grid-col-item group">
+                        <span class="text-meta" style="margin-bottom: 1.5rem; opacity: 0.7;">MOTHERHOOD</span>
+                        <h3 class="font-serif" style="font-size: 1.5rem; line-height: 1.2;">21 Completely Subjective Rules for Raising Teenage Boys</h3>
+                    </div>
+                    <div class="grid-col-item group">
+                        <span class="text-meta" style="margin-bottom: 1.5rem; opacity: 0.7;">CULTURE</span>
+                        <h3 class="font-serif" style="font-size: 1.5rem; line-height: 1.2;">The Unspoken Etiquette of Neighborhood Facebook Groups</h3>
+                    </div>
+                    <div class="grid-col-item group">
+                        <span class="text-meta" style="margin-bottom: 1.5rem; opacity: 0.7;">PARENTING</span>
+                        <h3 class="font-serif" style="font-size: 1.5rem; line-height: 1.2;">Why I Stopped Trying to be a 'Cool Mom'</h3>
+                    </div>
+                    <div class="grid-col-item group">
+                        <span class="text-meta" style="margin-bottom: 1.5rem; opacity: 0.7;">LIFESTYLE</span>
+                        <h3 class="font-serif" style="font-size: 1.5rem; line-height: 1.2;">Is It Just Me, Or Is Everyone Moving to Portugal?</h3>
+                    </div>
+               </div>
+            </div>
+        </div>
+
+        <!-- Mobile Carousel View -->
+        <div class="section-full bg-yellow mobile-only">
+            <div class="section-header">
+                <h2>Most Commented</h2>
+                <div class="section-divider"></div>
+            </div>
+            
+            <div class="carousel-container">
+                <button onclick="prevCommented()" style="padding: 0.75rem;">
+                    <i data-lucide="chevron-left" width="32" height="32"></i>
+                </button>
+                
+                <div id="commented-container" class="carousel-content animate-fadeIn" style="text-align: center;">
+                    <div id="commented-category" class="text-meta" style="margin-bottom: 1rem; opacity: 0.7;">
+                        MOTHERHOOD
+                    </div>
+                    <h3 id="commented-title" class="font-serif" style="font-size: 2rem; line-height: 1.2; cursor: pointer; text-decoration: underline; text-underline-offset: 4px;">
+                        21 Completely Subjective Rules for Raising Teenage Boys
+                    </h3>
+                </div>
+
+                <button onclick="nextCommented()" style="padding: 0.75rem;">
+                    <i data-lucide="chevron-right" width="32" height="32"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- === PART 2: Topics Container === -->
+        <div class="container" style="padding-top: 6rem; padding-bottom: 3rem;">
+           
+            <!-- TOPICS HEADER -->
+            <div class="topics-header">
+                <h3 class="font-serif" style="font-size: 1.875rem;">Browse by Topic</h3>
+                <svg class="text-accent hidden md:block" width="128" height="24" viewBox="0 0 100 20" fill="none" style="display: none;">
+                    <path d="M0 10 Q 10 0 20 10 T 40 10 T 60 10 T 80 10 T 100 10" stroke="currentColor" stroke-width="2" />
+                </svg>
+            </div>
+
+            <!-- TOPICS GRID -->
+            <div class="topics-grid">
+                <div class="topic-card group">
+                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1000&auto=format&fit=crop" class="topic-bg">
+                    <div class="topic-overlay"></div>
+                    <div class="topic-arrow">
+                        <i data-lucide="arrow-up-right" width="16" height="16"></i>
+                    </div>
+                    <div class="topic-content">
+                        <h4 class="font-serif" style="font-size: 1.5rem; margin-bottom: 0.25rem;">Style</h4>
+                        <div class="topic-line"></div>
+                    </div>
+                </div>
+                <div class="topic-card group">
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1000&auto=format&fit=crop" class="topic-bg">
+                    <div class="topic-overlay"></div>
+                    <div class="topic-arrow">
+                        <i data-lucide="arrow-up-right" width="16" height="16"></i>
+                    </div>
+                    <div class="topic-content">
+                        <h4 class="font-serif" style="font-size: 1.5rem; margin-bottom: 0.25rem;">Living</h4>
+                        <div class="topic-line"></div>
+                    </div>
+                </div>
+                <div class="topic-card group">
+                    <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1000&auto=format&fit=crop" class="topic-bg">
+                    <div class="topic-overlay"></div>
+                    <div class="topic-arrow">
+                        <i data-lucide="arrow-up-right" width="16" height="16"></i>
+                    </div>
+                    <div class="topic-content">
+                        <h4 class="font-serif" style="font-size: 1.5rem; margin-bottom: 0.25rem;">Travel</h4>
+                        <div class="topic-line"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. EDITORS' PICKS -->
+        <!-- Desktop Grid View -->
+        <div class="section-full bg-peach desktop-only">
+            <div class="section-header">
+                <h2>Editors' Picks</h2>
+            </div>
+            
+            <div class="editors-grid">
+                <div class="editor-item group">
+                    <div class="editor-img-circle">
+                        <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1000&auto=format&fit=crop" alt="Milk Hair Serum">
+                    </div>
+                    <h3 class="font-serif" style="font-size: 1.25rem;">Milk Hair Serum</h3>
+                </div>
+                <div class="editor-item group">
+                    <div class="editor-img-circle">
+                        <img src="https://images.unsplash.com/photo-1507643179173-39db3ffde235?q=80&w=1000&auto=format&fit=crop" alt="Vintage Brass Lamp">
+                    </div>
+                    <h3 class="font-serif" style="font-size: 1.25rem;">Vintage Brass Lamp</h3>
+                </div>
+                <div class="editor-item group">
+                    <div class="editor-img-circle">
+                        <img src="https://images.unsplash.com/photo-1522771753035-1a5b6562f329?q=80&w=1000&auto=format&fit=crop" alt="The Perfect Linen Sheets">
+                    </div>
+                    <h3 class="font-serif" style="font-size: 1.25rem;">Linen Sheets</h3>
+                </div>
+                <div class="editor-item group">
+                    <div class="editor-img-circle">
+                        <img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?q=80&w=1000&auto=format&fit=crop" alt="Ceramic Mug">
+                    </div>
+                    <h3 class="font-serif" style="font-size: 1.25rem;">Ceramic Mug</h3>
+                </div>
+                <div class="editor-item group">
+                    <div class="editor-img-circle">
+                        <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=1000&auto=format&fit=crop" alt="Leather Journal">
+                    </div>
+                    <h3 class="font-serif" style="font-size: 1.25rem;">Leather Journal</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Carousel View -->
+        <div class="section-full bg-peach mobile-only">
+            <div class="section-header">
+                <h2>Editors' Picks</h2>
+            </div>
+            
+            <div class="carousel-container">
+                <button onclick="prevPick()" style="padding: 0.75rem;">
+                    <i data-lucide="chevron-left" width="32" height="32"></i>
+                </button>
+                
+                <div class="carousel-content group" style="display: flex; flex-direction: column; align-items: center;">
+                    <div class="editor-img-circle" style="width: 12rem; height: 12rem;">
+                        <img id="pick-image" src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1000&auto=format&fit=crop" alt="Milk Hair Serum">
+                    </div>
+                    <h3 id="pick-title" class="font-serif" style="font-size: 1.5rem; margin-top: 1rem;">Milk Hair Serum</h3>
+                </div>
+
+                <button onclick="nextPick()" style="padding: 0.75rem;">
+                    <i data-lucide="chevron-right" width="32" height="32"></i>
+                </button>
+            </div>
+        </div>
+            
+        <!-- Container for Archives -->
+        <div class="container" style="padding: 6rem 1.5rem;">
+            
+             <!-- FROM THE ARCHIVES -->
+             <div style="margin-bottom: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; border-bottom: 1px solid black; padding-bottom: 1rem;">
+                     <h3 class="font-serif" style="font-size: 1.875rem;">From the Archives</h3>
+                     <span class="text-meta" style="color: var(--color-gray-medium);">2024 Collection</span>
+                </div>
+                
+                <div class="archive-grid">
+                    <!-- Archive Item 1 -->
+                    <a href="#" class="archive-item group">
+                        <div class="post-image-container aspect-landscape" style="margin-bottom: 1.25rem;">
+                            <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1000&auto=format&fit=crop">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                             <span class="text-meta text-accent" style="font-size: 0.625rem;">ESSAYS</span>
+                             <h4 class="archive-title">The Slow Art of Writing Letters</h4>
+                             <p class="post-excerpt" style="font-size: 0.875rem;">In an age of instant messaging, putting pen to paper feels like a rebellious act of patience.</p>
+                        </div>
+                    </a>
+
+                     <!-- Archive Item 2 -->
+                     <a href="#" class="archive-item group">
+                        <div class="post-image-container aspect-landscape" style="margin-bottom: 1.25rem;">
+                            <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1000&auto=format&fit=crop">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                             <span class="text-meta text-accent" style="font-size: 0.625rem;">FOOD</span>
+                             <h4 class="archive-title">Sunday Morning Pancakes</h4>
+                             <p class="post-excerpt" style="font-size: 0.875rem;">The fluffiest ricotta pancakes you will ever make, paired with a simple blueberry compote.</p>
+                        </div>
+                    </a>
+
+                     <!-- Archive Item 3 -->
+                     <a href="#" class="archive-item group">
+                        <div class="post-image-container aspect-landscape" style="margin-bottom: 1.25rem;">
+                            <img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=1000&auto=format&fit=crop">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                             <span class="text-meta text-accent" style="font-size: 0.625rem;">LIFE</span>
+                             <h4 class="archive-title">A Dog Named Barnaby</h4>
+                             <p class="post-excerpt" style="font-size: 0.875rem;">Meeting my best friend at a shelter in Brooklyn and how he changed my daily routine.</p>
+                        </div>
+                    </a>
+                    
+                     <!-- Archive Item 4 -->
+                     <a href="#" class="archive-item group">
+                        <div class="post-image-container aspect-landscape" style="margin-bottom: 1.25rem;">
+                            <img src="https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?q=80&w=1000&auto=format&fit=crop">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                             <span class="text-meta text-accent" style="font-size: 0.625rem;">TRAVEL</span>
+                             <h4 class="archive-title">Solo in Copenhagen</h4>
+                             <p class="post-excerpt" style="font-size: 0.875rem;">Biking through the rain, eating pastries, and learning to enjoy my own company.</p>
+                        </div>
+                    </a>
+
+                     <!-- Archive Item 5 -->
+                     <a href="#" class="archive-item group">
+                        <div class="post-image-container aspect-landscape" style="margin-bottom: 1.25rem;">
+                            <img src="https://images.unsplash.com/photo-1516062423079-7ca13cdc7f5a?q=80&w=1000&auto=format&fit=crop">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                             <span class="text-meta text-accent" style="font-size: 0.625rem;">STYLE</span>
+                             <h4 class="archive-title">The search for the Perfect Coat</h4>
+                             <p class="post-excerpt" style="font-size: 0.875rem;">It needs to be warm, stylish, and not make me look like a giant marshmallow.</p>
+                        </div>
+                    </a>
+
+                     <!-- Archive Item 6 -->
+                     <a href="#" class="archive-item group">
+                        <div class="post-image-container aspect-landscape" style="margin-bottom: 1.25rem;">
+                            <img src="https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?q=80&w=1000&auto=format&fit=crop">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                             <span class="text-meta text-accent" style="font-size: 0.625rem;">INTERIORS</span>
+                             <h4 class="archive-title">Plant Mom 101</h4>
+                             <p class="post-excerpt" style="font-size: 0.875rem;">I killed three ferns so you don't have to. Here are the hardiest plants for low light.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER: Rounded Top (Classic) -->
+    <footer>
+        <div class="container" style="display: flex; flex-direction: column; align-items: center;">
+          
+            <h2 class="font-serif" style="font-size: 2.25rem; letter-spacing: 0.1em; margin-bottom: 2rem; color: #4A5D4F;">YOUNG CHAI</h2>
+          
+            <div style="display: flex; gap: 1.5rem; margin-bottom: 3rem;">
+                <a href="#" class="footer-social-link"><i data-lucide="instagram" width="20" height="20"></i></a>
+                <a href="#" class="footer-social-link"><i data-lucide="twitter" width="20" height="20"></i></a>
+                <a href="#" class="footer-social-link"><i data-lucide="heart" width="20" height="20"></i></a>
+            </div>
+
+            <div class="footer-nav">
+                <a href="#">Press</a>
+                <a href="#">Contact</a>
+                <a href="#">Shop</a>
+                <a href="#">RSS</a>
+            </div>
+
+            <p class="font-serif italic" style="font-size: 0.75rem; color: #9ca3af;">
+                Built with intention. © 2025 Young Chai.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // --- Data ---
+        const mostCommentedPosts = [
+            { title: "21 Completely Subjective Rules for Raising Teenage Boys", category: "MOTHERHOOD" },
+            { title: "The Unspoken Etiquette of Neighborhood Facebook Groups", category: "CULTURE" },
+            { title: "Why I Stopped Trying to be a 'Cool Mom'", category: "PARENTING" },
+            { title: "Is It Just Me, Or Is Everyone Moving to Portugal?", category: "LIFESTYLE" }
+        ];
+
+        const editorsPicks = [
+            { title: "Milk Hair Serum", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1000&auto=format&fit=crop" },
+            { title: "Vintage Brass Lamp", image: "https://images.unsplash.com/photo-1507643179173-39db3ffde235?q=80&w=1000&auto=format&fit=crop" },
+            { title: "The Perfect Linen Sheets", image: "https://images.unsplash.com/photo-1522771753035-1a5b6562f329?q=80&w=1000&auto=format&fit=crop" },
+            { title: "Ceramic Mug", image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?q=80&w=1000&auto=format&fit=crop" },
+            { title: "Leather Journal", image: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=1000&auto=format&fit=crop" }
+        ];
+
+        // --- State Variables ---
+        let isMenuOpen = false;
+        let commentedIndex = 0;
+        let pickIndex = 0;
+
+        // --- Elements ---
+        const navbar = document.getElementById('navbar');
+        const menuBtn = document.getElementById('menu-btn');
+        const menuIconContainer = document.getElementById('menu-icon-container');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        const commentedCategory = document.getElementById('commented-category');
+        const commentedTitle = document.getElementById('commented-title');
+        
+        const pickImage = document.getElementById('pick-image');
+        const pickTitle = document.getElementById('pick-title');
+
+        // --- Event Listeners ---
+        
+        // Scroll Listener
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Menu Toggle
+        menuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            
+            if (isMenuOpen) {
+                // Show Menu
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.remove('opacity-0');
+                
+                // Change Icon to X
+                menuIconContainer.innerHTML = '<i data-lucide="x" width="20" height="20"></i>';
+            } else {
+                // Hide Menu
+                mobileMenu.classList.add('opacity-0');
+                setTimeout(() => mobileMenu.classList.add('hidden'), 300);
+                
+                // Change Icon to Menu
+                menuIconContainer.innerHTML = '<i data-lucide="menu" width="20" height="20"></i>';
+            }
+            lucide.createIcons();
+        });
+
+        // --- Carousel Logic ---
+
+        // Most Commented Carousel
+        function updateCommented() {
+            const post = mostCommentedPosts[commentedIndex];
+            
+            const container = document.getElementById('commented-container');
+            container.style.opacity = '0';
+            
+            setTimeout(() => {
+                commentedCategory.textContent = post.category;
+                commentedTitle.textContent = post.title;
+                container.style.opacity = '1';
+            }, 150);
+        }
+
+        function nextCommented() {
+            commentedIndex = (commentedIndex + 1) % mostCommentedPosts.length;
+            updateCommented();
+        }
+
+        function prevCommented() {
+            commentedIndex = (commentedIndex - 1 + mostCommentedPosts.length) % mostCommentedPosts.length;
+            updateCommented();
+        }
+
+        // Editors' Picks Carousel
+        function updatePick() {
+            const pick = editorsPicks[pickIndex];
+            
+            pickImage.style.opacity = '0.5';
+            pickTitle.style.opacity = '0';
+            
+            setTimeout(() => {
+                pickImage.src = pick.image;
+                pickTitle.textContent = pick.title;
+                pickImage.style.opacity = '1';
+                pickTitle.style.opacity = '1';
+            }, 150);
+        }
+
+        function nextPick() {
+            pickIndex = (pickIndex + 1) % editorsPicks.length;
+            updatePick();
+        }
+
+        function prevPick() {
+            pickIndex = (pickIndex - 1 + editorsPicks.length) % editorsPicks.length;
+            updatePick();
+        }
+
+        // --- Load More Logic ---
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        const extraStoriesGrid = document.getElementById('extra-stories-grid');
+        
+        const newStories = [
+            {
+                category: "WELLNESS",
+                date: "NOV 28, 2025",
+                title: "Morning Pages: A Month of Writing",
+                excerpt: "Three pages, every morning, before the coffee kicks in.",
+                image: "https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=1000&auto=format&fit=crop"
+            },
+            {
+                category: "PHOTOGRAPHY",
+                date: "NOV 25, 2025",
+                title: "Chasing Light in Lisbon",
+                excerpt: "The golden hour hits differently when the tiles reflect the sun.",
+                image: "https://images.unsplash.com/photo-1555881400-74d7acaacd81?q=80&w=1000&auto=format&fit=crop"
+            },
+            {
+                category: "STYLE",
+                date: "NOV 22, 2025",
+                title: "Thrifting the Perfect Oversized Blazer",
+                excerpt: "It smells like mothballs now, but just wait.",
+                image: "https://images.unsplash.com/photo-1550614000-4b9519e09d9f?q=80&w=1000&auto=format&fit=crop"
+            },
+            {
+                category: "WORK",
+                date: "NOV 18, 2025",
+                title: "Designing for Dark Mode",
+                excerpt: "Why high contrast isn't always the answer.",
+                image: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=1000&auto=format&fit=crop"
+            }
+        ];
+
+        loadMoreBtn.addEventListener('click', () => {
+            // Populate Grid using Vanilla CSS classes instead of Tailwind
+            extraStoriesGrid.innerHTML = newStories.map(post => `
+                <a href="#" class="post-card group animate-fadeIn">
+                    <div class="post-image-container aspect-standard">
+                        <img src="${post.image}" alt="${post.title}">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div class="post-meta">
+                            <span class="category-tag">
+                                <span class="category-line"></span>
+                                ${post.category}
+                            </span>
+                            <span class="date-tag">${post.date}</span>
+                        </div>
+                        <h2 class="post-title">
+                            ${post.title}
+                        </h2>
+                        <p class="post-excerpt">
+                            "${post.excerpt}"
+                        </p>
+                    </div>
+                </a>
+            `).join('');
+
+            // Show Grid
+            extraStoriesGrid.classList.remove('hidden');
+            
+            // Hide Button
+            loadMoreBtn.style.display = 'none';
+        });
+
+    </script>
+</body>
+</html>

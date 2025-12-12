@@ -1,0 +1,362 @@
+---
+layout: 'base.html'
+tagTitle: 'A Journal about Life, Code & Tea'
+metaTitle: 'Young Chai | A Journal about Life, Code & Tea'
+description: "Notes on slow living, thoughtful coding, and the rituals that make a home."
+preloadImg: '/images/blog/landing.jpg'
+preloadCSS: '/css/blog-home.css'
+permalink: '/'
+eleventyNavigation:
+  key: Home
+  order: 100
+---
+
+{% set posts = collections.post | reverse %}
+{% set heroPost = posts[0] if posts | length > 0 else null %}
+
+<div style="padding-top: 8rem;">
+    <div class="container">
+        <div class="grid-layout">
+            <div class="feed-col">
+                {% if heroPost %}
+                    {% set post = heroPost %}
+                    {% set isHero = true %}
+                    {% set aspectClass = 'aspect-hero' %}
+                    {% include 'post-card.html' %}
+                {% else %}
+                    <p class="post-excerpt">Stay tuned — new essays are brewing.</p>
+                {% endif %}
+
+                {% for post in posts %}
+                    {% if loop.index0 > 0 and loop.index0 < 5 %}
+                        {% set isHero = false %}
+                        {% set aspectClass = 'aspect-standard' %}
+                        {% include 'post-card.html' %}
+                    {% endif %}
+                {% endfor %}
+
+                <div id="extra-stories-grid" class="hidden" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 4rem 2rem;">
+                    {% for post in posts %}
+                        {% if loop.index0 >= 5 and loop.index0 < 9 %}
+                            {% set isHero = false %}
+                            {% set aspectClass = 'aspect-standard' %}
+                            {% include 'post-card.html' %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div style="display: flex; justify-content: center; padding-top: 2rem; margin-bottom: 4rem;">
+                    <button id="load-more-btn" class="btn-load">
+                        <span id="load-more-text">Load More Stories</span>
+                        <i data-lucide="chevron-down" class="animate-bounce" width="20" height="20"></i>
+                    </button>
+                </div>
+
+                <div class="mobile-only" style="margin-top: 3rem;">
+                    <div class="widget-box" style="width: 100%;">
+                        <div class="corner-tr"></div>
+                        <div class="corner-bl"></div>
+
+                        <div class="widget-header">
+                            <i data-lucide="coffee" class="text-accent" width="20" height="20"></i>
+                            <h3 class="italic" style="font-size: 1.25rem;">Popular Posts</h3>
+                        </div>
+
+                        <ul class="widget-list">
+                            {% if collections.popular and collections.popular | length > 0 %}
+                                {%- for post in collections.popular | reverse | head(5) -%}
+                                {%- set index = loop.index -%}
+                                <li class="group">
+                                    <div class="widget-list-meta">
+                                        <span class="widget-num">{{ index | padStart(2, '0') }}</span>
+                                        <span class="widget-tag">{{ post.data.category | upper | default('BLOG') }}</span>
+                                    </div>
+                                    <a href="{{ post.url }}">
+                                        <h4 class="widget-title">{{ post.data.blogTitle }}</h4>
+                                    </a>
+                                </li>
+                                {%- endfor -%}
+                            {% else %}
+                                <li>
+                                    <p class="post-excerpt" style="font-size: 0.9rem;">Featured reads will appear here once posts are tagged "popular".</p>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+
+    <div class="section-full bg-yellow desktop-only">
+        <div class="section-header">
+            <h2>Most Commented</h2>
+            <div class="section-divider-full"></div>
+        </div>
+
+        <div class="container">
+            <div class="grid-4-cols">
+                {% for post in collections.commented | reverse %}
+                    {% if loop.index <= 4 %}
+                        <div class="grid-col-item group">
+                            <span class="text-meta" style="margin-bottom: 1.5rem; opacity: 0.7;">{{ post.data.category | upper | default('DISCUSS') }}</span>
+                            <a href="{{ post.url }}">
+                                <h3 class="font-serif" style="font-size: 1.5rem; line-height: 1.2;">{{ post.data.blogTitle }}</h3>
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% if collections.commented | length == 0 %}
+                    <div class="grid-col-item">
+                        <span class="text-meta" style="margin-bottom: 1.5rem; opacity: 0.7;">UP NEXT</span>
+                        <h3 class="font-serif" style="font-size: 1.5rem; line-height: 1.2;">Add the “commented” tag to highlight lively discussions.</h3>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="section-full bg-yellow mobile-only">
+        <div class="section-header">
+            <h2>Most Commented</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="carousel-container">
+            <button id="commented-prev" style="padding: 0.75rem;">
+                <i data-lucide="chevron-left" width="32" height="32"></i>
+            </button>
+
+            <div id="commented-container" class="carousel-content animate-fadeIn" style="text-align: center;">
+                <div id="commented-category" class="text-meta" style="margin-bottom: 1rem; opacity: 0.7;">
+                    {{ (collections.commented | reverse)[0].data.category | upper if collections.commented and collections.commented | length else 'SOON' }}
+                </div>
+                <h3 id="commented-title" class="font-serif" style="font-size: 2rem; line-height: 1.2;">
+                    {{ (collections.commented | reverse)[0].data.blogTitle if collections.commented and collections.commented | length else 'Mark posts as "commented" to feature them.' }}
+                </h3>
+            </div>
+
+            <button id="commented-next" style="padding: 0.75rem;">
+                <i data-lucide="chevron-right" width="32" height="32"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="container" style="padding-top: 6rem; padding-bottom: 3rem;">
+        <div class="topics-header">
+            <h3 class="font-serif" style="font-size: 1.875rem;">Browse by Topic</h3>
+        </div>
+
+        <div class="topics-grid">
+            {% for topic in topics %}
+                <a href="/blog/{{ topic.slug }}" class="topic-card group">
+                    <img src="{{ topic.image }}" class="topic-bg" alt="{{ topic.name }}">
+                    <div class="topic-overlay"></div>
+                    <div class="topic-arrow">
+                        <i data-lucide="arrow-up-right" width="16" height="16"></i>
+                    </div>
+                    <div class="topic-content">
+                        <h4 class="font-serif" style="font-size: 1.5rem; margin-bottom: 0.25rem;">{{ topic.name }}</h4>
+                        <div class="topic-line"></div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section-full bg-peach desktop-only">
+        <div class="section-header">
+            <h2>Editors' Picks</h2>
+        </div>
+
+        <div class="editors-grid">
+            {% for pick in editorsPicks %}
+                <a href="{{ pick.link }}" class="editor-item group">
+                    <div class="editor-img-circle">
+                        <img src="{{ pick.image }}" alt="{{ pick.title }}">
+                    </div>
+                    <h3 class="font-serif" style="font-size: 1.25rem;">{{ pick.title }}</h3>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section-full bg-peach mobile-only">
+        <div class="section-header">
+            <h2>Editors' Picks</h2>
+        </div>
+
+        <div class="carousel-container">
+            <button id="pick-prev" style="padding: 0.75rem;">
+                <i data-lucide="chevron-left" width="32" height="32"></i>
+            </button>
+
+            <div class="carousel-content group" style="display: flex; flex-direction: column; align-items: center;">
+                <div class="editor-img-circle" style="width: 12rem; height: 12rem;">
+                    <img id="pick-image" src="{{ editorsPicks[0].image if editorsPicks and editorsPicks[0] else 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1000&auto=format&fit=crop' }}" alt="{{ editorsPicks[0].title if editorsPicks and editorsPicks[0] else 'Editors Pick' }}">
+                </div>
+                <h3 id="pick-title" class="font-serif" style="font-size: 1.5rem; margin-top: 1rem;">
+                    {{ editorsPicks[0].title if editorsPicks and editorsPicks[0] else 'Add picks in editorsPicks.json' }}
+                </h3>
+            </div>
+
+            <button id="pick-next" style="padding: 0.75rem;">
+                <i data-lucide="chevron-right" width="32" height="32"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="container" style="padding: 6rem 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; border-bottom: 1px solid black; padding-bottom: 1rem;">
+            <h3 class="font-serif" style="font-size: 1.875rem;">From the Archives</h3>
+            <span class="text-meta" style="color: var(--color-gray-medium);">Collected essays</span>
+        </div>
+
+        <div class="archive-grid">
+            {% set rendered = 0 %}
+            {% for post in posts %}
+                {% if loop.index0 >= 9 and rendered < 6 %}
+                    <a href="{{ post.url }}" class="archive-item group">
+                        <div class="post-image-container aspect-landscape" style="margin-bottom: 1.25rem;">
+                            {% if post.data.image %}
+                                <img src="{{ post.data.image }}" alt="{{ post.data.imageAlt | default(post.data.blogTitle) }}">
+                            {% endif %}
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <span class="text-meta text-accent" style="font-size: 0.625rem;">{{ post.data.category | upper | default('ESSAYS') }}</span>
+                            <h4 class="archive-title">{{ post.data.blogTitle }}</h4>
+                            <p class="post-excerpt" style="font-size: 0.875rem;">{{ post.data.blogDescription }}</p>
+                        </div>
+                    </a>
+                    {% set rendered = rendered + 1 %}
+                {% endif %}
+            {% endfor %}
+            {% if rendered == 0 %}
+                <p class="post-excerpt">Once additional posts are published, they'll be curated here.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        const extraStoriesGrid = document.getElementById('extra-stories-grid');
+        if (loadMoreBtn && extraStoriesGrid) {
+            loadMoreBtn.addEventListener('click', () => {
+                extraStoriesGrid.classList.remove('hidden');
+                loadMoreBtn.style.display = 'none';
+            });
+        }
+
+        const commentedData = [
+            {% for post in collections.commented | reverse %}
+                {% if loop.index <= 4 %}
+                {
+                    title: {{ post.data.blogTitle | dump }},
+                    category: {{ post.data.category | upper | default('DISCUSS') | dump }}
+                }{% if not loop.last %},{% endif %}
+                {% endif %}
+            {% endfor %}
+        ];
+
+        // Most Commented Carousel
+        (function(){
+            if (!commentedData.length || commentedData.length === 0) { 
+                console.log('No commented posts available');
+                return; 
+            }
+            
+            const categoryEl = document.getElementById('commented-category');
+            const titleEl = document.getElementById('commented-title');
+            const container = document.getElementById('commented-container');
+            const prevBtn = document.getElementById('commented-prev');
+            const nextBtn = document.getElementById('commented-next');
+            
+            if (!categoryEl || !titleEl || !container || !prevBtn || !nextBtn) {
+                console.log('Carousel elements not found', {categoryEl, titleEl, container, prevBtn, nextBtn});
+                return;
+            }
+            
+            let index = 0;
+
+            function updateCommented(step){
+                index = (index + step + commentedData.length) % commentedData.length;
+                container.style.opacity = '0';
+                setTimeout(() => {
+                    if (commentedData[index]) {
+                        categoryEl.textContent = commentedData[index].category || 'DISCUSS';
+                        titleEl.textContent = commentedData[index].title || 'No title';
+                    }
+                    container.style.opacity = '1';
+                }, 150);
+            }
+
+            prevBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Prev clicked');
+                updateCommented(-1);
+            });
+            
+            nextBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Next clicked');
+                updateCommented(1);
+            });
+        })();
+
+        const picksData = {{ editorsPicks | dump | safe }};
+        
+        // Editors' Picks Carousel
+        (function(){
+            if (!picksData || !picksData.length || picksData.length === 0) { 
+                console.log('No editors picks available');
+                return; 
+            }
+            
+            const pickImage = document.getElementById('pick-image');
+            const pickTitle = document.getElementById('pick-title');
+            const prevBtn = document.getElementById('pick-prev');
+            const nextBtn = document.getElementById('pick-next');
+            
+            if (!pickImage || !pickTitle || !prevBtn || !nextBtn) {
+                console.log('Editors picks carousel elements not found', {pickImage, pickTitle, prevBtn, nextBtn});
+                return;
+            }
+            
+            let pickIndex = 0;
+
+            function updatePick(step){
+                pickIndex = (pickIndex + step + picksData.length) % picksData.length;
+                pickImage.style.opacity = '0.5';
+                pickTitle.style.opacity = '0';
+                setTimeout(() => {
+                    if (picksData[pickIndex]) {
+                        pickImage.src = picksData[pickIndex].image || '';
+                        pickTitle.textContent = picksData[pickIndex].title || 'No title';
+                    }
+                    pickImage.style.opacity = '1';
+                    pickTitle.style.opacity = '1';
+                }, 150);
+            }
+
+            prevBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Pick prev clicked');
+                updatePick(-1);
+            });
+            
+            nextBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Pick next clicked');
+                updatePick(1);
+            });
+        })();
+    });
+</script>

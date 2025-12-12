@@ -1,0 +1,69 @@
+---
+layout: 'base.html'
+description: "Story, process, and the slow rituals behind Young Chai's work."
+metaTitle: 'About Young Chai'
+tagTitle: 'About'
+preloadImg: '/images/blog/landing.jpg'
+preloadCSS: '/css/blog-home.css'
+permalink: 'about/'
+eleventyNavigation:
+    key: About Us
+    order: 200
+---
+
+<div style="padding-top: 8rem; padding-bottom: 4rem;">
+    <div class="container" style="margin-bottom: 3rem; text-align: center;">
+        <p class="text-meta">ABOUT</p>
+        <h1 class="font-serif" style="font-size: 3rem; margin-top: 0.5rem;">Young Chai</h1>
+        <p class="post-excerpt" style="margin: 1rem auto 0; max-width: 40rem;">
+            Writer, product designer, and unapologetic tea enthusiast documenting the intersection of code, interiors, and intentional living.
+        </p>
+    </div>
+
+    <div class="container">
+        <div class="grid-layout" style="align-items: start;">
+            <div class="feed-col">
+                <div class="post-image-container aspect-standard" style="margin-bottom: 2rem;">
+                    <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=1000&auto=format&fit=crop" alt="Cozy studio desk with tea">
+                </div>
+                <h2 class="font-serif" style="font-size: 2.25rem; margin-bottom: 1rem;">What I Write About</h2>
+                <p class="post-excerpt" style="font-size: 1rem;">
+                    I started this journal to hold the stories that fall between project launches: essays about slow mornings, recipes scribbled next to code comments, and travel notes written on train napkins. Every article is a field report from balancing client work, creative practice, and a gentler pace of life.
+                </p>
+                <ul style="margin-top: 1.5rem; padding-left: 1rem; color: var(--color-text); line-height: 1.8;">
+                    <li>📓 Essays on focus, rest, and digital boundaries</li>
+                    <li>🍜 Kitchen experiments that fuel late-night debugging</li>
+                    <li>✈️ Travel guides for cities best explored on foot</li>
+                    <li>🎨 Product design notes, process breakdowns, and figma musings</li>
+                </ul>
+            </div>
+
+            <div class="sidebar-col" style="display: flex; flex-direction: column; gap: 2rem;">
+                <div class="widget-box">
+                    <div class="corner-tr"></div>
+                    <div class="corner-bl"></div>
+                    <div class="widget-header">
+                        <i data-lucide="bookmark" class="text-accent" width="20" height="20"></i>
+                        <h3 class="italic" style="font-size: 1.25rem;">Currently</h3>
+                    </div>
+                    <p class="post-excerpt" style="font-size: 1rem;">
+                        Building calm digital products by day, brewing oolong and writing essays by night. Based in {{ client.address.city }}, but often found hopping between coffee shops with a camera in my bag.
+                    </p>
+                </div>
+                <div class="widget-box">
+                    <div class="corner-tr"></div>
+                    <div class="corner-bl"></div>
+                    <div class="widget-header">
+                        <i data-lucide="sparkles" class="text-accent" width="20" height="20"></i>
+                        <h3 class="italic" style="font-size: 1.25rem;">Values</h3>
+                    </div>
+                    <ul class="widget-list">
+                        <li>Small, daily experiments compound into real change.</li>
+                        <li>Good design feels like a deep breath, not a loud announcement.</li>
+                        <li>Tea breaks are a legitimate productivity strategy.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

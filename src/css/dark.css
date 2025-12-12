@@ -1,0 +1,132 @@
+/*-- -------------------------- -->
+<---      Core Dark Styles      -->
+<--- -------------------------- -*/
+/* Mobile */
+@media only screen and (min-width: 0em) {
+  :root {
+    --dark: #082032;
+    --medium: #2C394B;
+    --accent: #334756;
+  }
+  body.dark-mode {
+    background-color: var(--dark);
+  }
+  body.dark-mode p,
+  body.dark-mode li,
+  body.dark-mode h1,
+  body.dark-mode h2,
+  body.dark-mode h3,
+  body.dark-mode h4,
+  body.dark-mode h5,
+  body.dark-mode h6 {
+    color: #fff;
+  }
+  body.dark-mode .light {
+    display: none;
+  }
+  body.dark-mode .dark {
+    display: block !important;
+  }
+  .dark {
+    display: none;
+  }
+}
+/*-- -------------------------- -->
+<---     Dark Mode Toggle       -->
+<--- -------------------------- -*/
+
+.theme-toggle {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 1.875rem; /* Aligns with other nav items on desktop */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease-out;
+}
+
+.theme-toggle svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  stroke: #fff; /* Default color for desktop nav */
+  transition: stroke 0.3s;
+}
+
+/* Change stroke on scroll to match other nav links */
+body.scroll .theme-toggle svg {
+  stroke: var(--headerColor);
+}
+
+/* Dark mode styles */
+body.dark-mode .theme-toggle svg {
+  stroke: var(--bodyTextColorWhite);
+}
+
+.theme-toggle:hover svg,
+.theme-toggle:focus svg {
+  stroke: var(--primary);
+  cursor: pointer;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus {
+  transform: scale(1.05);
+}
+
+/* Hide sun icon by default */
+.icon-sun {
+  display: none;
+}
+
+/* Show moon in light mode, sun in dark mode */
+body:not(.dark-mode) .icon-moon {
+  display: block;
+}
+body:not(.dark-mode) .icon-sun {
+  display: none;
+}
+body.dark-mode .icon-moon {
+  display: none;
+}
+body.dark-mode .icon-sun {
+  display: block;
+}
+
+/* Animation Keyframes */
+@keyframes scale-out {
+  from {
+      transform: rotate(0) scale(1);
+      opacity: 1;
+  }
+  to {
+      transform: rotate(360deg) scale(0);
+      opacity: 0;
+  }
+}
+
+@keyframes scale-in {
+  from {
+      transform: rotate(-360deg) scale(0);
+      opacity: 0;
+  }
+  to {
+      transform: rotate(0) scale(1);
+      opacity: 1;
+  }
+}
+
+/* Animation Classes */
+.animating-out {
+  animation: scale-out 0.3s ease-in-out forwards;
+}
+
+.animating-in {
+  animation: scale-in 0.3s ease-in-out forwards;
+}

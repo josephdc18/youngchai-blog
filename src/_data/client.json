@@ -1,0 +1,23 @@
+{
+  "name": "Young Chai",
+  "email": "hello@youngchai.com",
+  "phone": "214-555-0199",
+  "phoneFormatted": "(214) 555-0199",
+  "hours": "Mon–Thu, 10a–4p CT",
+  "address": {
+    "lineOne": "Dallas Studio",
+    "city": "Dallas",
+    "county": "TX",
+    "postcode": "75201",
+    "region": "Dallas-Fort Worth",
+    "mapLink": "https://goo.gl/maps/dfw"
+  },
+  "year": "2025",
+  "domain": "www.youngchai.com",
+  "tagline": "Slowing down, coding, and finding the perfect cup of tea.",
+  "social": {
+    "instagram": "https://instagram.com/youngchai",
+    "twitter": "https://twitter.com/youngchai",
+    "pinterest": "https://pinterest.com/youngchai"
+  }
+}

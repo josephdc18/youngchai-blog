@@ -1,0 +1,39 @@
+layout: 'base.html'
+description: 'An archive of essays, travel notes, food diaries, and coding musings.'
+metaTitle: 'Journal | Young Chai'
+tagTitle: 'Journal'
+preloadImg: '/images/blog/landing.jpg'
+preloadCSS: '/css/blog-home.css'
+permalink: 'blog/'
+eleventyNavigation:
+    key: Blog
+    order: 500
+---
+
+<div style="padding-top: 8rem; padding-bottom: 4rem;">
+    <div class="container" style="margin-bottom: 3rem; text-align: center;">
+        <p class="text-meta">FIELD NOTES</p>
+        <h1 class="font-serif" style="font-size: 3rem; margin-top: 0.5rem;">Journal</h1>
+        <p class="post-excerpt" style="margin: 1rem auto 0; max-width: 36rem;">
+            Essays, recipes, road trips, and the design decisions I'm documenting along the way.
+        </p>
+    </div>
+
+    <div class="container">
+        <div class="grid-layout">
+            <div class="feed-col">
+                {% if collections.post | length == 0 %}
+                    <p class="post-excerpt">No stories just yet. Check back soon!</p>
+                {% endif %}
+
+                {%- for post in collections.post | reverse -%}
+                    {% set isHero = false %}
+                    {% set aspectClass = 'aspect-standard' %}
+                    {% include 'post-card.html' %}
+                {%- endfor -%}
+            </div>
+
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+</div>

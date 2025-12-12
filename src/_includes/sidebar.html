@@ -1,0 +1,50 @@
+{% set profileImage = client.profileImage | default('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1000&auto=format&fit=crop') %}
+
+<div class="sidebar-col desktop-only">
+    <div class="sidebar-profile">
+        <div class="profile-img">
+            <img src="{{ profileImage }}" alt="{{ client.name }} profile portrait">
+        </div>
+        <p class="italic" style="color: var(--color-gray-medium); margin-bottom: 1.5rem;">
+            "{{ client.tagline | default('Slowing down, coding, and finding the perfect cup of tea.') }}"
+        </p>
+        <div class="social-links">
+            <a href="{{ client.social.instagram }}" aria-label="Instagram"><i data-lucide="instagram" width="18" height="18" class="text-accent"></i></a>
+            <a href="{{ client.social.twitter }}" aria-label="Twitter"><i data-lucide="twitter" width="18" height="18" class="text-accent"></i></a>
+        </div>
+    </div>
+
+    <div class="sticky-wrapper">
+        <div class="widget-box">
+            <div class="corner-tr"></div>
+            <div class="corner-bl"></div>
+
+            <div class="widget-header">
+                <i data-lucide="coffee" class="text-accent" width="20" height="20"></i>
+                <h3 class="italic" style="font-size: 1.25rem;">Popular Posts</h3>
+            </div>
+
+            <ul class="widget-list">
+                {% if collections.popular and collections.popular | length > 0 %}
+                    {%- for post in collections.popular | reverse | head(5) -%}
+                        {%- set index = loop.index -%}
+                        <li class="group">
+                            <div class="widget-list-meta">
+                                <span class="widget-num">{{ index | padStart(2, '0') }}</span>
+                                <span class="widget-tag">{{ post.data.category | upper | default('BLOG') }}</span>
+                            </div>
+                            <a href="{{ post.url }}">
+                                <h4 class="widget-title">{{ post.data.blogTitle }}</h4>
+                            </a>
+                        </li>
+                    {%- endfor -%}
+                {% else %}
+                    <li>
+                        <p class="post-excerpt" style="font-size: 0.9rem;">Featured reads will appear here once posts are tagged "popular".</p>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Style",
+    "slug": "style",
+    "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1000&auto=format&fit=crop",
+    "description": "Uniforms for everyday life."
+  },
+  {
+    "name": "Living",
+    "slug": "living",
+    "image": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1000&auto=format&fit=crop",
+    "description": "Home rituals and routines."
+  },
+  {
+    "name": "Travel",
+    "slug": "travel",
+    "image": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1000&auto=format&fit=crop",
+    "description": "City guides and wandering notes."
+  }
+]
+

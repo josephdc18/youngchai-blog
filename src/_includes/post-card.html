@@ -1,0 +1,35 @@
+{% set category = post.data.category | upper | default('BLOG') %}
+{% set imageAlt = post.data.imageAlt | default(post.data.blogTitle) %}
+{% set excerpt = post.data.blogDescription | default('') %}
+
+<a href="{{ post.url }}" class="post-card group">
+    <div class="post-image-container {{ aspectClass | default('aspect-standard') }}">
+        {% if post.data.image %}
+            <img src="{{ post.data.image }}" alt="{{ imageAlt }}">
+        {% endif %}
+        {% if isHero %}
+            <div class="hero-badge">Latest Story</div>
+        {% endif %}
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="post-meta">
+            <span class="category-tag">
+                <span class="category-line"></span>
+                {{ category }}
+            </span>
+            <span class="date-tag">{{ post.date | postDate }}</span>
+        </div>
+        <h2 class="post-title {% if isHero %}post-title-hero{% endif %}">
+            {{ post.data.blogTitle }}
+        </h2>
+        {% if excerpt %}
+        <p class="post-excerpt">
+            "{{ excerpt }}"
+        </p>
+        {% endif %}
+        <div>
+            <span class="read-more">Read More</span>
+        </div>
+    </div>
+</a>
+

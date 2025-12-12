@@ -1,0 +1,37 @@
+<!-- ============================================ -->
+<!--                   Footer                     -->
+<!-- ============================================ -->
+
+<footer id="footer">
+    <div class="container" style="display: flex; flex-direction: column; align-items: center;">
+        <h2 class="font-serif" style="font-size: 2.25rem; letter-spacing: 0.1em; margin-bottom: 1rem; color: #4A5D4F;">
+            {{ client.name | upper | default('YOUNG CHAI') }}
+        </h2>
+        <p class="font-serif italic" style="max-width: 28rem; color: #6b7280; margin-bottom: 2rem;">
+            {{ client.tagline | default('Slowing down, coding, and finding the perfect cup of tea.') }}
+        </p>
+
+        <div style="display: flex; gap: 1.5rem; margin-bottom: 3rem;">
+            <a href="{{ client.social.instagram }}" class="footer-social-link" aria-label="Instagram">
+                <i data-lucide="instagram" width="20" height="20"></i>
+            </a>
+            <a href="{{ client.social.twitter }}" class="footer-social-link" aria-label="Twitter">
+                <i data-lucide="twitter" width="20" height="20"></i>
+            </a>
+            <a href="{{ client.social.pinterest }}" class="footer-social-link" aria-label="Pinterest">
+                <i data-lucide="heart" width="20" height="20"></i>
+            </a>
+        </div>
+
+        <div class="footer-nav">
+            <a href="/about">About</a>
+            <a href="/blog">Journal</a>
+            <a href="/contact">Contact</a>
+            <a href="/rss.xml">RSS</a>
+        </div>
+
+        <p class="font-serif italic" style="font-size: 0.75rem; color: #9ca3af;">
+            Built with intention. &copy; 2025 {{ client.name | default('Young Chai') }}.
+        </p>
+    </div>
+</footer>

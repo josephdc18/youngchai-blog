@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--Swap our for actual link-->
+        <link rel="canonical" href="https://{{ client.domain }}{{ page.url }}">
+
+        <meta name="description" content="{{ description }}">
+        <meta name="keywords" content="">
+
+        <!--Social Media Display-->
+        <meta property="og:title" content="{{ metaTitle }}"/>
+        <meta property="og:description" content="{{ description }}"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="https://{{ client.domain }}{{ page.url }}"/>
+        <meta property="og:image" content="/images/social.jpg"/>
+        <meta property="og:image:secure_url" content="/images/social.jpg"/>
+
+        <!--Favicons-->
+        <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon-32x32.png?v1">
+        <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicons/favicon-16x16.png">
+        <link rel="manifest" href="/assets/favicons/site.webmanifest">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+
+        <!-- Preload -->
+        <link rel="preload" as="image" href="/assets/logo-light.png">
+        <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/roboto-v29-latin-regular.woff2" crossorigin>
+        <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/roboto-v29-latin-700.woff2" crossorigin>
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="/css/root.css">
+
+        <link rel="preload" as="image" href="{{ preloadImg }}"/>
+
+        <!-- Loading in page specific CSS sheets from css block -->
+        <link rel="stylesheet" href="/css/critical.css"/>
+        <link rel="stylesheet" href="/css/blog-home.css">
+        {% if preloadCSS %}
+        <link rel="stylesheet" href="{{ preloadCSS }}">
+        {% endif %}
+
+        <!--Put analytics tag here at the bottom to prevent it from render blocking-->
+
+        <script defer src="https://unpkg.com/lucide@latest"></script>
+
+        <!-- For home page, use full title, including location for SEO. Other pages should just include the page name -->
+        <title>
+            {% if page.url == '/'%}
+                {{ client.name }} | {{ tagTitle }} | {{ client.address.city }}, {{ client.address.county }}
+            {% else %}
+                {{ tagTitle }} | {{ client.name }}
+            {% endif %}
+        </title>
+    </head>
+    <body>
+        <!--Screen reader skip main nav-->
+        <a class="skip" aria-label="skip to main content" href="#main">Click To Skip To Main Content</a>
+
+        {% include "header.html" %}
+        <main id="main">{{ content | safe }}</main>
+        {% include "footer.html" %}
+
+        <button href="#" id="go-top" aria-label="Go to top">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+            </svg>
+            <span>Top</span>
+        </button>
+
+        <script id="post-search-data" type="application/json">
+            [
+            {%- for post in collections.post -%}
+                {
+                    "title": {{ post.data.blogTitle | dump | safe }},
+                    "url": "{{ post.url }}",
+                    "description": {{ post.data.blogDescription | dump | safe }},
+                    "category": {{ post.data.category | upper | dump | safe }}
+                }{% if not loop.last %},{% endif %}
+            {%- endfor -%}
+            ]
+        </script>
+
+        <script defer src="/assets/js/menu.js"></script>
+
+        <!--
+        This script adds a class to the body after scrolling 100px
+        and we used these body.scroll styles to create some on scroll 
+        animations with the navbar
+    -->
+    <script defer>
+        // Navbar scroll animation
+        document.addEventListener('scroll', (e) => {
+            const scroll = document.documentElement.scrollTop;
+            if (scroll >= 100) {
+                document.querySelector('body').classList.add('scroll');
+            } else {
+                document.querySelector('body').classList.remove('scroll');
+            }
+        });
+    
+        // --- Go To Top Button ---
+        const goTopBtn = document.getElementById('go-top');
+    
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) { // Show button after scrolling 400px
+                goTopBtn.classList.add('visible');
+            } else {
+                goTopBtn.classList.remove('visible');
+            }
+        });
+    
+        goTopBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent the # from appearing in the URL
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Press feedback: add/remove .is-pressed on touch to mirror hover
+        (function(){
+            const PRESS_SEL = `
+                a, button, .button-solid, .btn, .hamburger-menu, #go-top, #navbar-menu a, #footer a
+            `;
+            let pressedEl = null;
+
+            function onTouchStart(e){
+                const el = e.target.closest(PRESS_SEL);
+                if(!el) return;
+                pressedEl = el;
+                el.classList.add('is-pressed');
+            }
+            function clearPressed(){
+                if(pressedEl){ pressedEl.classList.remove('is-pressed'); pressedEl = null; }
+            }
+            document.addEventListener('touchstart', onTouchStart, { passive: true });
+            document.addEventListener('touchend', clearPressed, { passive: true });
+            document.addEventListener('touchcancel', clearPressed, { passive: true });
+            // Do NOT clear on scroll to keep highlight while finger is down
+        })();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                window.lucide.createIcons();
+            }
+        });
+    </script>
+
+    </body>
+</html>

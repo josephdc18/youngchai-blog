@@ -1,0 +1,424 @@
+---
+layout: 'base.html'
+preloadCSS: '/css/blog.css'
+eleventyComputed:
+    description: '{{ blogDescription }}'
+    metaTitle: '{{ blogTitle }}'
+    tagTitle: '{{ titleTag }}'
+    preloadImg: '{{ image }}'
+    permalink: '/blog/{{ pageName | slug }}/index.html'
+---
+
+<!-- ============================================ -->
+<!--                    LANDING                   -->
+<!-- ============================================ -->
+
+<section id="int-hero" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{{ image }}') center/cover no-repeat;">
+</section>
+
+<!-- ============================================ -->
+<!--              Main Blog Content               -->
+<!-- ============================================ -->
+
+<div class="blog-container main-content-wrapper">
+    <!--Main content -->
+    <div class="main-content">
+        <!-- ============================================ -->
+        <!--                  Blog Article                -->
+        <!-- ============================================ -->
+
+        <article class="blog-article">
+            <!--Main Article Image-->
+            <picture class="blog-mainImage">
+                <img src="{{ image }}" alt="{{ imageAlt }}" width="795" height="400" decoding="async"/>
+            </picture>
+
+            <!--Article Info-->
+            <div class="article-group">
+                <h1 class="blog-h1">{{ blogTitle }}</h1>
+                <div class="blog-authorGroup">
+                    <!--Author Image-->
+                    <picture class="blog-author-img">
+                        <img
+            src="/assets/svgs/profile.svg"
+            alt="house"
+            width="32"
+            height="32"
+            decoding="async"
+/>
+                    </picture>
+                    <span class="blog-author">{{ author }}</span>
+                    <span aria-hidden="true" class="blog-dot"></span>
+                    <!--Blog Date-->
+                    <span class="blog-date">{{ date | postDate }}</span>
+                </div>
+            </div>
+            <section id="blog-content">
+                {{ content | safe }}
+            </section>
+        </article>
+
+        <!-- ============================================ -->
+        <!--              Comments Section                -->
+        <!-- ============================================ -->
+        <section class="comments-section" id="comments-section">
+            <div class="comments-header">
+                <h2 class="comments-title">
+                    <i data-lucide="message-circle" width="24" height="24"></i>
+                    <span>Comments</span>
+                    <span class="comment-count" id="comment-count">0</span>
+                </h2>
+            </div>
+
+            <!-- New Comment Form - Inline at top -->
+            <div class="new-comment-form-container" id="new-comment-form-container">
+                <form class="inline-comment-form" id="new-comment-form">
+                    <div class="comment-form-header">
+                        <i data-lucide="edit-3" width="18" height="18"></i>
+                        <span>Write a comment</span>
+                    </div>
+                    <div class="comment-form-row">
+                        <div class="floating-label-group">
+                            <input type="text" name="commenter-name" id="new-commenter-name" placeholder=" " required>
+                            <label for="new-commenter-name">Your Name</label>
+                        </div>
+                        <div class="floating-label-group">
+                            <input type="email" name="commenter-email" id="new-commenter-email" placeholder=" " required>
+                            <label for="new-commenter-email">Email</label>
+                        </div>
+                    </div>
+                    <div class="floating-label-group">
+                        <textarea name="comment-text" id="new-comment-text" rows="3" placeholder=" " required></textarea>
+                        <label for="new-comment-text">Share your thoughts...</label>
+                    </div>
+                    <button type="submit" class="comment-submit-btn">
+                        <span>Post Comment</span>
+                        <i data-lucide="send" width="16" height="16"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Comments List -->
+            <div class="comments-list" id="comments-list">
+                <!-- Sample comments - will be dynamic -->
+                <div class="comment" data-comment-id="1">
+                    <div class="comment-body">
+                        <div class="comment-header">
+                            <span class="comment-author">Sarah M.</span>
+                            <span class="comment-date">2 hours ago</span>
+                        </div>
+                        <p class="comment-text">This is exactly what I needed to read today! Your perspective on slowing down really resonates with me. I've been trying to disconnect more on weekends.</p>
+                        <div class="comment-actions">
+                            <button class="comment-action-btn like-btn" data-liked="false">
+                                <i data-lucide="heart" width="14" height="14"></i>
+                                <span class="like-count">12</span>
+                            </button>
+                            <button class="comment-action-btn reply-btn">
+                                <i data-lucide="reply" width="14" height="14"></i>
+                                <span>Reply</span>
+                            </button>
+                        </div>
+
+                        <!-- Inline Reply Form (hidden by default) -->
+                        <div class="inline-reply-form-container hidden" data-reply-form="1"></div>
+
+                        <!-- Replies to this comment -->
+                        <div class="replies">
+                            <div class="comment reply" data-comment-id="1-1">
+                                <div class="comment-body">
+                                    <div class="comment-header">
+                                        <span class="comment-author">James K.</span>
+                                        <span class="comment-date">1 hour ago</span>
+                                    </div>
+                                    <p class="comment-text">Couldn't agree more! Weekend detox has been a game changer for me.</p>
+                                    <div class="comment-actions">
+                                        <button class="comment-action-btn like-btn" data-liked="false">
+                                            <i data-lucide="heart" width="14" height="14"></i>
+                                            <span class="like-count">3</span>
+                                        </button>
+                                        <button class="comment-action-btn reply-btn">
+                                            <i data-lucide="reply" width="14" height="14"></i>
+                                            <span>Reply</span>
+                                        </button>
+                                    </div>
+                                    <div class="inline-reply-form-container hidden" data-reply-form="1-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comment" data-comment-id="2">
+                    <div class="comment-body">
+                        <div class="comment-header">
+                            <span class="comment-author">Emily R.</span>
+                            <span class="comment-date">5 hours ago</span>
+                        </div>
+                        <p class="comment-text">Love your writing style! Would love to see more posts about mindful coding practices. Do you have any book recommendations on this topic?</p>
+                        <div class="comment-actions">
+                            <button class="comment-action-btn like-btn" data-liked="false">
+                                <i data-lucide="heart" width="14" height="14"></i>
+                                <span class="like-count">8</span>
+                            </button>
+                            <button class="comment-action-btn reply-btn">
+                                <i data-lucide="reply" width="14" height="14"></i>
+                                <span>Reply</span>
+                            </button>
+                        </div>
+                        <div class="inline-reply-form-container hidden" data-reply-form="2"></div>
+                    </div>
+                </div>
+
+                <div class="comment" data-comment-id="3">
+                    <div class="comment-body">
+                        <div class="comment-header">
+                            <span class="comment-author">Marcus T.</span>
+                            <span class="comment-date">Yesterday</span>
+                        </div>
+                        <p class="comment-text">Beautiful photos as always! Where was this taken?</p>
+                        <div class="comment-actions">
+                            <button class="comment-action-btn like-btn" data-liked="false">
+                                <i data-lucide="heart" width="14" height="14"></i>
+                                <span class="like-count">5</span>
+                            </button>
+                            <button class="comment-action-btn reply-btn">
+                                <i data-lucide="reply" width="14" height="14"></i>
+                                <span>Reply</span>
+                            </button>
+                        </div>
+                        <div class="inline-reply-form-container hidden" data-reply-form="3"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- End .main-content -->
+
+    <!-- ============================================ -->
+    <!--                   Sidebar                    -->
+    <!-- ============================================ -->
+
+    {% include 'featured-post.html' %}
+</div>
+
+<!-- Sticky Comment Bar -->
+<div class="sticky-comment-bar" id="sticky-comment-bar">
+    <div class="sticky-comment-inner">
+        <div class="sticky-comment-info">
+            <i data-lucide="message-circle" width="18" height="18"></i>
+            <span><strong id="sticky-count">4</strong> Comments</span>
+        </div>
+        <button class="write-comment-btn" id="write-comment-btn">
+            <i data-lucide="edit-3" width="16" height="16"></i>
+            <span>Write a Comment</span>
+        </button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const stickyBar = document.getElementById('sticky-comment-bar');
+    const writeCommentBtn = document.getElementById('write-comment-btn');
+    const newCommentForm = document.getElementById('new-comment-form');
+    const commentsList = document.getElementById('comments-list');
+    const commentCount = document.getElementById('comment-count');
+    const stickyCount = document.getElementById('sticky-count');
+
+    // Update comment count
+    function updateCommentCount() {
+        const comments = commentsList.querySelectorAll('.comment');
+        const count = comments.length;
+        commentCount.textContent = count;
+        stickyCount.textContent = count;
+    }
+
+    // Initialize count
+    updateCommentCount();
+
+    // Show sticky bar on scroll past hero
+    function handleScroll() {
+        const heroSection = document.getElementById('int-hero');
+        if (heroSection) {
+            const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+            if (window.scrollY > heroBottom - 100) {
+                stickyBar.classList.add('visible');
+            } else {
+                stickyBar.classList.remove('visible');
+            }
+        }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+
+    // Scroll to comment form when clicking "Write a Comment"
+    writeCommentBtn.addEventListener('click', () => {
+        const formContainer = document.getElementById('new-comment-form-container');
+        formContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+            document.getElementById('new-commenter-name').focus();
+        }, 500);
+    });
+
+    // Handle reply buttons - show inline reply form
+    commentsList.addEventListener('click', (e) => {
+        const replyBtn = e.target.closest('.reply-btn');
+        if (replyBtn) {
+            const commentEl = replyBtn.closest('.comment');
+            const commentId = commentEl.dataset.commentId;
+            const replyFormContainer = commentEl.querySelector(`[data-reply-form="${commentId}"]`);
+            
+            // Hide all other reply forms first
+            document.querySelectorAll('.inline-reply-form-container').forEach(container => {
+                if (container !== replyFormContainer) {
+                    container.classList.add('hidden');
+                    container.innerHTML = '';
+                }
+            });
+            
+            // Toggle this reply form
+            if (replyFormContainer.classList.contains('hidden')) {
+                replyFormContainer.classList.remove('hidden');
+                replyFormContainer.innerHTML = createReplyFormHTML(commentId);
+                lucide.createIcons();
+                replyFormContainer.querySelector('input[name="reply-name"]').focus();
+                
+                // Handle reply form submission
+                const replyForm = replyFormContainer.querySelector('.inline-reply-form');
+                replyForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = replyForm.querySelector('input[name="reply-name"]').value;
+                    const text = replyForm.querySelector('textarea[name="reply-text"]').value;
+                    
+                    addComment(name, text, commentId);
+                    replyFormContainer.classList.add('hidden');
+                    replyFormContainer.innerHTML = '';
+                });
+                
+                // Handle cancel
+                replyFormContainer.querySelector('.cancel-reply-btn').addEventListener('click', () => {
+                    replyFormContainer.classList.add('hidden');
+                    replyFormContainer.innerHTML = '';
+                });
+            } else {
+                replyFormContainer.classList.add('hidden');
+                replyFormContainer.innerHTML = '';
+            }
+        }
+
+        // Handle like buttons
+        const likeBtn = e.target.closest('.like-btn');
+        if (likeBtn) {
+            const isLiked = likeBtn.dataset.liked === 'true';
+            const likeCount = likeBtn.querySelector('.like-count');
+            let count = parseInt(likeCount.textContent);
+            
+            if (isLiked) {
+                likeBtn.dataset.liked = 'false';
+                likeBtn.classList.remove('liked');
+                likeCount.textContent = count - 1;
+            } else {
+                likeBtn.dataset.liked = 'true';
+                likeBtn.classList.add('liked');
+                likeCount.textContent = count + 1;
+            }
+            
+            lucide.createIcons();
+        }
+    });
+
+    // Handle new comment form submission
+    newCommentForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('new-commenter-name').value;
+        const text = document.getElementById('new-comment-text').value;
+        
+        addComment(name, text, null);
+        newCommentForm.reset();
+    });
+
+    function addComment(name, text, parentId) {
+        const newComment = createCommentElement(name, text, parentId);
+        
+        if (parentId) {
+            // Add as reply - find the parent and add to its replies container
+            const parentComment = commentsList.querySelector(`[data-comment-id="${parentId}"]`);
+            let repliesContainer = parentComment.querySelector('.replies');
+            if (!repliesContainer) {
+                repliesContainer = document.createElement('div');
+                repliesContainer.className = 'replies';
+                parentComment.querySelector('.comment-body').appendChild(repliesContainer);
+            }
+            repliesContainer.appendChild(newComment);
+        } else {
+            // Add as new comment at the top of the list
+            commentsList.insertBefore(newComment, commentsList.firstChild);
+        }
+
+        updateCommentCount();
+        lucide.createIcons();
+        newComment.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function createReplyFormHTML(parentId) {
+        return `
+            <form class="inline-reply-form">
+                <div class="reply-form-inputs">
+                    <div class="floating-label-group">
+                        <input type="text" name="reply-name" placeholder=" " required>
+                        <label>Your Name</label>
+                    </div>
+                    <div class="floating-label-group">
+                        <textarea name="reply-text" rows="2" placeholder=" " required></textarea>
+                        <label>Write your reply...</label>
+                    </div>
+                </div>
+                <div class="reply-form-actions">
+                    <button type="button" class="cancel-reply-btn">Cancel</button>
+                    <button type="submit" class="submit-reply-btn">
+                        <span>Reply</span>
+                        <i data-lucide="send" width="14" height="14"></i>
+                    </button>
+                </div>
+            </form>
+        `;
+    }
+
+    function createCommentElement(name, text, parentId) {
+        const commentId = parentId ? `${parentId}-${Date.now()}` : Date.now().toString();
+        const div = document.createElement('div');
+        div.className = parentId ? 'comment reply' : 'comment';
+        div.dataset.commentId = commentId;
+        
+        div.innerHTML = `
+            <div class="comment-body">
+                <div class="comment-header">
+                    <span class="comment-author">${escapeHtml(name)}</span>
+                    <span class="comment-date">Just now</span>
+                </div>
+                <p class="comment-text">${escapeHtml(text)}</p>
+                <div class="comment-actions">
+                    <button class="comment-action-btn like-btn" data-liked="false">
+                        <i data-lucide="heart" width="14" height="14"></i>
+                        <span class="like-count">0</span>
+                    </button>
+                    <button class="comment-action-btn reply-btn">
+                        <i data-lucide="reply" width="14" height="14"></i>
+                        <span>Reply</span>
+                    </button>
+                </div>
+                <div class="inline-reply-form-container hidden" data-reply-form="${commentId}"></div>
+            </div>
+        `;
+        
+        return div;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+});
+</script>
