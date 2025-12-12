@@ -106,7 +106,6 @@ h4 {
 @media (min-width: 1024px) {
     .grid-layout {
         grid-template-columns: 8fr 4fr;
-        align-items: start;
     }
 
     .sidebar-col {
@@ -122,6 +121,12 @@ h4 {
     position: -webkit-sticky;
     position: sticky;
     top: 8rem;
+}
+
+@media (min-width: 1024px) {
+    .sidebar-col.desktop-only {
+        display: block;
+    }
 }
 
 .hidden {
