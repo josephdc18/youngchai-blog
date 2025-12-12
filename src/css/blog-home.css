@@ -111,14 +111,17 @@ h4 {
 
     .sidebar-col {
         order: 2;
-        position: -webkit-sticky;
-        position: sticky;
-        top: 8rem;
     }
 
     .feed-col {
         order: 1;
     }
+}
+
+.sticky-wrapper {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 8rem;
 }
 
 .hidden {
