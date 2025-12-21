@@ -63,48 +63,34 @@ eleventyComputed:
         </article>
 
         <!-- ============================================ -->
-        <!--              Comments Section                -->
+        <!--          Comments Section (Giscus)           -->
         <!-- ============================================ -->
         <section class="comments-section" id="comments-section">
             <div class="comments-header">
                 <h2 class="comments-title">
                     <i data-lucide="message-circle" width="24" height="24"></i>
                     <span>{{ 'Comments' if currentLocale == 'en' else '댓글' }}</span>
-                    <span class="comment-count" id="comment-count">0</span>
                 </h2>
             </div>
 
-            <!-- New Comment Form - Inline at top -->
-            <div class="new-comment-form-container" id="new-comment-form-container">
-                <form class="inline-comment-form" id="new-comment-form">
-                    <div class="comment-form-header">
-                        <i data-lucide="edit-3" width="18" height="18"></i>
-                        <span>{{ 'Write a comment' if currentLocale == 'en' else '댓글 작성' }}</span>
-                    </div>
-                    <div class="comment-form-row">
-                        <div class="floating-label-group">
-                            <input type="text" name="commenter-name" id="new-commenter-name" placeholder=" " required>
-                            <label for="new-commenter-name">{{ 'Your Name' if currentLocale == 'en' else '이름' }}</label>
-                        </div>
-                        <div class="floating-label-group">
-                            <input type="email" name="commenter-email" id="new-commenter-email" placeholder=" " required>
-                            <label for="new-commenter-email">{{ 'Email' if currentLocale == 'en' else '이메일' }}</label>
-                        </div>
-                    </div>
-                    <div class="floating-label-group">
-                        <textarea name="comment-text" id="new-comment-text" rows="3" placeholder=" " required></textarea>
-                        <label for="new-comment-text">{{ 'Share your thoughts...' if currentLocale == 'en' else '생각을 공유하세요...' }}</label>
-                    </div>
-                    <button type="submit" class="comment-submit-btn">
-                        <span>{{ 'Post Comment' if currentLocale == 'en' else '댓글 달기' }}</span>
-                        <i data-lucide="send" width="16" height="16"></i>
-                    </button>
-                </form>
-            </div>
-
-            <!-- Comments List -->
-            <div class="comments-list" id="comments-list">
-                <!-- Comments will be loaded dynamically -->
+            <!-- Giscus Comments -->
+            <div class="giscus-container">
+                <script src="https://giscus.app/client.js"
+                        data-repo="josephdc18/youngchai-blog"
+                        data-repo-id="R_kgDOQnvwIQ"
+                        data-category="Blog Comments"
+                        data-category-id="DIC_kwDOQnvwIc4C0EMg"
+                        data-mapping="pathname"
+                        data-strict="0"
+                        data-reactions-enabled="1"
+                        data-emit-metadata="0"
+                        data-input-position="bottom"
+                        data-theme="preferred_color_scheme"
+                        data-lang="{{ currentLocale }}"
+                        data-loading="lazy"
+                        crossorigin="anonymous"
+                        async>
+                </script>
             </div>
         </section>
     </div>
@@ -153,216 +139,36 @@ eleventyComputed:
     </div>
 </div>
 
-<!-- Sticky Comment Bar -->
-<div class="sticky-comment-bar" id="sticky-comment-bar">
-    <div class="sticky-comment-inner">
-        <div class="sticky-comment-info">
-            <i data-lucide="message-circle" width="18" height="18"></i>
-            <span><strong id="sticky-count">0</strong> {{ 'Comments' if currentLocale == 'en' else '댓글' }}</span>
-        </div>
-        <button class="write-comment-btn" id="write-comment-btn">
-            <i data-lucide="edit-3" width="16" height="16"></i>
-            <span>{{ 'Write a Comment' if currentLocale == 'en' else '댓글 작성' }}</span>
-        </button>
-    </div>
-</div>
+<style>
+/* Giscus container styling */
+.giscus-container {
+    margin-top: 2rem;
+    padding: 1rem 0;
+}
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const currentLocale = '{{ currentLocale }}';
-    const stickyBar = document.getElementById('sticky-comment-bar');
-    const writeCommentBtn = document.getElementById('write-comment-btn');
-    const newCommentForm = document.getElementById('new-comment-form');
-    const commentsList = document.getElementById('comments-list');
-    const commentCount = document.getElementById('comment-count');
-    const stickyCount = document.getElementById('sticky-count');
+/* Style the Giscus iframe to match the site */
+.giscus-frame {
+    width: 100%;
+}
 
-    function updateCommentCount() {
-        const comments = commentsList.querySelectorAll('.comment');
-        const count = comments.length;
-        commentCount.textContent = count;
-        stickyCount.textContent = count;
-    }
+/* Comments section header */
+.comments-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border, #e5e7eb);
+}
 
-    updateCommentCount();
+.comments-header {
+    margin-bottom: 1.5rem;
+}
 
-    function handleScroll() {
-        const heroSection = document.getElementById('int-hero');
-        if (heroSection) {
-            const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-            if (window.scrollY > heroBottom - 100) {
-                stickyBar.classList.add('visible');
-            } else {
-                stickyBar.classList.remove('visible');
-            }
-        }
-    }
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-
-    writeCommentBtn.addEventListener('click', () => {
-        const formContainer = document.getElementById('new-comment-form-container');
-        formContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(() => {
-            document.getElementById('new-commenter-name').focus();
-        }, 500);
-    });
-
-    commentsList.addEventListener('click', (e) => {
-        const replyBtn = e.target.closest('.reply-btn');
-        if (replyBtn) {
-            const commentEl = replyBtn.closest('.comment');
-            const commentId = commentEl.dataset.commentId;
-            const replyFormContainer = commentEl.querySelector(`[data-reply-form="${commentId}"]`);
-            
-            document.querySelectorAll('.inline-reply-form-container').forEach(container => {
-                if (container !== replyFormContainer) {
-                    container.classList.add('hidden');
-                    container.innerHTML = '';
-                }
-            });
-            
-            if (replyFormContainer.classList.contains('hidden')) {
-                replyFormContainer.classList.remove('hidden');
-                replyFormContainer.innerHTML = createReplyFormHTML(commentId);
-                if (window.lucide) lucide.createIcons();
-                replyFormContainer.querySelector('input[name="reply-name"]').focus();
-                
-                const replyForm = replyFormContainer.querySelector('.inline-reply-form');
-                replyForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const name = replyForm.querySelector('input[name="reply-name"]').value;
-                    const text = replyForm.querySelector('textarea[name="reply-text"]').value;
-                    addComment(name, text, commentId);
-                    replyFormContainer.classList.add('hidden');
-                    replyFormContainer.innerHTML = '';
-                });
-                
-                replyFormContainer.querySelector('.cancel-reply-btn').addEventListener('click', () => {
-                    replyFormContainer.classList.add('hidden');
-                    replyFormContainer.innerHTML = '';
-                });
-            } else {
-                replyFormContainer.classList.add('hidden');
-                replyFormContainer.innerHTML = '';
-            }
-        }
-
-        const likeBtn = e.target.closest('.like-btn');
-        if (likeBtn) {
-            const isLiked = likeBtn.dataset.liked === 'true';
-            const likeCount = likeBtn.querySelector('.like-count');
-            let count = parseInt(likeCount.textContent);
-            
-            if (isLiked) {
-                likeBtn.dataset.liked = 'false';
-                likeBtn.classList.remove('liked');
-                likeCount.textContent = count - 1;
-            } else {
-                likeBtn.dataset.liked = 'true';
-                likeBtn.classList.add('liked');
-                likeCount.textContent = count + 1;
-            }
-            
-            if (window.lucide) lucide.createIcons();
-        }
-    });
-
-    newCommentForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('new-commenter-name').value;
-        const text = document.getElementById('new-comment-text').value;
-        addComment(name, text, null);
-        newCommentForm.reset();
-    });
-
-    function addComment(name, text, parentId) {
-        const newComment = createCommentElement(name, text, parentId);
-        
-        if (parentId) {
-            const parentComment = commentsList.querySelector(`[data-comment-id="${parentId}"]`);
-            let repliesContainer = parentComment.querySelector('.replies');
-            if (!repliesContainer) {
-                repliesContainer = document.createElement('div');
-                repliesContainer.className = 'replies';
-                parentComment.querySelector('.comment-body').appendChild(repliesContainer);
-            }
-            repliesContainer.appendChild(newComment);
-        } else {
-            commentsList.insertBefore(newComment, commentsList.firstChild);
-        }
-
-        updateCommentCount();
-        if (window.lucide) lucide.createIcons();
-        newComment.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    const replyLabel = currentLocale === 'en' ? 'Reply' : '답글';
-    const cancelLabel = currentLocale === 'en' ? 'Cancel' : '취소';
-    const nameLabel = currentLocale === 'en' ? 'Your Name' : '이름';
-    const replyPlaceholder = currentLocale === 'en' ? 'Write your reply...' : '답글을 작성하세요...';
-
-    function createReplyFormHTML(parentId) {
-        return `
-            <form class="inline-reply-form">
-                <div class="reply-form-inputs">
-                    <div class="floating-label-group">
-                        <input type="text" name="reply-name" placeholder=" " required>
-                        <label>${nameLabel}</label>
-                    </div>
-                    <div class="floating-label-group">
-                        <textarea name="reply-text" rows="2" placeholder=" " required></textarea>
-                        <label>${replyPlaceholder}</label>
-                    </div>
-                </div>
-                <div class="reply-form-actions">
-                    <button type="button" class="cancel-reply-btn">${cancelLabel}</button>
-                    <button type="submit" class="submit-reply-btn">
-                        <span>${replyLabel}</span>
-                        <i data-lucide="send" width="14" height="14"></i>
-                    </button>
-                </div>
-            </form>
-        `;
-    }
-
-    function createCommentElement(name, text, parentId) {
-        const commentId = parentId ? `${parentId}-${Date.now()}` : Date.now().toString();
-        const div = document.createElement('div');
-        div.className = parentId ? 'comment reply' : 'comment';
-        div.dataset.commentId = commentId;
-        
-        const justNow = currentLocale === 'en' ? 'Just now' : '방금 전';
-        
-        div.innerHTML = `
-            <div class="comment-body">
-                <div class="comment-header">
-                    <span class="comment-author">${escapeHtml(name)}</span>
-                    <span class="comment-date">${justNow}</span>
-                </div>
-                <p class="comment-text">${escapeHtml(text)}</p>
-                <div class="comment-actions">
-                    <button class="comment-action-btn like-btn" data-liked="false">
-                        <i data-lucide="heart" width="14" height="14"></i>
-                        <span class="like-count">0</span>
-                    </button>
-                    <button class="comment-action-btn reply-btn">
-                        <i data-lucide="reply" width="14" height="14"></i>
-                        <span>${replyLabel}</span>
-                    </button>
-                </div>
-                <div class="inline-reply-form-container hidden" data-reply-form="${commentId}"></div>
-            </div>
-        `;
-        
-        return div;
-    }
-
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-});
-</script>
+.comments-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-serif, 'Playfair Display', serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--bodyHeader, #1a1a1a);
+}
+</style>
