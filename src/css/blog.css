@@ -551,7 +551,13 @@
   }
   .blog-article .blog-authorGroup {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .blog-article .author-info {
+    display: flex;
     align-items: center;
     gap: 0.75rem;
   }
@@ -567,6 +573,40 @@
     background-color: #fe4f70;
     border-radius: 50%;
     display: block;
+  }
+  /* Share Links */
+  .blog-article .share-links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .blog-article .share-label {
+    font-size: 0.75rem;
+    color: var(--bodyText);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .blog-article .share-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: #f5f5f5;
+    color: #666;
+    transition: all 0.2s ease;
+  }
+  .blog-article .share-link:hover {
+    transform: translateY(-2px);
+  }
+  .blog-article .share-pinterest:hover {
+    background: #E60023;
+    color: white;
+  }
+  .blog-article .share-email:hover {
+    background: #D48C70;
+    color: white;
   }
   .blog-article .blog-h1 {
     font-size: clamp(20px, 5vw, 39px);
