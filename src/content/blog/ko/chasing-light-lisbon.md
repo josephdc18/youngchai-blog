@@ -1,13 +1,13 @@
 ---
 title: 리스본에서 빛을 쫓다
-slug: chasing-light-lisbon
+slug: cr-smith-museum
 description: 파스텔 타일, 골든 아워 사진, 에스프레소 브레이크를 위해 언덕을 오르던 메모.
 category: PHOTOGRAPHY
 author: Young Chai
-date: 2025-11-25T08:00:00.000Z
+date: 2025-12-21T13:40:00.000-06:00
 tags:
   - post
-image: https://images.unsplash.com/photo-1555881400-74d7acaacd81?q=80&w=1000&auto=format&fit=crop
+image: ""
 imageAlt: 일몰의 리스본 옥상 풍경
 ---
 
