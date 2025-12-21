@@ -4,16 +4,28 @@
       "name": "Living",
       "slug": "LIVING",
       "subcategories": [
-        { "name": "Interiors", "slug": "INTERIORS" },
-        { "name": "Wellness", "slug": "WELLNESS" },
-        { "name": "Tech", "slug": "TECH" }
+        {
+          "name": "Interiors",
+          "slug": "INTERIORS"
+        },
+        {
+          "name": "Wellness",
+          "slug": "WELLNESS"
+        },
+        {
+          "name": "Tech",
+          "slug": "TECH"
+        }
       ]
     },
     {
       "name": "Style",
       "slug": "STYLE",
       "subcategories": [
-        { "name": "Photography", "slug": "PHOTOGRAPHY" }
+        {
+          "name": "Photography",
+          "slug": "PHOTOGRAPHY"
+        }
       ]
     },
     {
@@ -25,14 +37,21 @@
       "name": "Work",
       "slug": "WORK",
       "subcategories": [
-        { "name": "Essay", "slug": "ESSAY" }
+        {
+          "name": "Essay",
+          "slug": "ESSAY"
+        }
       ]
     },
     {
       "name": "Food",
       "slug": "FOOD",
-      "subcategories": []
+      "subcategories": [
+        {
+          "name": "Korean Food",
+          "slug": "KOREAN-FOOD"
+        }
+      ]
     }
   ]
 }
-
