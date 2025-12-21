@@ -1,0 +1,218 @@
+---
+layout: 'base.html'
+locale: 'ko'
+tagTitle: '삶, 코드, 차에 관한 일지'
+metaTitle: '영 차이 | 삶, 코드, 차에 관한 일지'
+description: "느린 삶, 신중한 코딩, 그리고 집을 만드는 의식에 대한 노트."
+preloadImg: '/images/blog/landing.jpg'
+preloadCSS: '/css/blog-home.css'
+permalink: '/ko/'
+---
+
+{% set posts = collections.posts_ko | default([]) %}
+{% set heroPost = posts[0] if posts | length > 0 else null %}
+{% set currentLocale = 'ko' %}
+
+<div style="padding-top: 8rem;">
+    <div class="container">
+        <div class="grid-layout">
+            <div class="feed-col">
+                {% if heroPost %}
+                    <a href="{{ heroPost.url }}" class="post-card group">
+                        <div class="post-image-container aspect-hero">
+                            {% if heroPost.data.image %}
+                            <img src="{{ heroPost.data.image }}" alt="{{ heroPost.data.imageAlt | default(heroPost.data.title) }}">
+                            {% endif %}
+                            <div class="hero-badge">{{ 'blog.latestStory' | t(currentLocale) }}</div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div class="post-meta">
+                                <span class="category-tag">
+                                    <span class="category-line"></span>
+                                    {{ heroPost.data.category | upper }}
+                                </span>
+                                <span class="date-tag">{{ heroPost.date | postDateLocale(currentLocale) }}</span>
+                            </div>
+                            <h2 class="post-title post-title-hero">{{ heroPost.data.title }}</h2>
+                            <p class="post-excerpt">"{{ heroPost.data.description }}"</p>
+                            <div>
+                                <span class="read-more">{{ 'blog.readMore' | t(currentLocale) }}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <p class="post-excerpt">{{ 'blog.noPosts' | t(currentLocale) }}</p>
+                {% endif %}
+
+                {% for post in posts %}
+                    {% if loop.index0 > 0 and loop.index0 < 5 %}
+                        <a href="{{ post.url }}" class="post-card group">
+                            <div class="post-image-container aspect-standard">
+                                {% if post.data.image %}
+                                <img src="{{ post.data.image }}" alt="{{ post.data.imageAlt | default(post.data.title) }}">
+                                {% endif %}
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <div class="post-meta">
+                                    <span class="category-tag">
+                                        <span class="category-line"></span>
+                                        {{ post.data.category | upper }}
+                                    </span>
+                                    <span class="date-tag">{{ post.date | postDateLocale(currentLocale) }}</span>
+                                </div>
+                                <h2 class="post-title">{{ post.data.title }}</h2>
+                                <p class="post-excerpt">"{{ post.data.description }}"</p>
+                                <div>
+                                    <span class="read-more">{{ 'blog.readMore' | t(currentLocale) }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+
+                <div style="display: flex; justify-content: center; padding-top: 2rem; margin-bottom: 4rem;">
+                    <button id="load-more-btn" class="btn-load">
+                        <span id="load-more-text">{{ 'blog.loadMore' | t(currentLocale) }}</span>
+                        <i data-lucide="chevron-down" class="animate-bounce" width="20" height="20"></i>
+                    </button>
+                </div>
+
+                <div class="mobile-only" style="margin-top: 3rem;">
+                    <div class="widget-box" style="width: 100%;">
+                        <div class="corner-tr"></div>
+                        <div class="corner-bl"></div>
+
+                        <div class="widget-header">
+                            <i data-lucide="coffee" class="text-accent" width="20" height="20"></i>
+                            <h3 class="italic" style="font-size: 1.25rem;">{{ 'blog.popularPosts' | t(currentLocale) }}</h3>
+                        </div>
+
+                        <ul class="widget-list">
+                            {% set popularPosts = collections.popular_ko | default([]) %}
+                            {% if popularPosts | length > 0 %}
+                                {%- for post in popularPosts | head(5) -%}
+                                {%- set index = loop.index -%}
+                                <li class="group">
+                                    <div class="widget-list-meta">
+                                        <span class="widget-num">{{ index | padStart(2, '0') }}</span>
+                                        <span class="widget-tag">{{ post.data.category | upper | default('BLOG') }}</span>
+                                    </div>
+                                    <a href="{{ post.url }}">
+                                        <h4 class="widget-title">{{ post.data.title }}</h4>
+                                    </a>
+                                </li>
+                                {%- endfor -%}
+                            {% else %}
+                                <li>
+                                    <p class="post-excerpt" style="font-size: 0.9rem;">인기 글이 곧 여기에 표시됩니다.</p>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {% include 'sidebar-ko.html' %}
+        </div>
+    </div>
+
+    <div class="section-full bg-yellow desktop-only">
+        <div class="section-header">
+            <h2>{{ 'blog.mostCommented' | t(currentLocale) }}</h2>
+            <div class="section-divider-full"></div>
+        </div>
+
+        <div class="container">
+            <div class="grid-4-cols">
+                {% set commentedPosts = collections.commented_ko | default([]) %}
+                {% for post in commentedPosts %}
+                    {% if loop.index <= 4 %}
+                        <div class="grid-col-item group">
+                            <span class="text-meta" style="margin-bottom: 1.5rem; opacity: 0.7;">{{ post.data.category | upper | default('DISCUSS') }}</span>
+                            <a href="{{ post.url }}">
+                                <h3 class="font-serif" style="font-size: 1.5rem; line-height: 1.2;">{{ post.data.title }}</h3>
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% if commentedPosts | length == 0 %}
+                    <div class="grid-col-item">
+                        <span class="text-meta" style="margin-bottom: 1.5rem; opacity: 0.7;">곧 공개</span>
+                        <h3 class="font-serif" style="font-size: 1.5rem; line-height: 1.2;">댓글이 많은 글이 여기에 표시됩니다.</h3>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="padding-top: 6rem; padding-bottom: 3rem;">
+        <div class="topics-header">
+            <h3 class="font-serif" style="font-size: 1.875rem;">{{ 'blog.browseByTopic' | t(currentLocale) }}</h3>
+        </div>
+
+        <div class="topics-grid">
+            {% for topic in topics %}
+                <a href="/ko/blog/{{ topic.slug }}" class="topic-card group">
+                    <img src="{{ topic.image }}" class="topic-bg" alt="{{ topic.name }}">
+                    <div class="topic-overlay"></div>
+                    <div class="topic-arrow">
+                        <i data-lucide="arrow-up-right" width="16" height="16"></i>
+                    </div>
+                    <div class="topic-content">
+                        <h4 class="font-serif" style="font-size: 1.5rem; margin-bottom: 0.25rem;">{{ topic.name }}</h4>
+                        <div class="topic-line"></div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section-full bg-peach desktop-only">
+        <div class="section-header">
+            <h2>{{ 'blog.editorsPicks' | t(currentLocale) }}</h2>
+        </div>
+
+        <div class="editors-grid">
+            {% for pick in editorsPicks %}
+                <a href="{{ pick.link }}" class="editor-item group">
+                    <div class="editor-img-circle">
+                        <img src="{{ pick.image }}" alt="{{ pick.title }}">
+                    </div>
+                    <h3 class="font-serif" style="font-size: 1.25rem;">{{ pick.title }}</h3>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container" style="padding: 6rem 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; border-bottom: 1px solid black; padding-bottom: 1rem;">
+            <h3 class="font-serif" style="font-size: 1.875rem;">{{ 'blog.fromArchives' | t(currentLocale) }}</h3>
+            <span class="text-meta" style="color: var(--color-gray-medium);">{{ 'blog.collectedEssays' | t(currentLocale) }}</span>
+        </div>
+
+        <div class="archive-grid">
+            {% set rendered = 0 %}
+            {% for post in posts %}
+                {% if loop.index0 >= 5 and rendered < 6 %}
+                    <a href="{{ post.url }}" class="archive-item group">
+                        <div class="post-image-container aspect-landscape" style="margin-bottom: 1.25rem;">
+                            {% if post.data.image %}
+                                <img src="{{ post.data.image }}" alt="{{ post.data.imageAlt | default(post.data.title) }}">
+                            {% endif %}
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <span class="text-meta text-accent" style="font-size: 0.625rem;">{{ post.data.category | upper | default('ESSAYS') }}</span>
+                            <h4 class="archive-title">{{ post.data.title }}</h4>
+                            <p class="post-excerpt" style="font-size: 0.875rem;">{{ post.data.description }}</p>
+                        </div>
+                    </a>
+                    {% set rendered = rendered + 1 %}
+                {% endif %}
+            {% endfor %}
+            {% if rendered == 0 %}
+                <p class="post-excerpt">추가 글이 게시되면 여기에 선별됩니다.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+

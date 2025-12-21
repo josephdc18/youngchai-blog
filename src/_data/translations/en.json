@@ -1,0 +1,53 @@
+{
+  "site": {
+    "title": "Young Chai",
+    "tagline": "A Journal about Life, Code & Tea",
+    "description": "Notes on slow living, thoughtful coding, and the rituals that make a home."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "style": "Style",
+    "living": "Living",
+    "travel": "Travel",
+    "menu": "Menu",
+    "search": "Search"
+  },
+  "blog": {
+    "readMore": "Read More",
+    "popularPosts": "Popular Posts",
+    "featuredPosts": "Featured Posts",
+    "mostCommented": "Most Commented",
+    "loadMore": "Load More Stories",
+    "latestStory": "Latest Story",
+    "browseByTopic": "Browse by Topic",
+    "editorsPicks": "Editor's Picks",
+    "fromArchives": "From the Archives",
+    "collectedEssays": "Collected essays",
+    "noPosts": "No posts yet. Check back soon!"
+  },
+  "footer": {
+    "builtWith": "Built with intention.",
+    "copyright": "© 2025 Young Chai."
+  },
+  "categories": {
+    "ESSAY": "Essay",
+    "TRAVEL": "Travel",
+    "FOOD": "Food",
+    "TECH": "Tech",
+    "INTERIORS": "Interiors",
+    "STYLE": "Style",
+    "WELLNESS": "Wellness",
+    "WORK": "Work",
+    "LIFE": "Life",
+    "PHOTOGRAPHY": "Photography"
+  },
+  "accessibility": {
+    "skipToContent": "Click To Skip To Main Content",
+    "goToTop": "Go to top",
+    "goToHomepage": "Go to homepage",
+    "searchSite": "Search site"
+  }
+}
+

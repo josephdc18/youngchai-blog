@@ -1,0 +1,53 @@
+{
+  "site": {
+    "title": "영 차이",
+    "tagline": "삶, 코드, 차에 관한 일지",
+    "description": "느린 삶, 신중한 코딩, 그리고 집을 만드는 의식에 대한 노트."
+  },
+  "nav": {
+    "home": "홈",
+    "about": "소개",
+    "contact": "연락처",
+    "style": "스타일",
+    "living": "라이프",
+    "travel": "여행",
+    "menu": "메뉴",
+    "search": "검색"
+  },
+  "blog": {
+    "readMore": "더 읽기",
+    "popularPosts": "인기 글",
+    "featuredPosts": "추천 글",
+    "mostCommented": "댓글 많은 글",
+    "loadMore": "더 보기",
+    "latestStory": "최신 글",
+    "browseByTopic": "주제별 탐색",
+    "editorsPicks": "에디터 추천",
+    "fromArchives": "아카이브에서",
+    "collectedEssays": "모은 에세이",
+    "noPosts": "아직 게시물이 없습니다. 곧 다시 확인하세요!"
+  },
+  "footer": {
+    "builtWith": "정성을 담아 만들었습니다.",
+    "copyright": "© 2025 영 차이."
+  },
+  "categories": {
+    "ESSAY": "에세이",
+    "TRAVEL": "여행",
+    "FOOD": "음식",
+    "TECH": "테크",
+    "INTERIORS": "인테리어",
+    "STYLE": "스타일",
+    "WELLNESS": "웰니스",
+    "WORK": "일",
+    "LIFE": "라이프",
+    "PHOTOGRAPHY": "사진"
+  },
+  "accessibility": {
+    "skipToContent": "본문으로 건너뛰기",
+    "goToTop": "맨 위로",
+    "goToHomepage": "홈으로 가기",
+    "searchSite": "사이트 검색"
+  }
+}
+

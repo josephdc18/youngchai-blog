@@ -1,23 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+{% set currentLocale = locale | default(page.url | getLocale) %}
+{% set altLocale = 'ko' if currentLocale == 'en' else 'en' %}
+{% set altUrl = page.url | altLangUrl(currentLocale) %}
+<html lang="{{ currentLocale }}">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!--Swap our for actual link-->
+        <!--Canonical and Alternate Language Links-->
         <link rel="canonical" href="https://{{ client.domain }}{{ page.url }}">
+        <link rel="alternate" hreflang="{{ currentLocale }}" href="https://{{ client.domain }}{{ page.url }}">
+        <link rel="alternate" hreflang="{{ altLocale }}" href="https://{{ client.domain }}{{ altUrl }}">
+        <link rel="alternate" hreflang="x-default" href="https://{{ client.domain }}{{ page.url | localeUrl('en', currentLocale) }}">
 
         <meta name="description" content="{{ description }}">
         <meta name="keywords" content="">
 
         <!--Social Media Display-->
-        <meta property="og:title" content="{{ metaTitle }}"/>
+        <meta property="og:title" content="{{ metaTitle | default(title) }}"/>
         <meta property="og:description" content="{{ description }}"/>
         <meta property="og:type" content="website"/>
         <meta property="og:url" content="https://{{ client.domain }}{{ page.url }}"/>
-        <meta property="og:image" content="/images/social.jpg"/>
-        <meta property="og:image:secure_url" content="/images/social.jpg"/>
+        <meta property="og:image" content="https://{{ client.domain }}/images/social.jpg"/>
+        <meta property="og:image:secure_url" content="https://{{ client.domain }}/images/social.jpg"/>
+        <meta property="og:locale" content="{{ 'en_US' if currentLocale == 'en' else 'ko_KR' }}"/>
 
         <!--Favicons-->
         <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
@@ -35,11 +42,13 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400{% if currentLocale == 'ko' %}&family=Noto+Sans+KR:wght@400;700{% endif %}&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="/css/root.css">
 
+        {% if preloadImg %}
         <link rel="preload" as="image" href="{{ preloadImg }}"/>
+        {% endif %}
 
         <!-- Loading in page specific CSS sheets from css block -->
         <link rel="stylesheet" href="/css/critical.css"/>
@@ -52,24 +61,26 @@
 
         <script defer src="https://unpkg.com/lucide@latest"></script>
 
-        <!-- For home page, use full title, including location for SEO. Other pages should just include the page name -->
+        <!-- Page Title -->
         <title>
-            {% if page.url == '/'%}
-                {{ client.name }} | {{ tagTitle }} | {{ client.address.city }}, {{ client.address.county }}
+            {% if page.url == '/' or page.url == '/ko/' %}
+                {{ 'site.title' | t(currentLocale) }} | {{ 'site.tagline' | t(currentLocale) }} | {{ client.address.city }}, {{ client.address.county }}
+            {% elif title %}
+                {{ title }} | {{ 'site.title' | t(currentLocale) }}
             {% else %}
-                {{ tagTitle }} | {{ client.name }}
+                {{ tagTitle | default('site.title' | t(currentLocale)) }} | {{ 'site.title' | t(currentLocale) }}
             {% endif %}
         </title>
     </head>
     <body>
         <!--Screen reader skip main nav-->
-        <a class="skip" aria-label="skip to main content" href="#main">Click To Skip To Main Content</a>
+        <a class="skip" aria-label="{{ 'accessibility.skipToContent' | t(currentLocale) }}" href="#main">{{ 'accessibility.skipToContent' | t(currentLocale) }}</a>
 
         {% include "header.html" %}
         <main id="main">{{ content | safe }}</main>
         {% include "footer.html" %}
 
-        <button href="#" id="go-top" aria-label="Go to top">
+        <button href="#" id="go-top" aria-label="{{ 'accessibility.goToTop' | t(currentLocale) }}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
             </svg>
@@ -78,11 +89,12 @@
 
         <script id="post-search-data" type="application/json">
             [
-            {%- for post in collections.post -%}
+            {% set postsCollection = 'posts_' + currentLocale %}
+            {%- for post in collections[postsCollection] | default(collections.post) -%}
                 {
-                    "title": {{ post.data.blogTitle | dump | safe }},
+                    "title": {{ post.data.title | default(post.data.blogTitle) | dump | safe }},
                     "url": "{{ post.url }}",
-                    "description": {{ post.data.blogDescription | dump | safe }},
+                    "description": {{ post.data.description | default(post.data.blogDescription) | dump | safe }},
                     "category": {{ post.data.category | upper | dump | safe }}
                 }{% if not loop.last %},{% endif %}
             {%- endfor -%}
@@ -111,7 +123,7 @@
         const goTopBtn = document.getElementById('go-top');
     
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 400) { // Show button after scrolling 400px
+            if (window.scrollY > 400) {
                 goTopBtn.classList.add('visible');
             } else {
                 goTopBtn.classList.remove('visible');
@@ -119,14 +131,14 @@
         });
     
         goTopBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent the # from appearing in the URL
+            e.preventDefault();
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             });
         });
         
-        // Press feedback: add/remove .is-pressed on touch to mirror hover
+        // Press feedback
         (function(){
             const PRESS_SEL = `
                 a, button, .button-solid, .btn, .hamburger-menu, #go-top, #navbar-menu a, #footer a
@@ -145,7 +157,6 @@
             document.addEventListener('touchstart', onTouchStart, { passive: true });
             document.addEventListener('touchend', clearPressed, { passive: true });
             document.addEventListener('touchcancel', clearPressed, { passive: true });
-            // Do NOT clear on scroll to keep highlight while finger is down
         })();
 
         document.addEventListener('DOMContentLoaded', () => {

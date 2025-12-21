@@ -1,5 +1,6 @@
 ---
 layout: 'base.html'
+locale: 'en'
 tagTitle: 'A Journal about Life, Code & Tea'
 metaTitle: 'Young Chai | A Journal about Life, Code & Tea'
 description: "Notes on slow living, thoughtful coding, and the rituals that make a home."
@@ -11,43 +12,98 @@ eleventyNavigation:
   order: 100
 ---
 
-{% set posts = collections.post | reverse %}
+{% set posts = collections.posts_en | default(collections.post) %}
 {% set heroPost = posts[0] if posts | length > 0 else null %}
+{% set currentLocale = 'en' %}
 
 <div style="padding-top: 8rem;">
     <div class="container">
         <div class="grid-layout">
             <div class="feed-col">
                 {% if heroPost %}
-                    {% set post = heroPost %}
-                    {% set isHero = true %}
-                    {% set aspectClass = 'aspect-hero' %}
-                    {% include 'post-card.html' %}
+                    <a href="{{ heroPost.url }}" class="post-card group">
+                        <div class="post-image-container aspect-hero">
+                            {% if heroPost.data.image %}
+                            <img src="{{ heroPost.data.image }}" alt="{{ heroPost.data.imageAlt | default(heroPost.data.title) }}">
+                            {% endif %}
+                            <div class="hero-badge">{{ 'blog.latestStory' | t(currentLocale) }}</div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div class="post-meta">
+                                <span class="category-tag">
+                                    <span class="category-line"></span>
+                                    {{ heroPost.data.category | upper }}
+                                </span>
+                                <span class="date-tag">{{ heroPost.date | postDateLocale(currentLocale) }}</span>
+                            </div>
+                            <h2 class="post-title post-title-hero">{{ heroPost.data.title | default(heroPost.data.blogTitle) }}</h2>
+                            <p class="post-excerpt">"{{ heroPost.data.description | default(heroPost.data.blogDescription) }}"</p>
+                            <div>
+                                <span class="read-more">{{ 'blog.readMore' | t(currentLocale) }}</span>
+                            </div>
+                        </div>
+                    </a>
                 {% else %}
-                    <p class="post-excerpt">Stay tuned — new essays are brewing.</p>
+                    <p class="post-excerpt">{{ 'blog.noPosts' | t(currentLocale) }}</p>
                 {% endif %}
 
                 {% for post in posts %}
                     {% if loop.index0 > 0 and loop.index0 < 5 %}
-                        {% set isHero = false %}
-                        {% set aspectClass = 'aspect-standard' %}
-                        {% include 'post-card.html' %}
+                        <a href="{{ post.url }}" class="post-card group">
+                            <div class="post-image-container aspect-standard">
+                                {% if post.data.image %}
+                                <img src="{{ post.data.image }}" alt="{{ post.data.imageAlt | default(post.data.title) }}">
+                                {% endif %}
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <div class="post-meta">
+                                    <span class="category-tag">
+                                        <span class="category-line"></span>
+                                        {{ post.data.category | upper }}
+                                    </span>
+                                    <span class="date-tag">{{ post.date | postDateLocale(currentLocale) }}</span>
+                                </div>
+                                <h2 class="post-title">{{ post.data.title | default(post.data.blogTitle) }}</h2>
+                                <p class="post-excerpt">"{{ post.data.description | default(post.data.blogDescription) }}"</p>
+                                <div>
+                                    <span class="read-more">{{ 'blog.readMore' | t(currentLocale) }}</span>
+                                </div>
+                            </div>
+                        </a>
                     {% endif %}
                 {% endfor %}
 
                 <div id="extra-stories-grid" class="hidden" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 4rem 2rem;">
                     {% for post in posts %}
                         {% if loop.index0 >= 5 and loop.index0 < 9 %}
-                            {% set isHero = false %}
-                            {% set aspectClass = 'aspect-standard' %}
-                            {% include 'post-card.html' %}
+                            <a href="{{ post.url }}" class="post-card group">
+                                <div class="post-image-container aspect-standard">
+                                    {% if post.data.image %}
+                                    <img src="{{ post.data.image }}" alt="{{ post.data.imageAlt | default(post.data.title) }}">
+                                    {% endif %}
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <div class="post-meta">
+                                        <span class="category-tag">
+                                            <span class="category-line"></span>
+                                            {{ post.data.category | upper }}
+                                        </span>
+                                        <span class="date-tag">{{ post.date | postDateLocale(currentLocale) }}</span>
+                                    </div>
+                                    <h2 class="post-title">{{ post.data.title | default(post.data.blogTitle) }}</h2>
+                                    <p class="post-excerpt">"{{ post.data.description | default(post.data.blogDescription) }}"</p>
+                                    <div>
+                                        <span class="read-more">{{ 'blog.readMore' | t(currentLocale) }}</span>
+                                    </div>
+                                </div>
+                            </a>
                         {% endif %}
                     {% endfor %}
                 </div>
 
                 <div style="display: flex; justify-content: center; padding-top: 2rem; margin-bottom: 4rem;">
                     <button id="load-more-btn" class="btn-load">
-                        <span id="load-more-text">Load More Stories</span>
+                        <span id="load-more-text">{{ 'blog.loadMore' | t(currentLocale) }}</span>
                         <i data-lucide="chevron-down" class="animate-bounce" width="20" height="20"></i>
                     </button>
                 </div>
@@ -59,12 +115,13 @@ eleventyNavigation:
 
                         <div class="widget-header">
                             <i data-lucide="coffee" class="text-accent" width="20" height="20"></i>
-                            <h3 class="italic" style="font-size: 1.25rem;">Popular Posts</h3>
+                            <h3 class="italic" style="font-size: 1.25rem;">{{ 'blog.popularPosts' | t(currentLocale) }}</h3>
                         </div>
 
                         <ul class="widget-list">
-                            {% if collections.popular and collections.popular | length > 0 %}
-                                {%- for post in collections.popular | reverse | head(5) -%}
+                            {% set popularPosts = collections.popular_en | default(collections.popular) | default([]) %}
+                            {% if popularPosts | length > 0 %}
+                                {%- for post in popularPosts | head(5) -%}
                                 {%- set index = loop.index -%}
                                 <li class="group">
                                     <div class="widget-list-meta">
@@ -72,7 +129,7 @@ eleventyNavigation:
                                         <span class="widget-tag">{{ post.data.category | upper | default('BLOG') }}</span>
                                     </div>
                                     <a href="{{ post.url }}">
-                                        <h4 class="widget-title">{{ post.data.blogTitle }}</h4>
+                                        <h4 class="widget-title">{{ post.data.title | default(post.data.blogTitle) }}</h4>
                                     </a>
                                 </li>
                                 {%- endfor -%}
@@ -92,26 +149,27 @@ eleventyNavigation:
 
     <div class="section-full bg-yellow desktop-only">
         <div class="section-header">
-            <h2>Most Commented</h2>
+            <h2>{{ 'blog.mostCommented' | t(currentLocale) }}</h2>
             <div class="section-divider-full"></div>
         </div>
 
         <div class="container">
             <div class="grid-4-cols">
-                {% for post in collections.commented | reverse %}
+                {% set commentedPosts = collections.commented_en | default(collections.commented) | default([]) %}
+                {% for post in commentedPosts %}
                     {% if loop.index <= 4 %}
                         <div class="grid-col-item group">
                             <span class="text-meta" style="margin-bottom: 1.5rem; opacity: 0.7;">{{ post.data.category | upper | default('DISCUSS') }}</span>
                             <a href="{{ post.url }}">
-                                <h3 class="font-serif" style="font-size: 1.5rem; line-height: 1.2;">{{ post.data.blogTitle }}</h3>
+                                <h3 class="font-serif" style="font-size: 1.5rem; line-height: 1.2;">{{ post.data.title | default(post.data.blogTitle) }}</h3>
                             </a>
                         </div>
                     {% endif %}
                 {% endfor %}
-                {% if collections.commented | length == 0 %}
+                {% if commentedPosts | length == 0 %}
                     <div class="grid-col-item">
                         <span class="text-meta" style="margin-bottom: 1.5rem; opacity: 0.7;">UP NEXT</span>
-                        <h3 class="font-serif" style="font-size: 1.5rem; line-height: 1.2;">Add the “commented” tag to highlight lively discussions.</h3>
+                        <h3 class="font-serif" style="font-size: 1.5rem; line-height: 1.2;">Add the "commented" tag to highlight lively discussions.</h3>
                     </div>
                 {% endif %}
             </div>
@@ -120,7 +178,7 @@ eleventyNavigation:
 
     <div class="section-full bg-yellow mobile-only">
         <div class="section-header">
-            <h2>Most Commented</h2>
+            <h2>{{ 'blog.mostCommented' | t(currentLocale) }}</h2>
             <div class="section-divider"></div>
         </div>
 
@@ -131,10 +189,11 @@ eleventyNavigation:
 
             <div id="commented-container" class="carousel-content animate-fadeIn" style="text-align: center;">
                 <div id="commented-category" class="text-meta" style="margin-bottom: 1rem; opacity: 0.7;">
-                    {{ (collections.commented | reverse)[0].data.category | upper if collections.commented and collections.commented | length else 'SOON' }}
+                    {% set commentedPosts = collections.commented_en | default(collections.commented) | default([]) %}
+                    {{ commentedPosts[0].data.category | upper if commentedPosts | length else 'SOON' }}
                 </div>
                 <h3 id="commented-title" class="font-serif" style="font-size: 2rem; line-height: 1.2;">
-                    {{ (collections.commented | reverse)[0].data.blogTitle if collections.commented and collections.commented | length else 'Mark posts as "commented" to feature them.' }}
+                    {{ (commentedPosts[0].data.title | default(commentedPosts[0].data.blogTitle)) if commentedPosts | length else 'Mark posts as "commented" to feature them.' }}
                 </h3>
             </div>
 
@@ -146,7 +205,7 @@ eleventyNavigation:
 
     <div class="container" style="padding-top: 6rem; padding-bottom: 3rem;">
         <div class="topics-header">
-            <h3 class="font-serif" style="font-size: 1.875rem;">Browse by Topic</h3>
+            <h3 class="font-serif" style="font-size: 1.875rem;">{{ 'blog.browseByTopic' | t(currentLocale) }}</h3>
         </div>
 
         <div class="topics-grid">
@@ -168,7 +227,7 @@ eleventyNavigation:
 
     <div class="section-full bg-peach desktop-only">
         <div class="section-header">
-            <h2>Editors' Picks</h2>
+            <h2>{{ 'blog.editorsPicks' | t(currentLocale) }}</h2>
         </div>
 
         <div class="editors-grid">
@@ -185,7 +244,7 @@ eleventyNavigation:
 
     <div class="section-full bg-peach mobile-only">
         <div class="section-header">
-            <h2>Editors' Picks</h2>
+            <h2>{{ 'blog.editorsPicks' | t(currentLocale) }}</h2>
         </div>
 
         <div class="carousel-container">
@@ -210,8 +269,8 @@ eleventyNavigation:
 
     <div class="container" style="padding: 6rem 1.5rem;">
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; border-bottom: 1px solid black; padding-bottom: 1rem;">
-            <h3 class="font-serif" style="font-size: 1.875rem;">From the Archives</h3>
-            <span class="text-meta" style="color: var(--color-gray-medium);">Collected essays</span>
+            <h3 class="font-serif" style="font-size: 1.875rem;">{{ 'blog.fromArchives' | t(currentLocale) }}</h3>
+            <span class="text-meta" style="color: var(--color-gray-medium);">{{ 'blog.collectedEssays' | t(currentLocale) }}</span>
         </div>
 
         <div class="archive-grid">
@@ -221,13 +280,13 @@ eleventyNavigation:
                     <a href="{{ post.url }}" class="archive-item group">
                         <div class="post-image-container aspect-landscape" style="margin-bottom: 1.25rem;">
                             {% if post.data.image %}
-                                <img src="{{ post.data.image }}" alt="{{ post.data.imageAlt | default(post.data.blogTitle) }}">
+                                <img src="{{ post.data.image }}" alt="{{ post.data.imageAlt | default(post.data.title) }}">
                             {% endif %}
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                             <span class="text-meta text-accent" style="font-size: 0.625rem;">{{ post.data.category | upper | default('ESSAYS') }}</span>
-                            <h4 class="archive-title">{{ post.data.blogTitle }}</h4>
-                            <p class="post-excerpt" style="font-size: 0.875rem;">{{ post.data.blogDescription }}</p>
+                            <h4 class="archive-title">{{ post.data.title | default(post.data.blogTitle) }}</h4>
+                            <p class="post-excerpt" style="font-size: 0.875rem;">{{ post.data.description | default(post.data.blogDescription) }}</p>
                         </div>
                     </a>
                     {% set rendered = rendered + 1 %}
@@ -251,45 +310,12 @@ eleventyNavigation:
             });
         }
 
-        // Sticky widget for desktop
-        if (window.innerWidth >= 1024) {
-            const stickyWrapper = document.querySelector('.sidebar-col .sticky-wrapper');
-            const sidebarProfile = document.querySelector('.sidebar-col .sidebar-profile');
-            if (stickyWrapper && sidebarProfile) {
-                const navHeight = 128; // 8rem
-                let profileBottom = 0;
-                
-                function updateProfileBottom() {
-                    profileBottom = sidebarProfile.getBoundingClientRect().bottom + window.scrollY;
-                }
-                updateProfileBottom();
-                
-                function handleScroll() {
-                    const scrollY = window.scrollY;
-                    if (scrollY + navHeight >= profileBottom) {
-                        stickyWrapper.style.position = 'fixed';
-                        stickyWrapper.style.top = navHeight + 'px';
-                        stickyWrapper.style.width = stickyWrapper.parentElement.offsetWidth + 'px';
-                    } else {
-                        stickyWrapper.style.position = 'static';
-                        stickyWrapper.style.top = 'auto';
-                        stickyWrapper.style.width = 'auto';
-                    }
-                }
-                
-                window.addEventListener('scroll', handleScroll);
-                window.addEventListener('resize', () => {
-                    updateProfileBottom();
-                    handleScroll();
-                });
-            }
-        }
-
         const commentedData = [
-            {% for post in collections.commented | reverse %}
+            {% set commentedPosts = collections.commented_en | default(collections.commented) | default([]) %}
+            {% for post in commentedPosts %}
                 {% if loop.index <= 4 %}
                 {
-                    title: {{ post.data.blogTitle | dump }},
+                    title: {{ (post.data.title | default(post.data.blogTitle)) | dump }},
                     category: {{ post.data.category | upper | default('DISCUSS') | dump }}
                 }{% if not loop.last %},{% endif %}
                 {% endif %}
@@ -310,7 +336,7 @@ eleventyNavigation:
             const nextBtn = document.getElementById('commented-next');
             
             if (!categoryEl || !titleEl || !container || !prevBtn || !nextBtn) {
-                console.log('Carousel elements not found', {categoryEl, titleEl, container, prevBtn, nextBtn});
+                console.log('Carousel elements not found');
                 return;
             }
             
@@ -331,14 +357,12 @@ eleventyNavigation:
             prevBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Prev clicked');
                 updateCommented(-1);
             });
             
             nextBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Next clicked');
                 updateCommented(1);
             });
         })();
@@ -358,7 +382,7 @@ eleventyNavigation:
             const nextBtn = document.getElementById('pick-next');
             
             if (!pickImage || !pickTitle || !prevBtn || !nextBtn) {
-                console.log('Editors picks carousel elements not found', {pickImage, pickTitle, prevBtn, nextBtn});
+                console.log('Editors picks carousel elements not found');
                 return;
             }
             
@@ -381,14 +405,12 @@ eleventyNavigation:
             prevBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Pick prev clicked');
                 updatePick(-1);
             });
             
             nextBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Pick next clicked');
                 updatePick(1);
             });
         })();

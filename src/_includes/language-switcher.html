@@ -1,0 +1,15 @@
+{# Language Switcher Component #}
+{# Usage: {% include "language-switcher.html" %} #}
+
+{% set currentLocale = locale | default(page.url | getLocale) %}
+{% set altLocale = 'ko' if currentLocale == 'en' else 'en' %}
+{% set altUrl = page.url | altLangUrl(currentLocale) %}
+{% set altLabel = '한국어' if currentLocale == 'en' else 'English' %}
+
+<a href="{{ altUrl }}" 
+   class="language-toggle" 
+   aria-label="Switch to {{ 'Korean' if currentLocale == 'en' else 'English' }}"
+   hreflang="{{ altLocale }}">
+  {{ altLabel }}
+</a>
+

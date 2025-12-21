@@ -1,29 +1,165 @@
+# Decap CMS Configuration for Young Chai Blog
+# Deployed on Cloudflare Pages with GitHub OAuth
+
 backend:
-  name: git-gateway
+  name: github
+  repo: josephdc18/youngchai-blog
   branch: main
+  base_url: https://chailikethetea.com
+  auth_endpoint: /api/auth
 
+# Enable local backend for development (run: npx decap-server)
 local_backend: true
-# change url to a link to the image you want to use, no file paths, must be a URL
-logo_url: https://d33wubrfki0l68.cloudfront.net/c89899bad974606ce0e0f5d5a95842dc787dcb56/7fe98/assets/images/logo-blue.png
 
+# Logo for CMS
+logo_url: /assets/logo-light.png
+
+# i18n configuration - multiple folders structure
+i18n:
+  structure: multiple_folders
+  locales: [en, ko]
+  default_locale: en
+
+# Media settings
 media_folder: 'src/assets/images/blog'
 public_folder: '/assets/images/blog'
 
+# Slug settings
+slug:
+  encoding: 'unicode'
+  clean_accents: true
+  sanitize_replacement: '-'
+
 collections:
+  # Blog Posts Collection (with i18n)
   - name: 'blog'
-    label: 'Blog'
-    folder: 'src/blog'
+    label: 'Blog Posts'
+    label_singular: 'Blog Post'
+    folder: 'src/content/blog'
     create: true
-    slug: '{{pageName}}'
+    slug: '{{slug}}'
+    i18n: true
+    sortable_fields: ['date', 'title', 'category']
+    view_filters:
+      - label: Essays
+        field: category
+        pattern: 'ESSAY'
+      - label: Travel
+        field: category
+        pattern: 'TRAVEL'
+      - label: Food
+        field: category
+        pattern: 'FOOD'
+    view_groups:
+      - label: Category
+        field: category
     fields:
-      - { label: 'Page-Name-with-dashes-only', name: 'pageName', widget: 'string' }
-      - { label: 'Blog Title', name: 'blogTitle', widget: 'string' }
-      - { label: 'Title Tag', name: 'titleTag', widget: 'string' }
-      - { label: 'Description', name: 'blogDescription', widget: 'string' }
-      - { label: 'Category', name: 'category', widget: 'select', options: ['ESSAY', 'TRAVEL', 'FOOD', 'TECH', 'INTERIORS', 'STYLE', 'WELLNESS', 'WORK', 'LIFE', 'PHOTOGRAPHY'] }
-      - { label: 'Author', name: 'author', widget: 'string' }
-      - { label: 'Date', name: 'date', widget: 'datetime' }
-      - { label: 'Tags', name: 'tags', widget: 'list', default: ['post'] }
-      - { label: 'Featured Image', name: 'image', widget: 'image' }
-      - { label: 'Image Caption', name: 'imageAlt', widget: 'string' }
-      - { label: 'Body', name: 'body', widget: 'markdown' }
+      - label: 'Title'
+        name: 'title'
+        widget: 'string'
+        i18n: true
+      - label: 'Slug (URL path)'
+        name: 'slug'
+        widget: 'string'
+        i18n: duplicate
+        pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'Use lowercase letters, numbers, and hyphens only']
+      - label: 'Description'
+        name: 'description'
+        widget: 'text'
+        i18n: true
+      - label: 'Category'
+        name: 'category'
+        widget: 'select'
+        i18n: duplicate
+        options:
+          - { label: 'Essay', value: 'ESSAY' }
+          - { label: 'Travel', value: 'TRAVEL' }
+          - { label: 'Food', value: 'FOOD' }
+          - { label: 'Tech', value: 'TECH' }
+          - { label: 'Interiors', value: 'INTERIORS' }
+          - { label: 'Style', value: 'STYLE' }
+          - { label: 'Wellness', value: 'WELLNESS' }
+          - { label: 'Work', value: 'WORK' }
+          - { label: 'Life', value: 'LIFE' }
+          - { label: 'Photography', value: 'PHOTOGRAPHY' }
+      - label: 'Author'
+        name: 'author'
+        widget: 'string'
+        default: 'Young Chai'
+        i18n: duplicate
+      - label: 'Date'
+        name: 'date'
+        widget: 'datetime'
+        i18n: duplicate
+      - label: 'Tags'
+        name: 'tags'
+        widget: 'list'
+        default: ['post']
+        i18n: duplicate
+        hint: 'Add "featured" for featured posts, "popular" for popular posts'
+      - label: 'Featured Image'
+        name: 'image'
+        widget: 'image'
+        i18n: duplicate
+        required: false
+      - label: 'Image Alt Text'
+        name: 'imageAlt'
+        widget: 'string'
+        i18n: true
+        required: false
+      - label: 'Body'
+        name: 'body'
+        widget: 'markdown'
+        i18n: true
+
+  # Site Settings (single files, no i18n for settings)
+  - name: 'settings'
+    label: 'Site Settings'
+    files:
+      - name: 'client'
+        label: 'Client Info'
+        file: 'src/_data/client.json'
+        fields:
+          - { label: 'Name', name: 'name', widget: 'string' }
+          - { label: 'Email', name: 'email', widget: 'string' }
+          - { label: 'Phone', name: 'phone', widget: 'string', required: false }
+          - { label: 'Domain', name: 'domain', widget: 'string' }
+          - { label: 'Tagline', name: 'tagline', widget: 'string' }
+          - { label: 'Profile Image', name: 'profileImage', widget: 'image', required: false }
+          - label: 'Address'
+            name: 'address'
+            widget: 'object'
+            fields:
+              - { label: 'City', name: 'city', widget: 'string' }
+              - { label: 'County', name: 'county', widget: 'string' }
+          - label: 'Social Links'
+            name: 'social'
+            widget: 'object'
+            fields:
+              - { label: 'Instagram', name: 'instagram', widget: 'string', required: false }
+              - { label: 'Twitter', name: 'twitter', widget: 'string', required: false }
+              - { label: 'Pinterest', name: 'pinterest', widget: 'string', required: false }
+
+      - name: 'topics'
+        label: 'Topics/Categories'
+        file: 'src/_data/topics.json'
+        fields:
+          - label: 'Topics'
+            name: 'topics'
+            widget: 'list'
+            fields:
+              - { label: 'Name', name: 'name', widget: 'string' }
+              - { label: 'Slug', name: 'slug', widget: 'string' }
+              - { label: 'Image', name: 'image', widget: 'image' }
+
+      - name: 'editorsPicks'
+        label: "Editor's Picks"
+        file: 'src/_data/editorsPicks.json'
+        fields:
+          - label: 'Picks'
+            name: 'picks'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Link', name: 'link', widget: 'string' }
+              - { label: 'Image', name: 'image', widget: 'image' }
