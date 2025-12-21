@@ -56,7 +56,10 @@ module.exports = function (eleventyConfig) {
   // allows css, assets, robots.txt and CMS config files to be passed into /public
   eleventyConfig.addPassthroughCopy('./src/css/**/*.css');
   eleventyConfig.addPassthroughCopy('./src/assets');
-  eleventyConfig.addPassthroughCopy('./src/admin');
+  // Only passthrough specific admin files (config.yml and index.html for Decap CMS)
+  // Other admin pages like comments.njk are processed by Eleventy
+  eleventyConfig.addPassthroughCopy('./src/admin/config.yml');
+  eleventyConfig.addPassthroughCopy('./src/admin/index.html');
   eleventyConfig.addPassthroughCopy('./src/_redirects');
   eleventyConfig.addPassthroughCopy({ './src/robots.txt': '/robots.txt' });
 
