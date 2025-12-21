@@ -136,6 +136,19 @@ module.exports = function (eleventyConfig) {
       .toLocaleString(DateTime.DATE_MED);
   });
 
+  // Date formatting filter (like Liquid's date filter)
+  eleventyConfig.addFilter('date', (dateObj, format) => {
+    if (!dateObj) return '';
+    const dt = DateTime.fromJSDate(dateObj);
+    const formatMap = {
+      'yyyy': dt.toFormat('yyyy'),
+      'LLLL': dt.toFormat('LLLL'),
+      'MM': dt.toFormat('MM'),
+      'iso8601': dt.toISO()
+    };
+    return formatMap[format] || dt.toFormat(format);
+  });
+
   // ========================================
   // ARRAY/UTILITY FILTERS
   // ========================================
