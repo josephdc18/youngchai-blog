@@ -36,63 +36,41 @@ josephdc18,wifesusername,editorname
 
 ---
 
-## 2. Comments Admin Protection (Cloudflare Access)
+## 2. Comments Admin Protection (GitHub OAuth)
 
-The `/admin/comments/` page should be protected with Cloudflare Access.
+The `/admin/comments/` page is protected using the **same GitHub allowlist** as the CMS.
 
-### Setup Steps
+### How It Works
 
-1. **Go to Cloudflare Dashboard**
-   - Navigate to **Zero Trust** (in the left sidebar)
-   - If prompted, set up your Zero Trust organization (free for up to 50 users)
+1. User visits `/admin/comments/`
+2. They see a "Sign in with GitHub" button
+3. After GitHub login, their username is checked against `CMS_ALLOWED_USERS`
+4. If not on the list → "Access Denied"
+5. If authorized → they can manage comments
 
-2. **Create an Access Application**
-   - Go to **Access** → **Applications**
-   - Click **Add an application**
-   - Choose **Self-hosted**
+### Setup
 
-3. **Configure the Application**
-   - **Application name**: `Young Chai Comments Admin`
-   - **Session Duration**: 24 hours (or your preference)
-   - **Application domain**: 
-     - **Subdomain**: `chailikethetea` (or leave blank)
-     - **Domain**: `chailikethetea.com`
-     - **Path**: `/admin/comments/`
+**No additional setup required!** The comments admin uses the same `CMS_ALLOWED_USERS` environment variable as the CMS.
 
-4. **Add a Second Path for the API**
-   - Click **Add another application**
-   - Add path: `/api/admin/`
-   - This protects the admin API endpoints too
+Just make sure you've added it:
+1. Go to **Cloudflare Dashboard** → **Pages** → **Settings** → **Environment Variables**
+2. Set `CMS_ALLOWED_USERS` = `josephdc18,wifesusername`
 
-5. **Create Access Policy**
-   - **Policy name**: `Allowed Editors`
-   - **Action**: Allow
-   - **Include**: Choose one of:
-     - **Emails**: Add specific email addresses
-     - **Emails ending in**: Your domain (e.g., `@youngchai.com`)
-     - **GitHub organization**: If you have one
-     - **Everyone**: (Not recommended for admin pages)
+### Security Features
 
-6. **Authentication Methods**
-   - Enable **One-time PIN** (easiest - sends code to email)
-   - Optionally enable **GitHub** or **Google**
-
-7. **Save and Deploy**
-
-### What This Does
-
-- Anyone visiting `/admin/comments/` sees a Cloudflare login screen
-- Only users matching your policy can access the page
-- The admin API (`/api/admin/comments`) is also protected
-- All authentication is handled by Cloudflare (enterprise-grade security)
+- ✅ GitHub OAuth authentication
+- ✅ Allowlist-based access control
+- ✅ Token stored in browser localStorage (session persists)
+- ✅ All admin API endpoints require valid token
+- ✅ Token is verified against GitHub API on each request
 
 ### Testing
 
 1. Open an incognito window
 2. Go to `https://chailikethetea.com/admin/comments/`
-3. You should see the Cloudflare Access login page
-4. Enter your email and check for the one-time PIN
-5. After authentication, you'll see the comments admin
+3. Click "Sign in with GitHub"
+4. After authentication, you should see the comments dashboard
+5. Try with a non-allowed GitHub account → should see "Access Denied"
 
 ---
 

@@ -28,6 +28,79 @@ permalink: /admin/comments/index.html
             min-height: 100vh;
         }
         
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .login-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .login-card h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-card p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+        
+        .login-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #24292e;
+            color: white;
+            padding: 0.875rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        
+        .login-btn:hover {
+            background: #1a1e22;
+        }
+        
+        .login-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .login-error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        
+        .login-error.show {
+            display: block;
+        }
+        
+        /* App (hidden until logged in) */
+        .app {
+            display: none;
+        }
+        
+        .app.show {
+            display: block;
+        }
+        
         .header {
             background: white;
             border-bottom: 1px solid var(--border);
@@ -46,6 +119,20 @@ permalink: /admin/comments/index.html
             display: flex;
             gap: 1rem;
             align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+        
+        .user-info img {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
         }
         
         .btn {
@@ -301,42 +388,65 @@ permalink: /admin/comments/index.html
     </style>
 </head>
 <body>
-    <header class="header">
-        <h1>💬 Comments Manager</h1>
-        <div class="header-actions">
-            <a href="/admin/" class="btn btn-secondary">← Back to CMS</a>
-            <button id="refresh-btn" class="btn btn-primary">Refresh</button>
+    <!-- Login Screen -->
+    <div class="login-screen" id="login-screen">
+        <div class="login-card">
+            <h1>🔐 Comments Manager</h1>
+            <p>Sign in with GitHub to manage comments</p>
+            <div class="login-error" id="login-error"></div>
+            <a href="/api/auth/admin" class="login-btn" id="login-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                Sign in with GitHub
+            </a>
         </div>
-    </header>
+    </div>
     
-    <div class="container">
-        <div class="stats" id="stats">
-            <div class="stat-card">
-                <h3>Total Comments</h3>
-                <div class="value" id="stat-total">-</div>
+    <!-- App (shown after login) -->
+    <div class="app" id="app">
+        <header class="header">
+            <h1>💬 Comments Manager</h1>
+            <div class="header-actions">
+                <div class="user-info" id="user-info">
+                    <img id="user-avatar" src="" alt="">
+                    <span id="user-name"></span>
+                </div>
+                <a href="/admin/" class="btn btn-secondary">← CMS</a>
+                <button id="refresh-btn" class="btn btn-primary">Refresh</button>
+                <button id="logout-btn" class="btn btn-secondary">Logout</button>
             </div>
-            <div class="stat-card">
-                <h3>Approved</h3>
-                <div class="value" id="stat-approved">-</div>
-            </div>
-            <div class="stat-card">
-                <h3>Pending</h3>
-                <div class="value" id="stat-pending">-</div>
-            </div>
-            <div class="stat-card">
-                <h3>Today</h3>
-                <div class="value" id="stat-today">-</div>
-            </div>
-        </div>
+        </header>
         
-        <div class="filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="pending">Pending</button>
-            <button class="filter-btn" data-filter="approved">Approved</button>
-        </div>
-        
-        <div class="comments-list" id="comments-list">
-            <div class="loading">Loading comments...</div>
+        <div class="container">
+            <div class="stats" id="stats">
+                <div class="stat-card">
+                    <h3>Total Comments</h3>
+                    <div class="value" id="stat-total">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Approved</h3>
+                    <div class="value" id="stat-approved">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending</h3>
+                    <div class="value" id="stat-pending">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Today</h3>
+                    <div class="value" id="stat-today">-</div>
+                </div>
+            </div>
+            
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="pending">Pending</button>
+                <button class="filter-btn" data-filter="approved">Approved</button>
+            </div>
+            
+            <div class="comments-list" id="comments-list">
+                <div class="loading">Loading comments...</div>
+            </div>
         </div>
     </div>
     
@@ -346,6 +456,97 @@ permalink: /admin/comments/index.html
         const API_BASE = '/api/admin/comments';
         let currentFilter = 'all';
         let allComments = [];
+        let authToken = null;
+        let currentUser = null;
+        
+        // Check for existing session
+        function checkAuth() {
+            const stored = localStorage.getItem('comments_admin_auth');
+            if (stored) {
+                try {
+                    const data = JSON.parse(stored);
+                    if (data.token && data.user) {
+                        authToken = data.token;
+                        currentUser = data.user;
+                        showApp();
+                        return true;
+                    }
+                } catch (e) {
+                    localStorage.removeItem('comments_admin_auth');
+                }
+            }
+            return false;
+        }
+        
+        // Show login screen
+        function showLogin(error = null) {
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('app').classList.remove('show');
+            
+            if (error) {
+                const errorEl = document.getElementById('login-error');
+                errorEl.textContent = error;
+                errorEl.classList.add('show');
+            }
+        }
+        
+        // Show app after login
+        function showApp() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app').classList.add('show');
+            
+            // Update user info
+            if (currentUser) {
+                document.getElementById('user-avatar').src = currentUser.avatar_url || '';
+                document.getElementById('user-name').textContent = '@' + currentUser.login;
+            }
+            
+            loadComments();
+        }
+        
+        // Handle OAuth callback
+        function handleCallback() {
+            const params = new URLSearchParams(window.location.search);
+            const token = params.get('token');
+            const userJson = params.get('user');
+            const error = params.get('error');
+            
+            if (error) {
+                showLogin(decodeURIComponent(error));
+                // Clean URL
+                window.history.replaceState({}, '', '/admin/comments/');
+                return;
+            }
+            
+            if (token && userJson) {
+                try {
+                    const user = JSON.parse(decodeURIComponent(userJson));
+                    authToken = token;
+                    currentUser = user;
+                    
+                    // Save to localStorage
+                    localStorage.setItem('comments_admin_auth', JSON.stringify({
+                        token: token,
+                        user: user
+                    }));
+                    
+                    // Clean URL
+                    window.history.replaceState({}, '', '/admin/comments/');
+                    
+                    showApp();
+                } catch (e) {
+                    showLogin('Authentication failed');
+                }
+            }
+        }
+        
+        // Logout
+        function logout() {
+            localStorage.removeItem('comments_admin_auth');
+            authToken = null;
+            currentUser = null;
+            showLogin();
+        }
         
         // Show toast notification
         function showToast(message, type = 'info') {
@@ -375,8 +576,19 @@ permalink: /admin/comments/index.html
             listEl.innerHTML = '<div class="loading">Loading comments...</div>';
             
             try {
-                const response = await fetch(API_BASE);
+                const response = await fetch(API_BASE, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
                 const data = await response.json();
+                
+                if (response.status === 401 || response.status === 403) {
+                    logout();
+                    showLogin(data.error || 'Session expired. Please login again.');
+                    return;
+                }
                 
                 if (!response.ok) {
                     throw new Error(data.error || 'Failed to load comments');
@@ -390,9 +602,6 @@ permalink: /admin/comments/index.html
                 console.error('Error loading comments:', error);
                 listEl.innerHTML = `<div class="empty">
                     <p>Error loading comments: ${error.message}</p>
-                    <p style="margin-top: 1rem; font-size: 0.875rem;">
-                        Make sure the admin API is configured and you're logged in.
-                    </p>
                 </div>`;
             }
         }
@@ -474,8 +683,17 @@ permalink: /admin/comments/index.html
         async function approveComment(id) {
             try {
                 const response = await fetch(`${API_BASE}/${id}/approve`, {
-                    method: 'POST'
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
                 });
+                
+                if (response.status === 401 || response.status === 403) {
+                    logout();
+                    showLogin('Session expired. Please login again.');
+                    return;
+                }
                 
                 if (!response.ok) {
                     const data = await response.json();
@@ -498,8 +716,17 @@ permalink: /admin/comments/index.html
             
             try {
                 const response = await fetch(`${API_BASE}/${id}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
                 });
+                
+                if (response.status === 401 || response.status === 403) {
+                    logout();
+                    showLogin('Session expired. Please login again.');
+                    return;
+                }
                 
                 if (!response.ok) {
                     const data = await response.json();
@@ -527,9 +754,14 @@ permalink: /admin/comments/index.html
         // Refresh button
         document.getElementById('refresh-btn').addEventListener('click', loadComments);
         
-        // Initial load
-        loadComments();
+        // Logout button
+        document.getElementById('logout-btn').addEventListener('click', logout);
+        
+        // Initialize
+        handleCallback();
+        if (!checkAuth()) {
+            showLogin();
+        }
     </script>
 </body>
 </html>
-
