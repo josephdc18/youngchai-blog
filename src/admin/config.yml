@@ -126,6 +126,12 @@ collections:
         widget: 'string'
         i18n: true
         required: false
+      - label: 'Series'
+        name: 'series'
+        widget: 'string'
+        i18n: duplicate
+        required: false
+        hint: 'Enter series ID if this post is part of a series (e.g., "getting-started")'
       - label: 'Body'
         name: 'body'
         widget: 'markdown'
@@ -177,6 +183,10 @@ collections:
           - { label: 'Domain', name: 'domain', widget: 'string' }
           - { label: 'Tagline', name: 'tagline', widget: 'string' }
           - { label: 'Profile Image', name: 'profileImage', widget: 'image', required: false }
+          - { label: 'Ko-fi Username', name: 'kofiUsername', widget: 'string', required: false, hint: 'Your Ko-fi username for the support button (leave empty to hide)' }
+          - { label: 'Newsletter Username', name: 'newsletterUsername', widget: 'string', required: false, hint: 'Your Buttondown username for newsletter signup' }
+          - { label: 'Webmention Username', name: 'webmentionUsername', widget: 'string', required: false, hint: 'Your webmention.io username' }
+          - { label: 'Turnstile Site Key', name: 'turnstileSiteKey', widget: 'string', required: false, hint: 'Cloudflare Turnstile site key for comment protection' }
           - label: 'Address'
             name: 'address'
             widget: 'object'
@@ -219,3 +229,31 @@ collections:
               - { label: 'Title', name: 'title', widget: 'string' }
               - { label: 'Link', name: 'link', widget: 'string', hint: 'URL to the blog post' }
               - { label: 'Image', name: 'image', widget: 'image' }
+
+      - name: 'series'
+        label: 'Post Series'
+        file: 'src/_data/series.json'
+        fields:
+          - label: 'Series'
+            name: 'series'
+            widget: 'list'
+            label_singular: 'Series'
+            summary: '{{fields.id}}: {{fields.title.en}}'
+            fields:
+              - { label: 'Series ID', name: 'id', widget: 'string', hint: 'Unique identifier (lowercase, hyphens only)' }
+              - label: 'Title'
+                name: 'title'
+                widget: 'object'
+                fields:
+                  - { label: 'English', name: 'en', widget: 'string' }
+                  - { label: 'Korean', name: 'ko', widget: 'string' }
+              - label: 'Description'
+                name: 'description'
+                widget: 'object'
+                fields:
+                  - { label: 'English', name: 'en', widget: 'text' }
+                  - { label: 'Korean', name: 'ko', widget: 'text' }
+              - label: 'Posts (slugs in order)'
+                name: 'posts'
+                widget: 'list'
+                field: { label: 'Post Slug', name: 'slug', widget: 'string' }

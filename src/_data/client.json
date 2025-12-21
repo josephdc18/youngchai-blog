@@ -20,5 +20,8 @@
     "twitter": "https://twitter.com/youngchai",
     "pinterest": "https://pinterest.com/youngchai"
   },
-  "turnstileSiteKey": "0x4AAAAAACH2XUFcS5g5heeL"
+  "turnstileSiteKey": "0x4AAAAAACH2XUFcS5g5heeL",
+  "kofiUsername": "",
+  "newsletterUsername": "",
+  "webmentionUsername": ""
 }

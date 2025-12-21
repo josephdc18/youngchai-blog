@@ -28,13 +28,17 @@ eleventyNavigation:
                             {% endif %}
                             <div class="hero-badge">{{ 'blog.latestStory' | t(currentLocale) }}</div>
                         </div>
-                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                             <div class="post-meta">
                                 <span class="category-tag">
                                     <span class="category-line"></span>
                                     {{ heroPost.data.category | upper }}
                                 </span>
                                 <span class="date-tag">{{ heroPost.date | postDateLocale(currentLocale) }}</span>
+                                <span class="comment-count" data-post-slug="{{ heroPost.fileSlug }}">
+                                    <i data-lucide="message-circle" width="14" height="14"></i>
+                                    <span class="comment-count-number">—</span>
+                                </span>
                             </div>
                             <h2 class="post-title post-title-hero">{{ heroPost.data.title | default(heroPost.data.blogTitle) }}</h2>
                             <p class="post-excerpt">"{{ heroPost.data.description | default(heroPost.data.blogDescription) }}"</p>
@@ -62,6 +66,10 @@ eleventyNavigation:
                                         {{ post.data.category | upper }}
                                     </span>
                                     <span class="date-tag">{{ post.date | postDateLocale(currentLocale) }}</span>
+                                    <span class="comment-count" data-post-slug="{{ post.fileSlug }}">
+                                        <i data-lucide="message-circle" width="14" height="14"></i>
+                                        <span class="comment-count-number">—</span>
+                                    </span>
                                 </div>
                                 <h2 class="post-title">{{ post.data.title | default(post.data.blogTitle) }}</h2>
                                 <p class="post-excerpt">"{{ post.data.description | default(post.data.blogDescription) }}"</p>
@@ -89,6 +97,10 @@ eleventyNavigation:
                                             {{ post.data.category | upper }}
                                         </span>
                                         <span class="date-tag">{{ post.date | postDateLocale(currentLocale) }}</span>
+                                        <span class="comment-count" data-post-slug="{{ post.fileSlug }}">
+                                            <i data-lucide="message-circle" width="14" height="14"></i>
+                                            <span class="comment-count-number">—</span>
+                                        </span>
                                     </div>
                                     <h2 class="post-title">{{ post.data.title | default(post.data.blogTitle) }}</h2>
                                     <p class="post-excerpt">"{{ post.data.description | default(post.data.blogDescription) }}"</p>
@@ -284,7 +296,13 @@ eleventyNavigation:
                             {% endif %}
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <span class="text-meta text-accent" style="font-size: 0.625rem;">{{ post.data.category | upper | default('ESSAYS') }}</span>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <span class="text-meta text-accent" style="font-size: 0.625rem;">{{ post.data.category | upper | default('ESSAYS') }}</span>
+                                <span class="comment-count" data-post-slug="{{ post.fileSlug }}">
+                                    <i data-lucide="message-circle" width="12" height="12"></i>
+                                    <span class="comment-count-number">—</span>
+                                </span>
+                            </div>
                             <h4 class="archive-title">{{ post.data.title | default(post.data.blogTitle) }}</h4>
                             <p class="post-excerpt" style="font-size: 0.875rem;">{{ post.data.description | default(post.data.blogDescription) }}</p>
                         </div>
@@ -413,6 +431,33 @@ eleventyNavigation:
                 e.stopPropagation();
                 updatePick(1);
             });
+        })();
+
+        // Fetch and display comment counts
+        (async function loadCommentCounts() {
+            const commentElements = document.querySelectorAll('.comment-count[data-post-slug]');
+            if (!commentElements.length) return;
+
+            // Get unique slugs
+            const slugs = [...new Set([...commentElements].map(el => el.dataset.postSlug).filter(Boolean))];
+            
+            // Fetch comment counts for each post
+            for (const slug of slugs) {
+                try {
+                    const response = await fetch(`/api/comments?post=${encodeURIComponent(slug)}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        const count = data.comments ? data.comments.length : 0;
+                        
+                        // Update all elements with this slug
+                        document.querySelectorAll(`.comment-count[data-post-slug="${slug}"] .comment-count-number`).forEach(el => {
+                            el.textContent = count;
+                        });
+                    }
+                } catch (err) {
+                    console.log(`Could not load comments for ${slug}`);
+                }
+            }
         })();
     });
 </script>

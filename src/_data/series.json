@@ -1,0 +1,17 @@
+{
+  "series": [
+    {
+      "id": "getting-started",
+      "title": {
+        "en": "Getting Started with Slow Living",
+        "ko": "슬로우 리빙 시작하기"
+      },
+      "description": {
+        "en": "A beginner's guide to embracing a slower, more intentional lifestyle",
+        "ko": "더 느리고 의도적인 라이프스타일을 받아들이는 초보자 가이드"
+      },
+      "posts": []
+    }
+  ]
+}
+

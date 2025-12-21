@@ -1,0 +1,229 @@
+/* Print Styles for Beautiful Article Printing */
+
+@media print {
+    /* Hide non-essential elements */
+    #header,
+    .header-container,
+    nav,
+    #go-top,
+    .sticky-comment-bar,
+    .comments-section,
+    .blog-sidebar,
+    .tea-progress,
+    .exit-reading-mode,
+    .continue-reading-bar,
+    .reading-controls,
+    .share-links,
+    .toc-sidebar,
+    footer,
+    #footer,
+    .search-modal,
+    .newsletter-section,
+    .related-posts,
+    .hamburger-menu,
+    .language-switcher,
+    button,
+    .btn,
+    .btn-load,
+    .webmention-section,
+    .ko-fi-widget,
+    .highlight-share-popup,
+    .random-post-btn,
+    .sidebar-col,
+    #int-hero {
+        display: none !important;
+    }
+
+    /* Reset body styles */
+    body {
+        background: white !important;
+        color: black !important;
+        font-size: 12pt !important;
+        line-height: 1.6 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Page setup */
+    @page {
+        margin: 2cm;
+        size: A4;
+    }
+
+    @page :first {
+        margin-top: 3cm;
+    }
+
+    /* Main content */
+    .blog-container,
+    .main-content-wrapper,
+    .main-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    .blog-article {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Typography */
+    .blog-h1 {
+        font-size: 24pt !important;
+        margin-bottom: 0.5cm !important;
+        page-break-after: avoid;
+        color: black !important;
+    }
+
+    #blog-content {
+        font-size: 11pt !important;
+        line-height: 1.7 !important;
+    }
+
+    #blog-content h2 {
+        font-size: 16pt !important;
+        margin-top: 1cm !important;
+        page-break-after: avoid;
+    }
+
+    #blog-content h3 {
+        font-size: 14pt !important;
+        margin-top: 0.8cm !important;
+        page-break-after: avoid;
+    }
+
+    #blog-content p {
+        margin-bottom: 0.5cm !important;
+        orphans: 3;
+        widows: 3;
+    }
+
+    /* Images */
+    .blog-mainImage,
+    #blog-content img {
+        max-width: 100% !important;
+        height: auto !important;
+        page-break-inside: avoid;
+        margin: 0.5cm 0 !important;
+    }
+
+    /* Links */
+    a {
+        color: black !important;
+        text-decoration: underline !important;
+    }
+
+    /* Show URLs after links */
+    #blog-content a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+        color: #666;
+        word-wrap: break-word;
+    }
+
+    /* Blockquotes */
+    blockquote {
+        border-left: 3pt solid #333 !important;
+        padding-left: 0.5cm !important;
+        margin: 0.5cm 0 !important;
+        font-style: italic !important;
+        page-break-inside: avoid;
+    }
+
+    /* Code blocks */
+    pre, code {
+        background: #f5f5f5 !important;
+        border: 1pt solid #ddd !important;
+        font-size: 9pt !important;
+        page-break-inside: avoid;
+    }
+
+    pre {
+        padding: 0.3cm !important;
+        overflow: visible !important;
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+    }
+
+    /* Lists */
+    ul, ol {
+        margin: 0.3cm 0 0.3cm 1cm !important;
+    }
+
+    li {
+        margin-bottom: 0.2cm !important;
+    }
+
+    /* Author info */
+    .blog-authorGroup {
+        margin-top: 0.5cm !important;
+        padding-top: 0.3cm !important;
+        border-top: 1pt solid #ccc !important;
+    }
+
+    .blog-author,
+    .blog-date {
+        font-size: 10pt !important;
+        color: #333 !important;
+    }
+
+    /* Read info */
+    .read-info {
+        font-size: 9pt !important;
+        color: #666 !important;
+        margin-top: 0.3cm !important;
+    }
+
+    /* Article info header for print */
+    .article-group::before {
+        content: "chailikethetea.com";
+        display: block;
+        font-size: 9pt;
+        color: #999;
+        margin-bottom: 0.5cm;
+        text-transform: uppercase;
+        letter-spacing: 2pt;
+    }
+
+    /* Avoid page breaks */
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+    }
+
+    img, table, figure {
+        page-break-inside: avoid;
+    }
+
+    /* Tables */
+    table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+        margin: 0.5cm 0 !important;
+    }
+
+    th, td {
+        border: 1pt solid #333 !important;
+        padding: 0.2cm !important;
+        text-align: left !important;
+    }
+
+    th {
+        background: #f0f0f0 !important;
+    }
+
+    /* Footer note */
+    .blog-article::after {
+        content: "Printed from chailikethetea.com — © Young Chai";
+        display: block;
+        margin-top: 1cm;
+        padding-top: 0.5cm;
+        border-top: 1pt solid #ccc;
+        font-size: 9pt;
+        color: #999;
+        text-align: center;
+    }
+}
+

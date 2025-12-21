@@ -176,6 +176,48 @@
     backdrop-filter: blur(4px);
     border-radius: 2px;
   }
+
+  /* Parallax Hero Styles */
+  #int-hero.parallax-hero {
+    position: relative;
+    height: 50vh;
+    min-height: 350px;
+    overflow: hidden;
+    background: none;
+  }
+
+  #int-hero.parallax-hero:before {
+    display: none;
+  }
+
+  #int-hero .parallax-bg {
+    position: absolute;
+    inset: -20%;
+    background-size: cover;
+    background-position: center;
+    will-change: transform;
+  }
+
+  #int-hero .parallax-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+  }
+
+  #int-hero .parallax-content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 2rem;
+    color: white;
+  }
   #int-hero picture {
     position: absolute;
     top: 0;
@@ -275,6 +317,131 @@
     max-width: 22.5em;
   }
 }
+
+/* 3-Column Layout with TOC Sidebar */
+.main-content-wrapper-3col {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  row-gap: 3rem;
+}
+
+.main-content-wrapper-3col .main-content {
+  max-width: 49.6875em;
+  width: 100%;
+}
+
+/* Desktop - show 3 columns */
+@media only screen and (min-width: 80em) {
+  .main-content-wrapper-3col {
+    display: grid;
+    grid-template-columns: 220px 1fr 280px;
+    column-gap: 3rem;
+    align-items: start;
+  }
+
+  .main-content-wrapper-3col .toc-sidebar {
+    position: sticky;
+    top: 8rem;
+    max-height: calc(100vh - 10rem);
+    overflow-y: auto;
+  }
+
+  .main-content-wrapper-3col .main-content {
+    max-width: none;
+    order: 2;
+  }
+
+  .main-content-wrapper-3col .blog-sidebar {
+    order: 3;
+  }
+
+  .main-content-wrapper-3col .toc-sidebar {
+    order: 1;
+  }
+}
+
+/* Medium screens - 2 columns (hide TOC sidebar) */
+@media only screen and (min-width: 64em) and (max-width: 79.9375em) {
+  .main-content-wrapper-3col {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    column-gap: 3rem;
+    align-items: start;
+  }
+
+  .main-content-wrapper-3col .toc-sidebar {
+    display: none;
+  }
+
+  .main-content-wrapper-3col .main-content {
+    max-width: none;
+  }
+
+  .main-content-wrapper-3col .blog-sidebar {
+    position: sticky;
+    top: 8rem;
+  }
+}
+
+/* TOC inline details (mobile) */
+.toc-inline {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--color-border, #f5f5f5);
+  border-radius: 8px;
+}
+
+.toc-inline summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.toc-inline summary::-webkit-details-marker {
+  display: none;
+}
+
+.toc-list-inline {
+  margin-top: 1rem;
+}
+
+.toc-list-inline ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list-inline li {
+  padding: 0.375rem 0;
+}
+
+.toc-list-inline a {
+  color: var(--color-gray-dark, #555);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.toc-list-inline a:hover {
+  color: var(--accent-color, #b8860b);
+}
+
+.toc-list-inline .toc-h3 {
+  padding-left: 1rem;
+}
+
+/* Desktop-hide utility (for TOC inline on mobile) */
+@media only screen and (min-width: 80em) {
+  .desktop-hide {
+    display: none;
+  }
+}
+
 /*-- -------------------------- -->
 <---    Recent Blog Articles    -->
 <--- -------------------------- -*/

@@ -1,0 +1,37 @@
+<!-- Newsletter Subscription Section -->
+<section class="newsletter-section">
+    <div class="newsletter-content">
+        <div class="newsletter-icon">
+            <i data-lucide="mail" width="32" height="32"></i>
+        </div>
+        <h3 class="newsletter-title">{{ 'newsletter.title' | t(currentLocale) }}</h3>
+        <p class="newsletter-desc">{{ 'newsletter.description' | t(currentLocale) }}</p>
+        
+        <!-- Buttondown Form - Replace YOUR_BUTTONDOWN_USERNAME with actual username -->
+        <form 
+            action="https://buttondown.email/api/emails/embed-subscribe/{{ client.newsletterUsername | default('youngchai') }}"
+            method="post"
+            target="popupwindow"
+            onsubmit="window.open('https://buttondown.email/{{ client.newsletterUsername | default('youngchai') }}', 'popupwindow')"
+            class="newsletter-form"
+        >
+            <div class="newsletter-input-group">
+                <input 
+                    type="email" 
+                    name="email" 
+                    placeholder="{{ 'newsletter.placeholder' | t(currentLocale) }}"
+                    required
+                    class="newsletter-input"
+                />
+                <button type="submit" class="newsletter-btn">
+                    <span>{{ 'newsletter.subscribe' | t(currentLocale) }}</span>
+                    <i data-lucide="arrow-right" width="16" height="16"></i>
+                </button>
+            </div>
+            <p class="newsletter-privacy">
+                {{ 'newsletter.privacy' | t(currentLocale) }}
+            </p>
+        </form>
+    </div>
+</section>
+

@@ -34,19 +34,108 @@ eleventyComputed:
 
 <link rel="stylesheet" href="/css/enhancements.css">
 
+<!-- JSON-LD Article Structured Data -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "{{ postTitle | replace('"', '\\"') }}",
+    "description": "{{ postDescription | replace('"', '\\"') }}",
+    "image": "https://{{ client.domain }}{{ image }}",
+    "author": {
+        "@type": "Person",
+        "name": "{{ author | default(client.name) }}"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "{{ client.name }}",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://{{ client.domain }}/assets/logo-light.png"
+        }
+    },
+    "datePublished": "{{ date | date('iso8601') }}",
+    "dateModified": "{{ date | date('iso8601') }}",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://{{ client.domain }}{{ page.url }}"
+    },
+    "articleSection": "{{ category | default('Blog') }}",
+    "wordCount": {{ wordCount }},
+    "inLanguage": "{{ 'en-US' if currentLocale == 'en' else 'ko-KR' }}"
+}
+</script>
+
+<!-- Breadcrumb JSON-LD -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "{{ 'nav.home' | t(currentLocale) }}",
+            "item": "https://{{ client.domain }}{% if currentLocale == 'ko' %}/ko{% endif %}/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "{{ category | default('Blog') }}",
+            "item": "https://{{ client.domain }}{% if currentLocale == 'ko' %}/ko{% endif %}/blog/{{ category | lower }}/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ postTitle }}"
+        }
+    ]
+}
+</script>
+
+{% set postsCollection = 'posts_' + currentLocale %}
+{% set relatedPosts = collections[postsCollection] | relatedPosts(page, 3) %}
+{% set currentSeries = series | getSeriesForPost(postSlug) %}
+{% set toc = content | toc %}
+
 <!-- ============================================ -->
-<!--                    LANDING                   -->
+<!--                 PARALLAX LANDING             -->
 <!-- ============================================ -->
 
-<section id="int-hero" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{{ image }}') center/cover no-repeat;">
-    <span class="hero-category">{{ category | upper | default('BLOG') }}</span>
+<section id="int-hero" class="parallax-hero">
+    <div class="parallax-bg" id="parallax-bg" style="background-image: url('{{ image }}');"></div>
+    <div class="parallax-overlay"></div>
+    <div class="parallax-content">
+        <span class="hero-category">{{ category | upper | default('BLOG') }}</span>
+    </div>
 </section>
 
 <!-- ============================================ -->
 <!--              Main Blog Content               -->
 <!-- ============================================ -->
 
-<div class="blog-container main-content-wrapper">
+<div class="blog-container main-content-wrapper-3col">
+    <!-- Left Sidebar: Table of Contents (Desktop) -->
+    {% if toc | length > 2 %}
+    <aside class="toc-sidebar desktop-only" id="toc-sidebar">
+        <div class="toc-container">
+            <h4 class="toc-title">
+                <i data-lucide="list" width="16" height="16"></i>
+                {{ 'blog.tableOfContents' | t(currentLocale) }}
+            </h4>
+            <nav>
+                <ul class="toc-list">
+                    {% for heading in toc %}
+                    <li>
+                        <a href="#{{ heading.id }}" class="toc-{{ heading.level }}" data-toc-link>{{ heading.text }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+    </aside>
+    {% endif %}
+
     <!--Main content -->
     <div class="main-content">
         <!-- ============================================ -->
@@ -100,6 +189,22 @@ eleventyComputed:
                                 <path d="M22 7l-10 6L2 7"/>
                             </svg>
                         </a>
+                        <!-- SMS Share -->
+                        <a href="sms:?body={{ postTitle | urlencode }}%20-%20https://{{ client.domain }}{{ page.url }}" 
+                           class="share-link share-sms"
+                           aria-label="{{ 'blog.shareViaText' | t(currentLocale) }}">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </a>
+                        <!-- Print Button -->
+                        <button onclick="window.print()" class="share-link print-btn" aria-label="{{ 'blog.printArticle' | t(currentLocale) }}">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                                <rect x="6" y="14" width="12" height="8"></rect>
+                            </svg>
+                        </button>
                     </div>
                 </div>
 
@@ -138,9 +243,77 @@ eleventyComputed:
                     </button>
                 </div>
             </div>
+
+            <!-- Series Navigation (if part of a series) -->
+            {% if currentSeries %}
+            <div class="series-nav">
+                <div class="series-header">
+                    <i data-lucide="layers" width="16" height="16"></i>
+                    <span class="series-label">{{ 'blog.partOfSeries' | t(currentLocale) }}</span>
+                </div>
+                <h4 class="series-title">{{ currentSeries.title[currentLocale] | default(currentSeries.title.en) }}</h4>
+                <ol class="series-posts">
+                    {% set seriesPosts = collections[postsCollection] | getSeriesPosts(currentSeries) %}
+                    {% for seriesPost in seriesPosts %}
+                    <li class="{% if seriesPost.data.slug == postSlug or seriesPost.fileSlug == postSlug %}current{% endif %}">
+                        <a href="{{ seriesPost.url }}">{{ seriesPost.data.title | default(seriesPost.data.blogTitle) }}</a>
+                    </li>
+                    {% endfor %}
+                </ol>
+            </div>
+            {% endif %}
+
+            <!-- Table of Contents (for long posts) -->
+            {% if toc | length > 2 %}
+            <div class="toc-inline desktop-hide">
+                <details>
+                    <summary>
+                        <i data-lucide="list" width="16" height="16"></i>
+                        {{ 'blog.tableOfContents' | t(currentLocale) }}
+                    </summary>
+                    <nav class="toc-list-inline">
+                        <ul>
+                            {% for heading in toc %}
+                            <li class="toc-{{ heading.level }}">
+                                <a href="#{{ heading.id }}">{{ heading.text }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </details>
+            </div>
+            {% endif %}
+
             <section id="blog-content">
                 {{ content | safe }}
             </section>
+
+            <!-- Newsletter Section -->
+            {% set currentLocale = locale | default(page.url | getLocale) %}
+            {% include "newsletter.html" %}
+
+            <!-- Related Posts -->
+            {% if relatedPosts | length > 0 %}
+            <section class="related-posts">
+                <h3 class="related-posts-title">
+                    <i data-lucide="sparkles" width="20" height="20"></i>
+                    {{ 'blog.relatedPosts' | t(currentLocale) }}
+                </h3>
+                <div class="related-posts-grid">
+                    {% for relatedPost in relatedPosts %}
+                    <a href="{{ relatedPost.url }}" class="related-post-card">
+                        {% if relatedPost.data.image %}
+                        <div class="related-post-image">
+                            <img src="{{ relatedPost.data.image }}" alt="{{ relatedPost.data.imageAlt | default(relatedPost.data.title) }}" loading="lazy">
+                        </div>
+                        {% endif %}
+                        <span class="related-post-category">{{ relatedPost.data.category | upper | default('BLOG') }}</span>
+                        <h4 class="related-post-title">{{ relatedPost.data.title | default(relatedPost.data.blogTitle) }}</h4>
+                    </a>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
         </article>
 
         <!-- ============================================ -->
@@ -806,5 +979,123 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     checkSavedProgress();
+
+    // ============================================
+    // PARALLAX HERO EFFECT
+    // ============================================
+    const parallaxBg = document.getElementById('parallax-bg');
+    if (parallaxBg) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const rate = scrolled * 0.3;
+            parallaxBg.style.transform = `translateY(${rate}px)`;
+        }, { passive: true });
+    }
+
+    // ============================================
+    // TABLE OF CONTENTS HIGHLIGHTING
+    // ============================================
+    const tocLinks = document.querySelectorAll('[data-toc-link]');
+    const articleHeadings = document.querySelectorAll('#blog-content h2, #blog-content h3');
+    
+    if (tocLinks.length > 0 && articleHeadings.length > 0) {
+        function updateTocHighlight() {
+            const scrollPosition = window.scrollY + 150;
+            
+            let currentHeadingId = null;
+            articleHeadings.forEach(heading => {
+                if (heading.offsetTop <= scrollPosition) {
+                    currentHeadingId = heading.id;
+                }
+            });
+            
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentHeadingId) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', updateTocHighlight, { passive: true });
+        updateTocHighlight();
+    }
+
+    // ============================================
+    // HIGHLIGHT & SHARE (Text Selection)
+    // ============================================
+    const highlightPopup = document.createElement('div');
+    highlightPopup.className = 'highlight-share-popup';
+    highlightPopup.innerHTML = `
+        <button class="highlight-share-btn" id="share-sms-selection" title="{{ 'blog.shareViaText' | t(currentLocale) }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+        </button>
+        <button class="highlight-share-btn" id="copy-selection" title="Copy">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+        </button>
+    `;
+    document.body.appendChild(highlightPopup);
+
+    function getSelectedText() {
+        return window.getSelection().toString().trim();
+    }
+
+    function showHighlightPopup(x, y) {
+        highlightPopup.style.left = x + 'px';
+        highlightPopup.style.top = (y - 50) + 'px';
+        highlightPopup.classList.add('visible');
+    }
+
+    function hideHighlightPopup() {
+        highlightPopup.classList.remove('visible');
+    }
+
+    blogContent?.addEventListener('mouseup', (e) => {
+        const selectedText = getSelectedText();
+        if (selectedText.length > 5) {
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            const rect = range.getBoundingClientRect();
+            showHighlightPopup(rect.left + rect.width / 2 + window.scrollX, rect.top + window.scrollY);
+        } else {
+            hideHighlightPopup();
+        }
+    });
+
+    document.addEventListener('mousedown', (e) => {
+        if (!highlightPopup.contains(e.target)) {
+            hideHighlightPopup();
+        }
+    });
+
+    document.getElementById('share-sms-selection')?.addEventListener('click', () => {
+        const text = getSelectedText();
+        const url = window.location.href;
+        window.location.href = `sms:?body="${text}" - ${url}`;
+        hideHighlightPopup();
+    });
+
+    document.getElementById('copy-selection')?.addEventListener('click', async () => {
+        const text = getSelectedText();
+        try {
+            await navigator.clipboard.writeText(text);
+            const btn = document.getElementById('copy-selection');
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+            setTimeout(() => {
+                btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+            }, 2000);
+        } catch (err) {
+            console.error('Failed to copy:', err);
+        }
+        hideHighlightPopup();
+    });
+
+    // Re-initialize Lucide icons for any new elements
+    if (window.lucide) lucide.createIcons();
 });
 </script>

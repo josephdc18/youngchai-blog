@@ -1,0 +1,129 @@
+<!-- Search Modal -->
+<div class="search-modal" id="search-modal" role="dialog" aria-modal="true" aria-labelledby="search-title">
+    <div class="search-backdrop" id="search-backdrop"></div>
+    <div class="search-container">
+        <div class="search-header">
+            <h2 class="search-title" id="search-title">
+                <i data-lucide="search" width="24" height="24"></i>
+                <span>{{ 'search.title' | t(currentLocale) }}</span>
+            </h2>
+            <button class="search-close" id="search-close" aria-label="Close search">
+                <i data-lucide="x" width="24" height="24"></i>
+            </button>
+        </div>
+        
+        <div class="search-input-wrapper">
+            <i data-lucide="search" width="20" height="20" class="search-input-icon"></i>
+            <input 
+                type="text" 
+                id="search-input" 
+                class="search-input"
+                placeholder="{{ 'search.placeholder' | t(currentLocale) }}"
+                autocomplete="off"
+                autofocus
+            />
+            <kbd class="search-kbd">ESC</kbd>
+        </div>
+        
+        <div class="search-results" id="search-results">
+            <p class="search-hint">{{ 'search.hint' | t(currentLocale) }}</p>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const modal = document.getElementById('search-modal');
+    const backdrop = document.getElementById('search-backdrop');
+    const closeBtn = document.getElementById('search-close');
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+    const searchData = JSON.parse(document.getElementById('post-search-data')?.textContent || '[]');
+    
+    // Open search modal
+    window.openSearch = function() {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => input.focus(), 100);
+        if (window.lucide) lucide.createIcons();
+    };
+    
+    // Close search modal
+    function closeSearch() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        input.value = '';
+        results.innerHTML = '<p class="search-hint">{{ "search.hint" | t(currentLocale) }}</p>';
+    }
+    
+    // Event listeners
+    backdrop?.addEventListener('click', closeSearch);
+    closeBtn?.addEventListener('click', closeSearch);
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        // Open with Cmd/Ctrl + K
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+            e.preventDefault();
+            openSearch();
+        }
+        // Close with Escape
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeSearch();
+        }
+    });
+    
+    // Search logic
+    input?.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        
+        if (query.length < 2) {
+            results.innerHTML = '<p class="search-hint">{{ "search.hint" | t(currentLocale) }}</p>';
+            return;
+        }
+        
+        const matches = searchData.filter(post => {
+            const title = (post.title || '').toLowerCase();
+            const desc = (post.description || '').toLowerCase();
+            const cat = (post.category || '').toLowerCase();
+            return title.includes(query) || desc.includes(query) || cat.includes(query);
+        });
+        
+        if (matches.length === 0) {
+            results.innerHTML = '<p class="search-no-results">{{ "search.noResults" | t(currentLocale) }}</p>';
+            return;
+        }
+        
+        let html = '<ul class="search-results-list">';
+        matches.slice(0, 10).forEach(post => {
+            html += `
+                <li class="search-result-item">
+                    <a href="${post.url}" class="search-result-link">
+                        <span class="search-result-category">${post.category || 'Blog'}</span>
+                        <span class="search-result-title">${highlightMatch(post.title, query)}</span>
+                        <span class="search-result-desc">${highlightMatch(post.description || '', query)}</span>
+                    </a>
+                </li>
+            `;
+        });
+        html += '</ul>';
+        
+        if (matches.length > 10) {
+            html += `<p class="search-more">{{ "search.andMore" | t(currentLocale) | replace("{count}", "${matches.length - 10}") }}</p>`;
+        }
+        
+        results.innerHTML = html;
+    });
+    
+    function highlightMatch(text, query) {
+        if (!text) return '';
+        const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+    }
+    
+    function escapeRegex(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+})();
+</script>
+

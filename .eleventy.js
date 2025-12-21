@@ -2,8 +2,10 @@
 const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 const { DateTime } = require('luxon');
 const Image = require('@11ty/eleventy-img');
+const pluginRss = require('@11ty/eleventy-plugin-rss');
 const path = require('path');
 const fs = require('fs');
+const cheerio = require('cheerio');
 
 // Load translations
 const translationsEn = JSON.parse(fs.readFileSync('./src/_data/translations/en.json', 'utf8'));
@@ -52,6 +54,7 @@ async function imageShortcode(src, alt, className, loading, sizes = '(max-width:
 module.exports = function (eleventyConfig) {
   // adds the navigation plugin for easy navs
   eleventyConfig.addPlugin(eleventyNavigationPlugin);
+  eleventyConfig.addPlugin(pluginRss);
 
   // allows css, assets, robots.txt and CMS config files to be passed into /public
   eleventyConfig.addPassthroughCopy('./src/css/**/*.css');
@@ -144,7 +147,8 @@ module.exports = function (eleventyConfig) {
       'yyyy': dt.toFormat('yyyy'),
       'LLLL': dt.toFormat('LLLL'),
       'MM': dt.toFormat('MM'),
-      'iso8601': dt.toISO()
+      'iso8601': dt.toISO(),
+      'yyyy-MM-dd': dt.toFormat('yyyy-MM-dd')
     };
     return formatMap[format] || dt.toFormat(format);
   });
@@ -173,6 +177,13 @@ module.exports = function (eleventyConfig) {
     return content.replace(/<[^>]*>/g, '');
   });
 
+  // Truncate text
+  eleventyConfig.addFilter('truncate', (content, length = 200) => {
+    if (!content) return '';
+    if (content.length <= length) return content;
+    return content.substring(0, length).trim() + '...';
+  });
+
   eleventyConfig.addFilter('slice', (array, start, end) => {
     if (!Array.isArray(array)) return [];
     return array.slice(start, end);
@@ -186,6 +197,132 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addFilter('filterByLocale', (array, locale) => {
     if (!Array.isArray(array)) return [];
     return array.filter(item => item.data?.locale === locale);
+  });
+
+  // JSON stringify for safe output
+  eleventyConfig.addFilter('jsonify', (obj) => {
+    return JSON.stringify(obj);
+  });
+
+  // URL encode
+  eleventyConfig.addFilter('urlencode', (str) => {
+    return encodeURIComponent(str || '');
+  });
+
+  // First item in array
+  eleventyConfig.addFilter('first', (array) => {
+    if (!Array.isArray(array) || !array.length) return null;
+    return array[0];
+  });
+
+  // ========================================
+  // TABLE OF CONTENTS FILTER
+  // ========================================
+  
+  eleventyConfig.addFilter('toc', (content) => {
+    if (!content) return [];
+    const $ = cheerio.load(content);
+    const headings = [];
+    
+    $('h2, h3').each((i, el) => {
+      const $el = $(el);
+      const text = $el.text();
+      const id = $el.attr('id') || text.toLowerCase().replace(/[^\w]+/g, '-');
+      
+      // Add ID to heading if not present
+      if (!$el.attr('id')) {
+        $el.attr('id', id);
+      }
+      
+      headings.push({
+        level: el.tagName.toLowerCase(),
+        text: text,
+        id: id
+      });
+    });
+    
+    return headings;
+  });
+
+  // ========================================
+  // RELATED POSTS FILTER
+  // ========================================
+  
+  eleventyConfig.addFilter('relatedPosts', (collection, currentPost, limit = 3) => {
+    if (!collection || !currentPost) return [];
+    
+    const currentCategory = currentPost.data?.category;
+    const currentTags = currentPost.data?.tags || [];
+    const currentUrl = currentPost.url;
+    
+    // Score posts by relevance
+    const scored = collection
+      .filter(post => post.url !== currentUrl)
+      .map(post => {
+        let score = 0;
+        
+        // Same category = high score
+        if (post.data?.category === currentCategory) {
+          score += 10;
+        }
+        
+        // Matching tags = medium score
+        const postTags = post.data?.tags || [];
+        const matchingTags = postTags.filter(tag => 
+          currentTags.includes(tag) && tag !== 'post'
+        );
+        score += matchingTags.length * 3;
+        
+        // Recent posts get a small boost
+        const daysDiff = (Date.now() - new Date(post.date).getTime()) / (1000 * 60 * 60 * 24);
+        if (daysDiff < 30) score += 2;
+        else if (daysDiff < 90) score += 1;
+        
+        return { post, score };
+      })
+      .filter(item => item.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit)
+      .map(item => item.post);
+    
+    // If not enough related posts, fill with recent posts
+    if (scored.length < limit) {
+      const recent = collection
+        .filter(post => 
+          post.url !== currentUrl && 
+          !scored.some(s => s.url === post.url)
+        )
+        .slice(0, limit - scored.length);
+      return [...scored, ...recent];
+    }
+    
+    return scored;
+  });
+
+  // ========================================
+  // RANDOM POST FILTER
+  // ========================================
+  
+  eleventyConfig.addFilter('randomPost', (collection) => {
+    if (!collection || !collection.length) return null;
+    const randomIndex = Math.floor(Math.random() * collection.length);
+    return collection[randomIndex];
+  });
+
+  // ========================================
+  // SERIES FILTER
+  // ========================================
+  
+  eleventyConfig.addFilter('getSeriesForPost', (seriesData, postSlug) => {
+    if (!seriesData || !seriesData.series) return null;
+    return seriesData.series.find(s => s.posts && s.posts.includes(postSlug));
+  });
+
+  eleventyConfig.addFilter('getSeriesPosts', (collection, series) => {
+    if (!collection || !series || !series.posts) return [];
+    return series.posts
+      .map(slug => collection.find(post => post.data?.slug === slug || post.fileSlug === slug))
+      .filter(Boolean);
   });
 
   // ========================================

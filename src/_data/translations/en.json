@@ -19,7 +19,8 @@
     "interiors": "Interiors",
     "tech": "Tech",
     "menu": "Menu",
-    "search": "Search"
+    "search": "Search",
+    "randomPost": "Surprise Me"
   },
   "blog": {
     "readMore": "Read More",
@@ -32,11 +33,40 @@
     "editorsPicks": "Editor's Picks",
     "fromArchives": "From the Archives",
     "collectedEssays": "Collected essays",
-    "noPosts": "No posts yet. Check back soon!"
+    "noPosts": "No posts yet. Check back soon!",
+    "relatedPosts": "You Might Also Like",
+    "tableOfContents": "Table of Contents",
+    "partOfSeries": "Part of Series",
+    "printArticle": "Print Article",
+    "shareViaText": "Share via Text"
+  },
+  "newsletter": {
+    "title": "Stay in the Loop",
+    "description": "Get thoughtful essays and updates delivered to your inbox. No spam, just genuine words.",
+    "placeholder": "Your email address",
+    "subscribe": "Subscribe",
+    "privacy": "We respect your privacy. Unsubscribe anytime."
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search articles...",
+    "hint": "Type at least 2 characters to search",
+    "noResults": "No articles found. Try different keywords.",
+    "andMore": "...and {count} more results"
+  },
+  "kofi": {
+    "buyMeACoffee": "Buy me a coffee"
+  },
+  "webmentions": {
+    "title": "Webmentions",
+    "likes": "Likes",
+    "reposts": "Reposts",
+    "replies": "Replies"
   },
   "footer": {
     "builtWith": "Built with intention.",
-    "copyright": "© 2025 Young Chai."
+    "copyright": "© 2025 Young Chai.",
+    "rss": "RSS Feed"
   },
   "categories": {
     "ESSAY": "Essay",
@@ -48,7 +78,8 @@
     "WELLNESS": "Wellness",
     "WORK": "Work",
     "LIFE": "Life",
-    "PHOTOGRAPHY": "Photography"
+    "PHOTOGRAPHY": "Photography",
+    "LIVING": "Living"
   },
   "category": {
     "label": "CATEGORY",
@@ -61,4 +92,3 @@
     "searchSite": "Search site"
   }
 }
-

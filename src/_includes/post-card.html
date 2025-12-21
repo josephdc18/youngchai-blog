@@ -18,6 +18,10 @@
                 {{ category }}
             </span>
             <span class="date-tag">{{ post.date | postDate }}</span>
+            <span class="comment-count" data-post-slug="{{ post.fileSlug }}">
+                <i data-lucide="message-circle" width="14" height="14"></i>
+                <span class="comment-count-number">—</span>
+            </span>
         </div>
         <h2 class="post-title {% if isHero %}post-title-hero{% endif %}">
             {{ post.data.blogTitle }}
