@@ -16,15 +16,16 @@
 
         <!-- Desktop: Left navigation links with dropdowns -->
         <div class="nav-links-left desktop-only">
-            <!-- Essay dropdown -->
+            <!-- Living dropdown -->
             <div class="nav-dropdown">
-                <a href="{{ urlPrefix }}/blog/essay/" class="nav-link nav-dropdown-trigger">
-                    {{ 'nav.essay' | t(currentLocale) }}
+                <a href="{{ urlPrefix }}/blog/living/" class="nav-link nav-dropdown-trigger">
+                    {{ 'nav.living' | t(currentLocale) }}
                     <i data-lucide="chevron-down" width="14" height="14" class="dropdown-arrow"></i>
                 </a>
                 <div class="nav-dropdown-menu">
+                    <a href="{{ urlPrefix }}/blog/interiors/" class="nav-dropdown-item">{{ 'nav.interiors' | t(currentLocale) }}</a>
                     <a href="{{ urlPrefix }}/blog/wellness/" class="nav-dropdown-item">{{ 'nav.wellness' | t(currentLocale) }}</a>
-                    <a href="{{ urlPrefix }}/blog/work/" class="nav-dropdown-item">{{ 'nav.work' | t(currentLocale) }}</a>
+                    <a href="{{ urlPrefix }}/blog/tech/" class="nav-dropdown-item">{{ 'nav.tech' | t(currentLocale) }}</a>
                 </div>
             </div>
 
@@ -39,20 +40,19 @@
                 </div>
             </div>
 
-            <!-- Living dropdown -->
+            <!-- Travel (no dropdown) -->
+            <a href="{{ urlPrefix }}/blog/travel/" class="nav-link">{{ 'nav.travel' | t(currentLocale) }}</a>
+
+            <!-- Work dropdown -->
             <div class="nav-dropdown">
-                <a href="{{ urlPrefix }}/blog/living/" class="nav-link nav-dropdown-trigger">
-                    {{ 'nav.living' | t(currentLocale) }}
+                <a href="{{ urlPrefix }}/blog/work/" class="nav-link nav-dropdown-trigger">
+                    {{ 'nav.work' | t(currentLocale) }}
                     <i data-lucide="chevron-down" width="14" height="14" class="dropdown-arrow"></i>
                 </a>
                 <div class="nav-dropdown-menu">
-                    <a href="{{ urlPrefix }}/blog/interiors/" class="nav-dropdown-item">{{ 'nav.interiors' | t(currentLocale) }}</a>
-                    <a href="{{ urlPrefix }}/blog/tech/" class="nav-dropdown-item">{{ 'nav.tech' | t(currentLocale) }}</a>
+                    <a href="{{ urlPrefix }}/blog/essay/" class="nav-dropdown-item">{{ 'nav.essay' | t(currentLocale) }}</a>
                 </div>
             </div>
-
-            <!-- Travel (no dropdown) -->
-            <a href="{{ urlPrefix }}/blog/travel/" class="nav-link">{{ 'nav.travel' | t(currentLocale) }}</a>
             
             <!-- Food (no dropdown) -->
             <a href="{{ urlPrefix }}/blog/food/" class="nav-link">{{ 'nav.food' | t(currentLocale) }}</a>
@@ -87,12 +87,13 @@
 
 <div id="mobile-menu" class="hidden" aria-hidden="true">
     <nav class="mobile-menu-content" aria-label="Mobile navigation">
-        <!-- Essay with subcategories -->
+        <!-- Living with subcategories -->
         <div class="mobile-nav-group">
-            <a href="{{ urlPrefix }}/blog/essay/" class="mobile-link mobile-link-main">{{ 'nav.essay' | t(currentLocale) }}</a>
+            <a href="{{ urlPrefix }}/blog/living/" class="mobile-link mobile-link-main">{{ 'nav.living' | t(currentLocale) }}</a>
             <div class="mobile-subnav">
+                <a href="{{ urlPrefix }}/blog/interiors/" class="mobile-link mobile-link-sub">{{ 'nav.interiors' | t(currentLocale) }}</a>
                 <a href="{{ urlPrefix }}/blog/wellness/" class="mobile-link mobile-link-sub">{{ 'nav.wellness' | t(currentLocale) }}</a>
-                <a href="{{ urlPrefix }}/blog/work/" class="mobile-link mobile-link-sub">{{ 'nav.work' | t(currentLocale) }}</a>
+                <a href="{{ urlPrefix }}/blog/tech/" class="mobile-link mobile-link-sub">{{ 'nav.tech' | t(currentLocale) }}</a>
             </div>
         </div>
 
@@ -104,17 +105,16 @@
             </div>
         </div>
 
-        <!-- Living with subcategories -->
-        <div class="mobile-nav-group">
-            <a href="{{ urlPrefix }}/blog/living/" class="mobile-link mobile-link-main">{{ 'nav.living' | t(currentLocale) }}</a>
-            <div class="mobile-subnav">
-                <a href="{{ urlPrefix }}/blog/interiors/" class="mobile-link mobile-link-sub">{{ 'nav.interiors' | t(currentLocale) }}</a>
-                <a href="{{ urlPrefix }}/blog/tech/" class="mobile-link mobile-link-sub">{{ 'nav.tech' | t(currentLocale) }}</a>
-            </div>
-        </div>
-
         <!-- Travel -->
         <a href="{{ urlPrefix }}/blog/travel/" class="mobile-link mobile-link-main">{{ 'nav.travel' | t(currentLocale) }}</a>
+
+        <!-- Work with subcategories -->
+        <div class="mobile-nav-group">
+            <a href="{{ urlPrefix }}/blog/work/" class="mobile-link mobile-link-main">{{ 'nav.work' | t(currentLocale) }}</a>
+            <div class="mobile-subnav">
+                <a href="{{ urlPrefix }}/blog/essay/" class="mobile-link mobile-link-sub">{{ 'nav.essay' | t(currentLocale) }}</a>
+            </div>
+        </div>
 
         <!-- Food -->
         <a href="{{ urlPrefix }}/blog/food/" class="mobile-link mobile-link-main">{{ 'nav.food' | t(currentLocale) }}</a>

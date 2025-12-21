@@ -6,6 +6,9 @@
   :root {
     --bodyHeader: #1a1a1a;
     --bodyText: #737373;
+    /* Use same fonts as homepage */
+    --font-sans: 'DM Sans', sans-serif;
+    --font-serif: 'Playfair Display', serif;
   }
   body,
   html,
@@ -568,7 +571,8 @@
   .blog-article .blog-h1 {
     font-size: clamp(20px, 5vw, 39px);
     line-height: 1.4em;
-    font-weight: 700;
+    font-weight: 400;
+    font-family: var(--font-serif);
     margin: 1rem 0;
     max-width: 34.375rem;
     color: var(--bodyHeader);
@@ -582,14 +586,16 @@
     font-size: 1.75rem;
     line-height: 1.5em;
     color: var(--bodyHeader);
-    font-weight: 700;
+    font-weight: 400;
+    font-family: var(--font-serif);
     margin-bottom: 1rem;
   }
   .blog-article #blog-content h3 {
     font-size: 1.5rem;
     line-height: 1.5em;
     color: var(--bodyHeader);
-    font-weight: 700;
+    font-weight: 400;
+    font-family: var(--font-serif);
     margin-bottom: 1rem;
   }
   .blog-article #blog-content h4,
@@ -598,12 +604,14 @@
     font-size: 1.25rem;
     line-height: 1.5em;
     color: var(--bodyHeader);
-    font-weight: 700;
+    font-weight: 400;
+    font-family: var(--font-serif);
     margin-bottom: 1rem;
   }
   .blog-article #blog-content p {
     font-size: 1rem;
     line-height: 1.6em;
+    font-family: var(--font-sans);
     margin: 0;
     margin-bottom: 1rem;
     color: var(--bodyText);
