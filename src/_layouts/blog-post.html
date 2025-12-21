@@ -155,13 +155,16 @@ eleventyComputed:
                 </h2>
             </div>
 
-            <!-- New Comment Form -->
+            <!-- New Comment Form (Accordion) -->
             <div class="new-comment-form-container" id="new-comment-form-container">
-                <form class="inline-comment-form" id="new-comment-form">
-                    <div class="comment-form-header">
+                <button type="button" class="comment-form-toggle" id="comment-form-toggle" aria-expanded="false">
+                    <span class="comment-form-toggle-left">
                         <i data-lucide="edit-3" width="18" height="18"></i>
                         <span>{{ 'Write a comment' if currentLocale == 'en' else '댓글 작성' }}</span>
-                    </div>
+                    </span>
+                    <i data-lucide="chevron-down" width="18" height="18" class="toggle-icon"></i>
+                </button>
+                <form class="inline-comment-form collapsed" id="new-comment-form">
                     <div class="comment-form-row">
                         <div class="floating-label-group">
                             <input type="text" name="commenter-name" id="new-commenter-name" placeholder=" " required>
@@ -561,13 +564,39 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', handleScroll);
     handleScroll();
 
-    // Write comment button - scroll to form
+    // Comment form accordion toggle
+    const commentFormToggle = document.getElementById('comment-form-toggle');
+    
+    function toggleCommentForm(open) {
+        const isOpen = open !== undefined ? open : newCommentForm.classList.contains('collapsed');
+        
+        if (isOpen) {
+            newCommentForm.classList.remove('collapsed');
+            newCommentForm.classList.add('expanded');
+            commentFormToggle.classList.add('open');
+            commentFormToggle.setAttribute('aria-expanded', 'true');
+        } else {
+            newCommentForm.classList.add('collapsed');
+            newCommentForm.classList.remove('expanded');
+            commentFormToggle.classList.remove('open');
+            commentFormToggle.setAttribute('aria-expanded', 'false');
+        }
+    }
+    
+    commentFormToggle.addEventListener('click', () => {
+        toggleCommentForm();
+        if (window.lucide) lucide.createIcons();
+    });
+
+    // Write comment button - scroll to form and expand
     writeCommentBtn.addEventListener('click', () => {
         const formContainer = document.getElementById('new-comment-form-container');
+        toggleCommentForm(true); // Expand the form
         formContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
         setTimeout(() => {
             document.getElementById('new-commenter-name').focus();
         }, 500);
+        if (window.lucide) lucide.createIcons();
     });
 
     // Submit new comment

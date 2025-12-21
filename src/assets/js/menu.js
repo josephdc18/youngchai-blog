@@ -228,3 +228,39 @@ function initStickySidebar() {
 // Run on load and resize
 initStickySidebar();
 window.addEventListener('resize', initStickySidebar);
+
+// Mobile Navigation Accordions
+function initMobileNavAccordions() {
+    const toggleButtons = document.querySelectorAll('.mobile-subnav-toggle');
+    
+    toggleButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const navGroup = btn.closest('.mobile-nav-group');
+            const subnav = navGroup.querySelector('.mobile-subnav');
+            
+            if (!subnav) return;
+            
+            const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                subnav.classList.add('collapsed');
+                btn.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+            } else {
+                subnav.classList.remove('collapsed');
+                btn.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+            
+            // Re-create Lucide icons
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                window.lucide.createIcons();
+            }
+        });
+    });
+}
+
+initMobileNavAccordions();

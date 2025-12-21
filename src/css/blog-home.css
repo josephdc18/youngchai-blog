@@ -296,19 +296,62 @@ h4 {
     margin-bottom: 0.5rem;
 }
 
+.mobile-link-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mobile-link-row .mobile-link-main {
+    flex: 1;
+}
+
+.mobile-subnav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--color-gray-medium);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.3s;
+}
+
+.mobile-subnav-toggle.open {
+    transform: rotate(180deg);
+}
+
+.mobile-subnav-toggle:hover {
+    color: var(--color-accent);
+}
+
 .mobile-link-main {
     font-weight: 700;
 }
 
 .mobile-subnav {
     padding-left: 1rem;
-    margin-top: 0.25rem;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    max-height: 500px;
+    opacity: 1;
+}
+
+.mobile-subnav.collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0;
 }
 
 .mobile-link-sub {
     font-size: 0.9rem;
     opacity: 0.7;
-    padding: 0.35rem 0;
+    padding: 0.5rem 0;
+    display: block;
 }
 
 .mobile-link-sub:hover {
@@ -807,13 +850,18 @@ h4 {
 
     .carousel-container button {
         position: absolute;
-        background: transparent;
-        border: none;
-        padding: 0.75rem;
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        padding: 0;
         z-index: 10;
         cursor: pointer;
         pointer-events: auto;
-        transition: opacity 0.2s;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        transition: all 0.2s;
         color: var(--color-text);
         display: flex;
         align-items: center;

@@ -1476,7 +1476,7 @@
     padding: 1rem;
     border: 1px solid var(--comment-border);
     font-family: inherit;
-    font-size: 0.9375rem;
+    font-size: 16px; /* Prevents iOS zoom on focus */
     background: #fafafa;
     transition: border-color 0.2s, background 0.2s;
   }
@@ -1514,5 +1514,68 @@
 
   .comment {
     display: block;
+  }
+
+  /* ======================================
+     COMMENT FORM ACCORDION
+     ====================================== */
+  .comment-form-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: #fff;
+    border: 1px solid var(--comment-border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .comment-form-toggle:hover {
+    border-color: var(--comment-accent);
+  }
+
+  .comment-form-toggle-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--comment-gray);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .comment-form-toggle-left i {
+    color: var(--comment-accent);
+  }
+
+  .comment-form-toggle .toggle-icon {
+    color: var(--comment-gray);
+    transition: transform 0.3s;
+  }
+
+  .comment-form-toggle.open .toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  .inline-comment-form.collapsed {
+    display: none;
+  }
+
+  .inline-comment-form.expanded {
+    display: flex;
+    border-top: none;
+  }
+
+  /* ======================================
+     GO-TOP BUTTON - Blog Post Adjustment
+     ====================================== */
+  body:has(.sticky-comment-bar) #go-top {
+    bottom: 5.5rem; /* Above the sticky comment bar */
+  }
+
+  @media (max-width: 768px) {
+    body:has(.sticky-comment-bar) #go-top {
+      bottom: 6rem;
+    }
   }
 }

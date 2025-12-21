@@ -427,13 +427,13 @@ article.blog-article .blog-date {
 @media (max-width: 768px) {
   .tea-progress {
     left: 1rem;
-    bottom: 1rem;
-    transform: scale(0.85);
+    bottom: 5.5rem; /* Above sticky comment bar */
+    transform: scale(0.75);
     transform-origin: bottom left;
   }
 
   .tea-progress.visible {
-    transform: scale(0.85) translateY(0);
+    transform: scale(0.75) translateY(0);
   }
 
   .reading-controls {
@@ -451,10 +451,17 @@ article.blog-article .blog-date {
   }
 }
 
-/* Hide on very small screens */
+/* Show tea cup on small screens (was hidden before) */
 @media (max-width: 480px) {
   .tea-progress {
-    display: none;
+    left: 0.75rem;
+    bottom: 5.5rem;
+    transform: scale(0.65);
+    transform-origin: bottom left;
+  }
+
+  .tea-progress.visible {
+    transform: scale(0.65) translateY(0);
   }
 }
 
