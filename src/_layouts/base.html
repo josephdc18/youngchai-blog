@@ -57,6 +57,9 @@
         <link rel="stylesheet" href="{{ preloadCSS }}">
         {% endif %}
 
+        <!-- Cloudflare Turnstile for spam protection -->
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
         <!--Put analytics tag here at the bottom to prevent it from render blocking-->
 
         <script defer src="https://unpkg.com/lucide@latest"></script>

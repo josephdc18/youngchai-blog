@@ -7,6 +7,7 @@ This guide explains how to set up the Cloudflare D1-powered comments system for 
 The comments system uses:
 - **Cloudflare D1** - SQLite database for storing comments
 - **Cloudflare Pages Functions** - API endpoints for reading/writing comments
+- **Cloudflare Turnstile** - CAPTCHA alternative for spam protection
 - **Custom UI** - Beautiful inline comment forms with sticky bar
 
 ## Setup Instructions
@@ -83,7 +84,36 @@ In your Cloudflare Pages dashboard:
    - **D1 database**: Select `youngchai-comments`
 3. Save the configuration
 
-### Step 7: Deploy
+### Step 7: Set Up Cloudflare Turnstile (Spam Protection)
+
+Turnstile is Cloudflare's free, privacy-friendly CAPTCHA alternative.
+
+1. Go to **Cloudflare Dashboard** → **Turnstile**
+2. Click **Add Site**
+3. Configure:
+   - **Site Name**: Young Chai Blog
+   - **Domains**: `chailikethetea.com` (your domain)
+   - **Widget Mode**: **Managed** (invisible for most users)
+4. Click **Create**
+5. Copy the **Site Key** and **Secret Key**
+
+#### Add Keys to Your Project
+
+**Site Key** (public - goes in client.json):
+```json
+{
+  "turnstileSiteKey": "0x4AAAAAAAxxxxxxxxxxxxxxxxx"
+}
+```
+
+**Secret Key** (private - goes in Cloudflare Pages environment variables):
+1. Go to **Pages** → Your project → **Settings** → **Environment Variables**
+2. Add a new variable:
+   - **Variable name**: `TURNSTILE_SECRET_KEY`
+   - **Value**: Your secret key (starts with `0x...`)
+3. Save
+
+### Step 8: Deploy
 
 Deploy your site to Cloudflare Pages:
 
@@ -94,11 +124,41 @@ wrangler pages deploy public
 
 Or push to your GitHub repository if you have automatic deployments set up.
 
-## How It Works
+---
 
-### API Endpoints
+## Spam Protection
 
-The comments API is available at `/api/comments`:
+The system includes multiple layers of spam protection:
+
+### 1. Cloudflare Turnstile
+Invisible CAPTCHA that challenges suspicious users. Most legitimate users won't see it.
+
+### 2. Honeypot Field
+A hidden form field that bots fill out but humans can't see. If filled, the comment is silently rejected.
+
+### 3. Rate Limiting
+Prevents spam floods by limiting to 3 comments per minute per IP.
+
+### 4. Input Sanitization
+All inputs are sanitized to prevent XSS attacks.
+
+---
+
+## Admin Panel
+
+Access the comments admin panel at: **`/admin/comments/`**
+
+Features:
+- 📊 View stats (total, approved, pending, today)
+- ✅ Approve pending comments
+- 🗑️ Delete spam or unwanted comments
+- 🔍 Filter by status
+
+---
+
+## API Endpoints
+
+### Public API
 
 #### GET `/api/comments?post=<slug>`
 
@@ -129,33 +189,31 @@ Creates a new comment.
 {
   "post": "finding-stillness",
   "name": "Jane Doe",
-  "email": "jane@example.com",  // Optional
+  "email": "jane@example.com",
   "content": "Great article!",
-  "parent_id": null  // Optional, for replies
+  "parent_id": null,
+  "turnstile_token": "xxxxx"
 }
 ```
 
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Comment posted successfully",
-  "commentId": 1
-}
-```
+### Admin API
 
-### Features
+> Note: These endpoints should be protected in production. Consider adding authentication.
 
-- ✅ **Guest comments** - Anyone can comment without logging in
-- ✅ **Threaded replies** - Reply to specific comments
-- ✅ **Rate limiting** - Prevents spam (3 comments per minute per IP)
-- ✅ **XSS protection** - All inputs are sanitized
-- ✅ **Privacy-conscious** - IPs are hashed, not stored raw
-- ✅ **Sticky comment bar** - Appears while scrolling
+#### GET `/api/admin/comments`
+Lists all comments (including pending).
 
-## Moderation
+#### POST `/api/admin/comments/:id/approve`
+Approves a pending comment.
 
-To moderate comments, you can query the D1 database directly:
+#### DELETE `/api/admin/comments/:id`
+Deletes a comment.
+
+---
+
+## CLI Moderation
+
+You can also moderate comments via Wrangler CLI:
 
 ### View all comments
 ```bash
@@ -172,11 +230,18 @@ wrangler d1 execute youngchai-comments --remote --command="UPDATE comments SET a
 wrangler d1 execute youngchai-comments --remote --command="DELETE FROM comments WHERE id = <comment_id>"
 ```
 
+### View spam attempts (pending comments)
+```bash
+wrangler d1 execute youngchai-comments --remote --command="SELECT * FROM comments WHERE approved = 0 ORDER BY created_at DESC"
+```
+
+---
+
 ## Customization
 
 ### Change auto-approval behavior
 
-By default, comments are auto-approved (`approved = 1`). To require manual approval, edit `functions/api/comments.js`:
+By default, comments are auto-approved. To require manual approval, edit `functions/api/comments.js`:
 
 ```javascript
 // Change this line in the INSERT statement:
@@ -198,6 +263,8 @@ Comment styles are in `src/css/blog.css` under the "Comments Section" heading. K
 }
 ```
 
+---
+
 ## Troubleshooting
 
 ### "Database not configured" error
@@ -207,14 +274,20 @@ Make sure you've:
 2. Updated `wrangler.toml` with the correct database ID
 3. Added the D1 binding in Cloudflare Pages dashboard
 
+### "Verification failed" error
+
+Check that:
+1. Turnstile Site Key is in `src/_data/client.json`
+2. Turnstile Secret Key is in Cloudflare Pages environment variables
+3. Your domain is added to the Turnstile widget
+
 ### Comments not appearing
 
 Check that:
-1. The database schema was created (`wrangler d1 execute ... --file=./db/schema.sql`)
+1. The database schema was created
 2. The post slug matches exactly (case-sensitive)
 3. Comments are approved (`approved = 1`)
 
 ### Rate limit errors
 
 Wait 1 minute before posting more comments, or adjust the rate limit in `functions/api/comments.js`.
-

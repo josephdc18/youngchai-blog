@@ -13,11 +13,12 @@
     "mapLink": "https://goo.gl/maps/dfw"
   },
   "year": "2025",
-  "domain": "www.youngchai.com",
+  "domain": "chailikethetea.com",
   "tagline": "Slowing down, coding, and finding the perfect cup of tea.",
   "social": {
     "instagram": "https://instagram.com/youngchai",
     "twitter": "https://twitter.com/youngchai",
     "pinterest": "https://pinterest.com/youngchai"
-  }
+  },
+  "turnstileSiteKey": ""
 }

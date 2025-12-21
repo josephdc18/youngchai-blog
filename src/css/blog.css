@@ -1248,6 +1248,22 @@
     letter-spacing: 0.1em;
   }
 
+  /* Honeypot field - hidden from users */
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* Turnstile widget */
+  .cf-turnstile {
+    margin-bottom: 1rem;
+  }
+
   .comment-submit-btn {
     display: flex;
     align-items: center;

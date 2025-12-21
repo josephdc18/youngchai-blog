@@ -1,6 +1,8 @@
 // Cloudflare Pages Function for Blog Comments API
 // Uses Cloudflare D1 for storage
-// Environment variable: DB (D1 database binding)
+// Environment variables: DB (D1 database binding), TURNSTILE_SECRET_KEY
+
+const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 // Simple hash function for IP addresses (privacy)
 function hashIP(ip) {
@@ -31,11 +33,41 @@ function isValidEmail(email) {
   return emailRegex.test(email);
 }
 
+// Verify Turnstile token
+async function verifyTurnstile(token, ip, secretKey) {
+  if (!secretKey) {
+    console.log('Turnstile secret key not configured, skipping verification');
+    return true; // Skip verification if not configured
+  }
+  
+  if (!token) {
+    return false;
+  }
+
+  try {
+    const response = await fetch(TURNSTILE_VERIFY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        secret: secretKey,
+        response: token,
+        remoteip: ip,
+      }),
+    });
+
+    const result = await response.json();
+    return result.success === true;
+  } catch (error) {
+    console.error('Turnstile verification error:', error);
+    return false;
+  }
+}
+
 // CORS headers
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
 // Handle OPTIONS request for CORS preflight
@@ -61,7 +93,6 @@ export async function onRequestGet(context) {
   try {
     // Check if D1 binding exists
     if (!env.DB) {
-      // Return empty comments if DB not configured yet
       return new Response(JSON.stringify({ 
         comments: [],
         message: 'Database not configured. Comments will appear once D1 is set up.'
@@ -99,7 +130,23 @@ export async function onRequestPost(context) {
 
   try {
     const body = await request.json();
-    const { post, name, email, content, parent_id } = body;
+    const { post, name, email, content, parent_id, turnstile_token } = body;
+
+    // Get client IP
+    const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
+
+    // Verify Turnstile token (if secret key is configured)
+    if (env.TURNSTILE_SECRET_KEY) {
+      const isHuman = await verifyTurnstile(turnstile_token, clientIP, env.TURNSTILE_SECRET_KEY);
+      if (!isHuman) {
+        return new Response(JSON.stringify({ 
+          error: 'Verification failed. Please complete the security check.' 
+        }), {
+          status: 403,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        });
+      }
+    }
 
     // Validation
     if (!post || !name || !content) {
@@ -150,7 +197,6 @@ export async function onRequestPost(context) {
     const sanitizedPost = sanitizeInput(post);
 
     // Get IP hash for spam prevention
-    const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
     const ipHash = hashIP(clientIP);
 
     // Simple rate limiting: check for recent comments from same IP
@@ -215,4 +261,3 @@ export async function onRequestPost(context) {
     });
   }
 }
-

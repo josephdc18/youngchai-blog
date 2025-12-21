@@ -117,10 +117,16 @@ eleventyComputed:
                             <label for="new-commenter-email">{{ 'Email (optional)' if currentLocale == 'en' else '이메일 (선택)' }}</label>
                         </div>
                     </div>
+                    <!-- Honeypot field - hidden from users, bots will fill it -->
+                    <div class="hp-field" aria-hidden="true">
+                        <input type="text" name="website" id="hp-website" tabindex="-1" autocomplete="off">
+                    </div>
                     <div class="floating-label-group">
                         <textarea name="comment-text" id="new-comment-text" rows="3" placeholder=" " required></textarea>
                         <label for="new-comment-text">{{ 'Share your thoughts...' if currentLocale == 'en' else '생각을 공유하세요...' }}</label>
                     </div>
+                    <!-- Cloudflare Turnstile Widget -->
+                    <div class="cf-turnstile" data-sitekey="{{ client.turnstileSiteKey | default('0x4AAAAAAABxxxxxxxxxxxxxxx') }}" data-theme="light"></div>
                     <button type="submit" class="comment-submit-btn" id="submit-comment-btn">
                         <span>{{ 'Post Comment' if currentLocale == 'en' else '댓글 달기' }}</span>
                         <i data-lucide="send" width="16" height="16"></i>
@@ -385,7 +391,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Post comment to API
-    async function postComment(name, email, content, parentId = null) {
+    async function postComment(name, email, content, parentId = null, turnstileToken = null) {
         try {
             const response = await fetch(API_BASE, {
                 method: 'POST',
@@ -395,18 +401,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     name: name,
                     email: email || null,
                     content: content,
-                    parent_id: parentId
+                    parent_id: parentId,
+                    turnstile_token: turnstileToken
                 })
             });
 
-            if (!response.ok) throw new Error('Failed to post comment');
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to post comment');
+            }
+            
+            // Reset Turnstile after successful submission
+            if (window.turnstile) {
+                turnstile.reset();
+            }
             
             // Reload comments
             await loadComments();
             return true;
         } catch (error) {
             console.error('Error posting comment:', error);
-            alert(t.error);
+            alert(error.message || t.error);
             return false;
         }
     }
@@ -451,15 +467,28 @@ document.addEventListener('DOMContentLoaded', function() {
     newCommentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        // Check honeypot field (bots will fill this)
+        const honeypot = document.getElementById('hp-website');
+        if (honeypot && honeypot.value) {
+            console.log('Honeypot triggered');
+            // Silently fail for bots
+            newCommentForm.reset();
+            return;
+        }
+        
         const name = document.getElementById('new-commenter-name').value;
         const email = document.getElementById('new-commenter-email').value;
         const text = document.getElementById('new-comment-text').value;
+        
+        // Get Turnstile token
+        const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]');
+        const turnstileToken = turnstileResponse ? turnstileResponse.value : null;
         
         // Disable button while posting
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<span>${t.posting}</span>`;
         
-        const success = await postComment(name, email, text, null);
+        const success = await postComment(name, email, text, null, turnstileToken);
         
         // Re-enable button
         submitBtn.disabled = false;
