@@ -41,12 +41,15 @@
     const searchData = JSON.parse(document.getElementById('post-search-data')?.textContent || '[]');
     
     // Open search modal
-    window.openSearch = function() {
+    function openSearch() {
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
         setTimeout(() => input.focus(), 100);
         if (window.lucide) lucide.createIcons();
-    };
+    }
+    
+    // Expose globally
+    window.openSearch = openSearch;
     
     // Close search modal
     function closeSearch() {
@@ -55,6 +58,14 @@
         input.value = '';
         results.innerHTML = '<p class="search-hint">{{ "search.hint" | t(currentLocale) }}</p>';
     }
+    
+    // Wire up search buttons
+    document.querySelectorAll('#search-btn, #search-btn-mobile, #search-btn-menu').forEach(btn => {
+        btn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            openSearch();
+        });
+    });
     
     // Event listeners
     backdrop?.addEventListener('click', closeSearch);

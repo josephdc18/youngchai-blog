@@ -1,6 +1,7 @@
 <!-- ============================================ -->
 <!--                   Footer                     -->
 <!-- ============================================ -->
+{% set currentLocale = locale | default(page.url | getLocale) %}
 
 <footer id="footer">
     <div class="container" style="display: flex; flex-direction: column; align-items: center;">
@@ -10,6 +11,22 @@
         <p class="font-serif italic" style="max-width: 28rem; color: #6b7280; margin-bottom: 2rem;">
             {{ client.tagline | default('Slowing down, coding, and finding the perfect cup of tea.') }}
         </p>
+
+        <!-- Newsletter Inline -->
+        <div class="footer-newsletter">
+            <span class="footer-newsletter-label">{{ 'newsletter.title' | t(currentLocale) }}</span>
+            <form 
+                action="https://buttondown.email/api/emails/embed-subscribe/{{ client.newsletterUsername | default('youngchai') }}"
+                method="post"
+                target="popupwindow"
+                class="footer-newsletter-form"
+            >
+                <input type="email" name="email" placeholder="{{ 'newsletter.placeholder' | t(currentLocale) }}" required class="footer-newsletter-input">
+                <button type="submit" class="footer-newsletter-btn">
+                    <i data-lucide="arrow-right" width="18" height="18"></i>
+                </button>
+            </form>
+        </div>
 
         <div style="display: flex; gap: 1.5rem; margin-bottom: 3rem;">
             <a href="{{ client.social.instagram }}" class="footer-social-link" aria-label="Instagram">
@@ -27,7 +44,7 @@
             <a href="/about">About</a>
             <a href="/blog">Journal</a>
             <a href="/contact">Contact</a>
-            <a href="/rss.xml">RSS</a>
+            <a href="/feed.xml">RSS</a>
         </div>
 
         <p class="font-serif italic" style="font-size: 0.75rem; color: #9ca3af;">

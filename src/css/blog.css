@@ -336,8 +336,8 @@
 @media only screen and (min-width: 80em) {
   .main-content-wrapper-3col {
     display: grid;
-    grid-template-columns: 220px 1fr 280px;
-    column-gap: 3rem;
+    grid-template-columns: 200px 1fr 320px;
+    column-gap: 2.5rem;
     align-items: start;
   }
 
@@ -705,7 +705,16 @@
 /* Tablet - 1024px */
 @media only screen and (min-width: 64em) {
   .blog-sidebar {
-    max-width: 22.5em;
+    max-width: 20rem;
+    min-width: 18rem;
+  }
+}
+
+/* Desktop - wider sidebar */
+@media only screen and (min-width: 80em) {
+  .blog-sidebar {
+    max-width: 22rem;
+    min-width: 20rem;
   }
 }
 /*-- -------------------------- -->
@@ -802,12 +811,25 @@
   .blog-article .share-link:hover {
     transform: translateY(-2px);
   }
+  .blog-article .share-link svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
   .blog-article .share-pinterest:hover {
     background: #E60023;
     color: white;
   }
   .blog-article .share-email:hover {
     background: #D48C70;
+    color: white;
+  }
+  .blog-article .share-sms:hover {
+    background: #25D366;
+    color: white;
+  }
+  .blog-article .print-btn:hover {
+    background: #333;
     color: white;
   }
   .blog-article .blog-h1 {

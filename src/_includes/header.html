@@ -150,15 +150,4 @@
     </nav>
 </div>
 
-<!-- Search is now handled by search-modal.html in base.html -->
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // Wire up all search buttons to open the modal
-    const searchBtns = document.querySelectorAll('#search-btn, #search-btn-mobile, #search-btn-menu');
-    searchBtns.forEach(btn => {
-        btn?.addEventListener('click', () => {
-            if (typeof openSearch === 'function') openSearch();
-        });
-    });
-});
-</script>
+<!-- Search is handled by search-modal.html in base.html -->

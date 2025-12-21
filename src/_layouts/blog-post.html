@@ -288,10 +288,6 @@ eleventyComputed:
                 {{ content | safe }}
             </section>
 
-            <!-- Newsletter Section -->
-            {% set currentLocale = locale | default(page.url | getLocale) %}
-            {% include "newsletter.html" %}
-
             <!-- Related Posts -->
             {% if relatedPosts | length > 0 %}
             <section class="related-posts">
@@ -387,14 +383,15 @@ eleventyComputed:
                 <div class="corner-bl"></div>
 
                 <div class="widget-header">
-                    <i data-lucide="star" class="text-accent" width="20" height="20"></i>
-                    <h3 class="italic" style="font-size: 1.25rem;">{{ 'blog.featuredPosts' | t(currentLocale) }}</h3>
+                    <i data-lucide="coffee" class="text-accent" width="20" height="20"></i>
+                    <h3 class="italic" style="font-size: 1.25rem;">{{ 'blog.popularPosts' | t(currentLocale) }}</h3>
                 </div>
 
                 <ul class="widget-list">
-                    {% set featuredPosts = collections[featuredCollection] | default(collections.featured) | default([]) %}
-                    {% if featuredPosts | length > 0 %}
-                        {%- for post in featuredPosts | head(5) -%}
+                    {% set popularCollection = 'popular_' + currentLocale %}
+                    {% set popularPosts = collections[popularCollection] | default(collections.popular) | default([]) %}
+                    {% if popularPosts | length > 0 %}
+                        {%- for post in popularPosts | head(5) -%}
                             {%- set index = loop.index -%}
                             <li class="group">
                                 <div class="widget-list-meta">
@@ -409,7 +406,7 @@ eleventyComputed:
                     {% else %}
                         <li>
                             <p class="post-excerpt" style="font-size: 0.9rem;">
-                                {{ 'Featured posts will appear here.' if currentLocale == 'en' else '추천 글이 여기에 표시됩니다.' }}
+                                {{ 'Popular posts will appear here.' if currentLocale == 'en' else '인기 글이 여기에 표시됩니다.' }}
                             </p>
                         </li>
                     {% endif %}

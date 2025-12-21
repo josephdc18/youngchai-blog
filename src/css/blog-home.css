@@ -647,10 +647,34 @@ h4 {
 }
 
 .post-meta {
-    align-items: center;
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.25rem 1rem;
     margin-bottom: .75rem;
+}
+
+/* Stack category and date vertically */
+.post-meta .category-tag {
+    order: 1;
+}
+
+.post-meta .date-tag {
+    order: 2;
+    width: 100%;
+    margin-top: -0.25rem;
+}
+
+.post-meta .comment-count {
+    order: 3;
+    margin-left: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.post-card {
+    position: relative;
 }
 
 .category-tag {
@@ -1341,6 +1365,76 @@ footer#footer,
 
 .footer-nav a:hover {
     color: var(--color-accent);
+}
+
+/* Footer Newsletter Inline */
+.footer-newsletter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.footer-newsletter-label {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--color-text);
+}
+
+.footer-newsletter-form {
+    display: flex;
+    width: 100%;
+    gap: 0;
+}
+
+.footer-newsletter-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    border: 1px solid rgba(44, 44, 44, 0.2);
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    background: rgba(255, 255, 255, 0.8);
+    font-family: var(--font-sans);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.footer-newsletter-input:focus {
+    border-color: var(--color-accent);
+}
+
+.footer-newsletter-btn {
+    padding: 0.75rem 1rem;
+    background: var(--color-text);
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-newsletter-btn:hover {
+    background: var(--color-accent);
+}
+
+@media (min-width: 768px) {
+    .footer-newsletter {
+        flex-direction: row;
+        gap: 1rem;
+        max-width: 500px;
+    }
+    
+    .footer-newsletter-label {
+        white-space: nowrap;
+    }
 }
 
 .desktop-only {
