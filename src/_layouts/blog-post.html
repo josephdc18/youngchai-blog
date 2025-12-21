@@ -2,10 +2,11 @@
 layout: 'base.html'
 preloadCSS: '/css/blog.css'
 eleventyComputed:
-    description: '{{ description | default(blogDescription) }}'
-    metaTitle: '{{ title | default(blogTitle) }}'
-    tagTitle: '{{ title | default(blogTitle) }}'
-    preloadImg: '{{ image }}'
+    description: "{{ description | default: blogDescription }}"
+    metaTitle: "{{ title | default: blogTitle }}"
+    tagTitle: "{{ title | default: blogTitle }}"
+    preloadImg: "{{ image }}"
+    permalink: "{% if locale == 'ko' %}/ko{% endif %}/blog/{{ slug | default: pageName }}/index.html"
 ---
 {% set currentLocale = locale | default(page.url | getLocale) %}
 {% set postTitle = title | default(blogTitle) %}

@@ -1,7 +1,5 @@
 {
   "layout": "blog-post.html",
   "tags": "post",
-  "locale": "en",
-  "permalink": "/blog/{{ slug }}/index.html"
+  "locale": "en"
 }
-
