@@ -12,5 +12,5 @@ compatibility_date = "2024-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "youngchai-comments"
-database_id = "YOUR_DATABASE_ID_HERE"  # Replace with your actual database ID
+database_id = "1c222462-5dcc-4060-af30-f4ed96e5bb40"  # Replace with your actual database ID
 
