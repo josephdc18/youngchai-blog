@@ -1,7 +1,7 @@
 ---
 title: 리스본에서 빛을 쫓다
 slug: chasing-light-lisbon
-description: "파스텔 타일, 골든 아워 사진, 에스프레소 브레이크를 위해 언덕을 오르던 메모."
+description: 파스텔 타일, 골든 아워 사진, 에스프레소 브레이크를 위해 언덕을 오르던 메모.
 category: PHOTOGRAPHY
 author: Young Chai
 date: 2025-11-25T08:00:00.000Z
