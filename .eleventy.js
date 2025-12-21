@@ -167,14 +167,29 @@ module.exports = function (eleventyConfig) {
     return collectionApi.getFilteredByGlob('src/content/blog/**/*.md').sort((a, b) => b.date - a.date);
   });
 
-  // English posts
+  // English posts (pinned posts first, then by date)
   eleventyConfig.addCollection('posts_en', function(collectionApi) {
-    return collectionApi.getFilteredByGlob('src/content/blog/en/*.md').sort((a, b) => b.date - a.date);
+    const posts = collectionApi.getFilteredByGlob('src/content/blog/en/*.md');
+    // Sort: pinned posts first, then by date descending
+    return posts.sort((a, b) => {
+      const aIsPinned = a.data.tags && a.data.tags.includes('pinned');
+      const bIsPinned = b.data.tags && b.data.tags.includes('pinned');
+      if (aIsPinned && !bIsPinned) return -1;
+      if (!aIsPinned && bIsPinned) return 1;
+      return b.date - a.date;
+    });
   });
 
-  // Korean posts
+  // Korean posts (pinned posts first, then by date)
   eleventyConfig.addCollection('posts_ko', function(collectionApi) {
-    return collectionApi.getFilteredByGlob('src/content/blog/ko/*.md').sort((a, b) => b.date - a.date);
+    const posts = collectionApi.getFilteredByGlob('src/content/blog/ko/*.md');
+    return posts.sort((a, b) => {
+      const aIsPinned = a.data.tags && a.data.tags.includes('pinned');
+      const bIsPinned = b.data.tags && b.data.tags.includes('pinned');
+      if (aIsPinned && !bIsPinned) return -1;
+      if (!aIsPinned && bIsPinned) return 1;
+      return b.date - a.date;
+    });
   });
 
   // Featured posts by locale

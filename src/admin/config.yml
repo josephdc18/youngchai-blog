@@ -98,7 +98,12 @@ collections:
         widget: 'list'
         default: ['post']
         i18n: true
-        hint: 'Add "featured" for featured posts, "popular" for popular posts'
+        hint: |
+          Add tags to control where posts appear:
+          • "pinned" - Shows at the very TOP of homepage
+          • "featured" - Shows in Featured Posts sidebar
+          • "popular" - Shows in Popular Posts sidebar
+          • "commented" - Shows in Most Commented section
       - label: 'Featured Image'
         name: 'image'
         widget: 'image'

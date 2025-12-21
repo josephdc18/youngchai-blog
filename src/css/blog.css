@@ -144,6 +144,19 @@
     left: 0;
     z-index: -1;
   }
+  /* Category label in hero */
+  #int-hero .hero-category {
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    border-radius: 2px;
+  }
   #int-hero picture {
     position: absolute;
     top: 0;
@@ -207,7 +220,10 @@
 /* Mobile - 360px */
 @media only screen and (min-width: 0em) {
   .blog-container {
-    padding: clamp(60px, 7vw, 100px) 0;
+    width: 94%;
+    max-width: 70em;
+    margin: 0 auto;
+    padding: clamp(60px, 7vw, 100px) 1.5rem;
   }
   .main-content-wrapper {
     display: flex;
