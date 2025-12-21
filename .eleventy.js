@@ -146,6 +146,20 @@ module.exports = function (eleventyConfig) {
     return array.slice(0, n);
   });
 
+  // Word count filter for read time estimation
+  eleventyConfig.addFilter('wordcount', (content) => {
+    if (!content) return 0;
+    const text = content.replace(/<[^>]*>/g, '').trim();
+    const words = text.split(/\s+/).filter(word => word.length > 0);
+    return words.length;
+  });
+
+  // Strip HTML tags
+  eleventyConfig.addFilter('striptags', (content) => {
+    if (!content) return '';
+    return content.replace(/<[^>]*>/g, '');
+  });
+
   eleventyConfig.addFilter('slice', (array, start, end) => {
     if (!Array.isArray(array)) return [];
     return array.slice(start, end);

@@ -13,6 +13,26 @@ eleventyComputed:
 {% set postDescription = description | default(blogDescription) %}
 {% set featuredCollection = 'featured_' + currentLocale %}
 {% set postSlug = slug | default(pageName) %}
+{% set wordCount = content | striptags | wordcount %}
+{% set readTime = (wordCount / 200) | round(0, 'ceil') %}
+{% set readTimeMin = 1 if readTime < 1 else readTime %}
+
+{# Tea pairing based on category #}
+{% set teaPairings = {
+  'ESSAY': { en: 'Jasmine Green', ko: '자스민 그린티' },
+  'TRAVEL': { en: 'Earl Grey', ko: '얼그레이' },
+  'FOOD': { en: 'Oolong', ko: '우롱차' },
+  'STYLE': { en: 'White Peony', ko: '백모단' },
+  'LIVING': { en: 'Chamomile', ko: '캐모마일' },
+  'TECH': { en: 'Matcha', ko: '말차' },
+  'WELLNESS': { en: 'Peppermint', ko: '페퍼민트' },
+  'WORK': { en: 'Black Tea', ko: '홍차' },
+  'INTERIORS': { en: 'Rooibos', ko: '루이보스' },
+  'PHOTOGRAPHY': { en: 'Darjeeling', ko: '다즐링' }
+} %}
+{% set teaPairing = teaPairings[category | upper] | default({ en: 'Green Tea', ko: '녹차' }) %}
+
+<link rel="stylesheet" href="/css/enhancements.css">
 
 <!-- ============================================ -->
 <!--                    LANDING                   -->
@@ -81,6 +101,41 @@ eleventyComputed:
                             </svg>
                         </a>
                     </div>
+                </div>
+
+                <!-- Read Time + Tea Pairing -->
+                <div class="read-info">
+                    <div class="read-time">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                        </svg>
+                        <span>{{ readTimeMin }} {{ 'min read' if currentLocale == 'en' else '분 읽기' }}</span>
+                    </div>
+                    <div class="read-divider"></div>
+                    <div class="tea-pairing">
+                        <span>☕</span>
+                        <span>{{ 'Perfect with:' if currentLocale == 'en' else '추천 차:' }}</span>
+                        <span class="tea-name">{{ teaPairing[currentLocale] }}</span>
+                    </div>
+                </div>
+
+                <!-- Reading Controls -->
+                <div class="reading-controls">
+                    <button class="reading-btn" id="reading-mode-btn" title="{{ 'Focus Mode' if currentLocale == 'en' else '집중 모드' }}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        </svg>
+                        <span>{{ 'Focus' if currentLocale == 'en' else '집중' }}</span>
+                    </button>
+                    <button class="tts-btn" id="tts-btn" title="{{ 'Listen to Article' if currentLocale == 'en' else '글 듣기' }}">
+                        <svg class="tts-play-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                        </svg>
+                        <svg class="tts-pause-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+                        </svg>
+                        <span>{{ 'Listen' if currentLocale == 'en' else '듣기' }}</span>
+                    </button>
                 </div>
             </div>
             <section id="blog-content">
@@ -185,6 +240,53 @@ eleventyComputed:
                 </ul>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Tea Cup Reading Progress -->
+<div class="tea-progress" id="tea-progress">
+    <div class="tea-cup">
+        <div class="tea-fill" id="tea-fill"></div>
+    </div>
+    <div class="tea-steam" id="tea-steam">
+        <div class="steam-line"></div>
+        <div class="steam-line"></div>
+        <div class="steam-line"></div>
+    </div>
+    <div class="tea-percent" id="tea-percent">0%</div>
+</div>
+
+<!-- Exit Reading Mode Button -->
+<button class="exit-reading-mode" id="exit-reading-mode">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"/>
+    </svg>
+    {{ 'Exit Focus Mode' if currentLocale == 'en' else '집중 모드 종료' }}
+</button>
+
+<!-- Continue Reading Bar -->
+<div class="continue-reading-bar" id="continue-reading-bar">
+    <div class="continue-reading-info">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span class="continue-reading-text">
+            {{ 'Continue where you left off' if currentLocale == 'en' else '이어서 읽기' }} 
+            (<strong id="saved-progress">0%</strong>)
+        </span>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <button class="continue-btn" id="continue-btn">
+            {{ 'Continue' if currentLocale == 'en' else '계속' }}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </button>
+        <button class="dismiss-continue" id="dismiss-continue" aria-label="Dismiss">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+        </button>
     </div>
 </div>
 
@@ -507,5 +609,173 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Load comments on page load
     loadComments();
+
+    // ============================================
+    // ENHANCEMENTS
+    // ============================================
+
+    // 1. Tea Cup Reading Progress
+    const teaProgress = document.getElementById('tea-progress');
+    const teaFill = document.getElementById('tea-fill');
+    const teaSteam = document.getElementById('tea-steam');
+    const teaPercent = document.getElementById('tea-percent');
+    const blogContent = document.getElementById('blog-content');
+
+    function updateReadingProgress() {
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight - windowHeight;
+        const scrollTop = window.scrollY;
+        const progress = Math.min(Math.max((scrollTop / documentHeight) * 100, 0), 100);
+
+        // Show tea cup after scrolling past hero
+        const heroSection = document.getElementById('int-hero');
+        if (heroSection && scrollTop > heroSection.offsetHeight) {
+            teaProgress.classList.add('visible');
+        } else {
+            teaProgress.classList.remove('visible');
+        }
+
+        // Update fill level
+        teaFill.style.height = progress + '%';
+        teaPercent.textContent = Math.round(progress) + '%';
+
+        // Show steam when near completion
+        if (progress > 85) {
+            teaSteam.classList.add('active');
+        } else {
+            teaSteam.classList.remove('active');
+        }
+
+        // Save progress for continue reading
+        if (progress > 5 && progress < 95) {
+            localStorage.setItem('reading_progress_' + postSlug, JSON.stringify({
+                progress: progress,
+                scrollTop: scrollTop,
+                timestamp: Date.now()
+            }));
+        }
+    }
+
+    window.addEventListener('scroll', updateReadingProgress);
+    updateReadingProgress();
+
+    // 2. Time of Day Theme
+    function setTimeOfDayTheme() {
+        const hour = new Date().getHours();
+        const body = document.body;
+        
+        // Remove existing TOD classes
+        body.classList.remove('tod-morning', 'tod-afternoon', 'tod-evening', 'tod-night');
+        
+        if (hour >= 6 && hour < 12) {
+            body.classList.add('tod-morning');
+        } else if (hour >= 12 && hour < 18) {
+            body.classList.add('tod-afternoon');
+        } else if (hour >= 18 && hour < 22) {
+            body.classList.add('tod-evening');
+        } else {
+            body.classList.add('tod-night');
+        }
+    }
+    setTimeOfDayTheme();
+
+    // 6. Reading Mode Toggle
+    const readingModeBtn = document.getElementById('reading-mode-btn');
+    const exitReadingMode = document.getElementById('exit-reading-mode');
+
+    readingModeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('reading-mode');
+        readingModeBtn.classList.toggle('active');
+    });
+
+    exitReadingMode.addEventListener('click', () => {
+        document.body.classList.remove('reading-mode');
+        readingModeBtn.classList.remove('active');
+    });
+
+    // 7. Text-to-Speech
+    const ttsBtn = document.getElementById('tts-btn');
+    let speechSynthesis = window.speechSynthesis;
+    let currentUtterance = null;
+    let isSpeaking = false;
+
+    ttsBtn.addEventListener('click', () => {
+        if (!speechSynthesis) {
+            alert('{{ "Text-to-speech not supported in this browser" if currentLocale == "en" else "이 브라우저에서는 음성 지원이 되지 않습니다" }}');
+            return;
+        }
+
+        if (isSpeaking) {
+            speechSynthesis.cancel();
+            isSpeaking = false;
+            ttsBtn.classList.remove('playing');
+        } else {
+            const content = blogContent.innerText;
+            currentUtterance = new SpeechSynthesisUtterance(content);
+            currentUtterance.lang = currentLocale === 'ko' ? 'ko-KR' : 'en-US';
+            currentUtterance.rate = 0.9;
+            currentUtterance.pitch = 1;
+
+            currentUtterance.onend = () => {
+                isSpeaking = false;
+                ttsBtn.classList.remove('playing');
+            };
+
+            currentUtterance.onerror = () => {
+                isSpeaking = false;
+                ttsBtn.classList.remove('playing');
+            };
+
+            speechSynthesis.speak(currentUtterance);
+            isSpeaking = true;
+            ttsBtn.classList.add('playing');
+        }
+    });
+
+    // Stop TTS when leaving page
+    window.addEventListener('beforeunload', () => {
+        if (speechSynthesis) speechSynthesis.cancel();
+    });
+
+    // 8. Continue Reading (Progress Saving)
+    const continueBar = document.getElementById('continue-reading-bar');
+    const continueBtn = document.getElementById('continue-btn');
+    const dismissContinue = document.getElementById('dismiss-continue');
+    const savedProgressEl = document.getElementById('saved-progress');
+
+    function checkSavedProgress() {
+        const saved = localStorage.getItem('reading_progress_' + postSlug);
+        if (saved) {
+            try {
+                const data = JSON.parse(saved);
+                // Only show if saved within last 7 days and progress is meaningful
+                const sevenDays = 7 * 24 * 60 * 60 * 1000;
+                if (Date.now() - data.timestamp < sevenDays && data.progress > 10 && data.progress < 90) {
+                    savedProgressEl.textContent = Math.round(data.progress) + '%';
+                    setTimeout(() => {
+                        continueBar.classList.add('visible');
+                    }, 1000);
+                }
+            } catch (e) {
+                localStorage.removeItem('reading_progress_' + postSlug);
+            }
+        }
+    }
+
+    continueBtn.addEventListener('click', () => {
+        const saved = localStorage.getItem('reading_progress_' + postSlug);
+        if (saved) {
+            const data = JSON.parse(saved);
+            window.scrollTo({ top: data.scrollTop, behavior: 'smooth' });
+        }
+        continueBar.classList.remove('visible');
+    });
+
+    dismissContinue.addEventListener('click', () => {
+        continueBar.classList.remove('visible');
+        localStorage.removeItem('reading_progress_' + postSlug);
+    });
+
+    checkSavedProgress();
 });
 </script>

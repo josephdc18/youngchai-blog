@@ -17,6 +17,10 @@
         <meta name="description" content="{{ description }}">
         <meta name="keywords" content="">
 
+        <!-- Safari Reader Mode Support -->
+        <meta name="article:author" content="{{ author | default(client.name) }}">
+        <meta name="article:published_time" content="{{ date | date('iso8601') if date else '' }}">
+
         <!--Social Media Display-->
         <meta property="og:title" content="{{ metaTitle | default(title) }}"/>
         <meta property="og:description" content="{{ description }}"/>

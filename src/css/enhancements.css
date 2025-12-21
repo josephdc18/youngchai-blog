@@ -1,0 +1,460 @@
+/*-- -------------------------- -->
+<---     Blog Enhancements      -->
+<--- -------------------------- -*/
+
+/* ============================================
+   1. Tea Cup Reading Progress
+   ============================================ */
+.tea-progress {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  width: 60px;
+  height: 80px;
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+
+.tea-progress.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tea-cup {
+  position: relative;
+  width: 50px;
+  height: 40px;
+  background: #f5f0e8;
+  border: 3px solid #d4a574;
+  border-radius: 0 0 25px 25px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.tea-cup::before {
+  content: '';
+  position: absolute;
+  right: -15px;
+  top: 5px;
+  width: 15px;
+  height: 20px;
+  border: 3px solid #d4a574;
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+}
+
+.tea-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, #8B4513, #D2691E);
+  transition: height 0.1s ease-out;
+  height: 0%;
+}
+
+.tea-steam {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.tea-steam.active {
+  opacity: 1;
+}
+
+.steam-line {
+  width: 2px;
+  height: 20px;
+  background: linear-gradient(to top, rgba(200,200,200,0.6), transparent);
+  border-radius: 2px;
+  animation: steam 2s ease-in-out infinite;
+}
+
+.steam-line:nth-child(2) { animation-delay: 0.3s; height: 25px; }
+.steam-line:nth-child(3) { animation-delay: 0.6s; height: 18px; }
+
+@keyframes steam {
+  0%, 100% { transform: translateY(0) scaleY(1); opacity: 0.6; }
+  50% { transform: translateY(-8px) scaleY(1.2); opacity: 0.3; }
+}
+
+.tea-percent {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-gray-medium, #6b7280);
+  margin-top: 0.25rem;
+  font-family: var(--font-sans);
+}
+
+/* ============================================
+   2. Time-of-Day Theme
+   ============================================ */
+:root {
+  --tod-accent: #D48C70;
+  --tod-bg: #FDFBF7;
+  --tod-text: #2C2C2C;
+}
+
+/* Morning (6am-12pm) - Warm golden */
+body.tod-morning {
+  --tod-accent: #E6A957;
+  --tod-bg: #FFFEF5;
+}
+
+body.tod-morning #int-hero {
+  filter: sepia(0.1) saturate(1.1);
+}
+
+/* Afternoon (12pm-6pm) - Bright, crisp */
+body.tod-afternoon {
+  --tod-accent: #D48C70;
+  --tod-bg: #FDFBF7;
+}
+
+/* Evening (6pm-10pm) - Warm amber, cozy */
+body.tod-evening {
+  --tod-accent: #C67B5C;
+  --tod-bg: #FBF6F0;
+}
+
+body.tod-evening #int-hero {
+  filter: sepia(0.15) saturate(1.05);
+}
+
+/* Night (10pm-6am) - Deeper, muted */
+body.tod-night {
+  --tod-accent: #A67B5B;
+  --tod-bg: #F5F0EA;
+  --tod-text: #3D3D3D;
+}
+
+body.tod-night #int-hero {
+  filter: brightness(0.9) saturate(0.9);
+}
+
+/* ============================================
+   5. Read Time + Tea Pairing Badge
+   ============================================ */
+.read-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #f8f4ef 0%, #f5efe6 100%);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--color-accent, #D48C70);
+}
+
+.read-time {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text, #2C2C2C);
+}
+
+.read-time svg {
+  opacity: 0.7;
+}
+
+.tea-pairing {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--color-gray-medium, #6b7280);
+  font-style: italic;
+}
+
+.tea-pairing .tea-name {
+  color: var(--color-accent, #D48C70);
+  font-weight: 500;
+}
+
+.read-divider {
+  width: 1px;
+  height: 1rem;
+  background: #ddd;
+}
+
+/* ============================================
+   6. Reading Mode Toggle
+   ============================================ */
+.reading-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.reading-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.75rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reading-btn:hover {
+  border-color: var(--color-accent, #D48C70);
+  color: var(--color-accent, #D48C70);
+}
+
+.reading-btn.active {
+  background: var(--color-accent, #D48C70);
+  border-color: var(--color-accent, #D48C70);
+  color: white;
+}
+
+.reading-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Reading mode active state */
+body.reading-mode .blog-sidebar,
+body.reading-mode .sticky-comment-bar,
+body.reading-mode .tea-progress,
+body.reading-mode #navbar,
+body.reading-mode .share-links {
+  display: none !important;
+}
+
+body.reading-mode .main-content-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+body.reading-mode .blog-article {
+  padding-top: 2rem;
+}
+
+body.reading-mode #blog-content {
+  font-size: 1.125rem;
+  line-height: 1.9;
+}
+
+body.reading-mode #blog-content p {
+  margin-bottom: 1.75rem;
+}
+
+/* Exit reading mode button */
+.exit-reading-mode {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  display: none;
+  padding: 0.75rem 1rem;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+body.reading-mode .exit-reading-mode {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ============================================
+   7. Text-to-Speech
+   ============================================ */
+.tts-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tts-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.75rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tts-btn:hover {
+  border-color: var(--color-accent, #D48C70);
+  color: var(--color-accent, #D48C70);
+}
+
+.tts-btn.playing {
+  background: var(--color-accent, #D48C70);
+  border-color: var(--color-accent, #D48C70);
+  color: white;
+}
+
+.tts-btn.playing .tts-play-icon {
+  display: none;
+}
+
+.tts-btn .tts-pause-icon {
+  display: none;
+}
+
+.tts-btn.playing .tts-pause-icon {
+  display: block;
+}
+
+/* ============================================
+   8. Progress Saving (Continue Reading)
+   ============================================ */
+.continue-reading-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.85));
+  color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 150;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.continue-reading-bar.visible {
+  transform: translateY(0);
+}
+
+.continue-reading-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.continue-reading-info svg {
+  color: var(--color-accent, #D48C70);
+}
+
+.continue-reading-text {
+  font-size: 0.875rem;
+}
+
+.continue-reading-text strong {
+  color: var(--color-accent, #D48C70);
+}
+
+.continue-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-accent, #D48C70);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.continue-btn:hover {
+  background: #c67b5c;
+}
+
+.dismiss-continue {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.dismiss-continue:hover {
+  color: white;
+}
+
+/* ============================================
+   iOS Safari Reader Mode Support
+   ============================================ */
+/* These styles help Safari detect article content */
+article.blog-article {
+  /* Ensure semantic structure for Reader */
+}
+
+article.blog-article h1 {
+  /* Reader mode picks this up as title */
+}
+
+article.blog-article .blog-author {
+  /* Reader mode picks this up as author */
+}
+
+article.blog-article .blog-date {
+  /* Reader mode picks this up as date */
+}
+
+#blog-content {
+  /* Main content area - Reader focuses on this */
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .tea-progress {
+    left: 1rem;
+    bottom: 1rem;
+    transform: scale(0.85);
+    transform-origin: bottom left;
+  }
+
+  .tea-progress.visible {
+    transform: scale(0.85) translateY(0);
+  }
+
+  .reading-controls {
+    flex-wrap: wrap;
+  }
+
+  .read-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .read-divider {
+    display: none;
+  }
+}
+
+/* Hide on very small screens */
+@media (max-width: 480px) {
+  .tea-progress {
+    display: none;
+  }
+}
+
