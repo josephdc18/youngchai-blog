@@ -209,7 +209,7 @@ eleventyNavigation:
         </div>
 
         <div class="topics-grid">
-            {% for topic in topics %}
+            {% for topic in topics.topics %}
                 <a href="/blog/{{ topic.slug }}" class="topic-card group">
                     <img src="{{ topic.image }}" class="topic-bg" alt="{{ topic.name }}">
                     <div class="topic-overlay"></div>
@@ -231,7 +231,7 @@ eleventyNavigation:
         </div>
 
         <div class="editors-grid">
-            {% for pick in editorsPicks %}
+            {% for pick in editorsPicks.picks %}
                 <a href="{{ pick.link }}" class="editor-item group">
                     <div class="editor-img-circle">
                         <img src="{{ pick.image }}" alt="{{ pick.title }}">
@@ -254,10 +254,10 @@ eleventyNavigation:
 
             <div class="carousel-content group" style="display: flex; flex-direction: column; align-items: center;">
                 <div class="editor-img-circle" style="width: 12rem; height: 12rem;">
-                    <img id="pick-image" src="{{ editorsPicks[0].image if editorsPicks and editorsPicks[0] else 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1000&auto=format&fit=crop' }}" alt="{{ editorsPicks[0].title if editorsPicks and editorsPicks[0] else 'Editors Pick' }}">
+                    <img id="pick-image" src="{{ editorsPicks.picks[0].image if editorsPicks.picks and editorsPicks.picks[0] else 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1000&auto=format&fit=crop' }}" alt="{{ editorsPicks.picks[0].title if editorsPicks.picks and editorsPicks.picks[0] else 'Editors Pick' }}">
                 </div>
                 <h3 id="pick-title" class="font-serif" style="font-size: 1.5rem; margin-top: 1rem;">
-                    {{ editorsPicks[0].title if editorsPicks and editorsPicks[0] else 'Add picks in editorsPicks.json' }}
+                    {{ editorsPicks.picks[0].title if editorsPicks.picks and editorsPicks.picks[0] else 'Add picks in editorsPicks.json' }}
                 </h3>
             </div>
 
@@ -367,7 +367,7 @@ eleventyNavigation:
             });
         })();
 
-        const picksData = {{ editorsPicks | dump | safe }};
+        const picksData = {{ editorsPicks.picks | dump | safe }};
         
         // Editors' Picks Carousel
         (function(){

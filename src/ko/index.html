@@ -151,7 +151,7 @@ permalink: '/ko/'
         </div>
 
         <div class="topics-grid">
-            {% for topic in topics %}
+            {% for topic in topics.topics %}
                 <a href="/ko/blog/{{ topic.slug }}" class="topic-card group">
                     <img src="{{ topic.image }}" class="topic-bg" alt="{{ topic.name }}">
                     <div class="topic-overlay"></div>
@@ -173,7 +173,7 @@ permalink: '/ko/'
         </div>
 
         <div class="editors-grid">
-            {% for pick in editorsPicks %}
+            {% for pick in editorsPicks.picks %}
                 <a href="{{ pick.link }}" class="editor-item group">
                     <div class="editor-img-circle">
                         <img src="{{ pick.image }}" alt="{{ pick.title }}">

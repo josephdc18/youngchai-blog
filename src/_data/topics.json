@@ -1,62 +1,54 @@
-[
-  {
-    "name": "Essay",
-    "slug": "essay",
-    "image": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1000&auto=format&fit=crop",
-    "description": "Thoughtful reflections on life."
-  },
-  {
-    "name": "Style",
-    "slug": "style",
-    "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1000&auto=format&fit=crop",
-    "description": "Uniforms for everyday life."
-  },
-  {
-    "name": "Living",
-    "slug": "living",
-    "image": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1000&auto=format&fit=crop",
-    "description": "Home rituals and routines."
-  },
-  {
-    "name": "Travel",
-    "slug": "travel",
-    "image": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1000&auto=format&fit=crop",
-    "description": "City guides and wandering notes."
-  },
-  {
-    "name": "Food",
-    "slug": "food",
-    "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1000&auto=format&fit=crop",
-    "description": "Recipes and culinary adventures."
-  },
-  {
-    "name": "Tech",
-    "slug": "tech",
-    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop",
-    "description": "Digital tools and workflows."
-  },
-  {
-    "name": "Wellness",
-    "slug": "wellness",
-    "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1000&auto=format&fit=crop",
-    "description": "Mind, body, and wellbeing."
-  },
-  {
-    "name": "Interiors",
-    "slug": "interiors",
-    "image": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1000&auto=format&fit=crop",
-    "description": "Spaces that inspire."
-  },
-  {
-    "name": "Work",
-    "slug": "work",
-    "image": "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=1000&auto=format&fit=crop",
-    "description": "Design and creative process."
-  },
-  {
-    "name": "Photography",
-    "slug": "photography",
-    "image": "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?q=80&w=1000&auto=format&fit=crop",
-    "description": "Moments captured through the lens."
-  }
-]
+{
+  "topics": [
+    {
+      "name": "Essay",
+      "slug": "essay",
+      "image": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1000&auto=format&fit=crop"
+    },
+    {
+      "name": "Style",
+      "slug": "style",
+      "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1000&auto=format&fit=crop"
+    },
+    {
+      "name": "Living",
+      "slug": "living",
+      "image": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1000&auto=format&fit=crop"
+    },
+    {
+      "name": "Travel",
+      "slug": "travel",
+      "image": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1000&auto=format&fit=crop"
+    },
+    {
+      "name": "Food",
+      "slug": "food",
+      "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1000&auto=format&fit=crop"
+    },
+    {
+      "name": "Tech",
+      "slug": "tech",
+      "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop"
+    },
+    {
+      "name": "Wellness",
+      "slug": "wellness",
+      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1000&auto=format&fit=crop"
+    },
+    {
+      "name": "Interiors",
+      "slug": "interiors",
+      "image": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1000&auto=format&fit=crop"
+    },
+    {
+      "name": "Work",
+      "slug": "work",
+      "image": "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=1000&auto=format&fit=crop"
+    },
+    {
+      "name": "Photography",
+      "slug": "photography",
+      "image": "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?q=80&w=1000&auto=format&fit=crop"
+    }
+  ]
+}
