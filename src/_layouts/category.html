@@ -3,9 +3,12 @@ layout: 'base.html'
 preloadCSS: '/css/blog-home.css'
 ---
 
+{% set currentLocale = locale | default('en') %}
+{% set urlPrefix = '/ko' if currentLocale == 'ko' else '' %}
+
 <div style="padding-top: 8rem; min-height: 100vh;">
     <div class="container" style="margin-bottom: 3rem; text-align: center;">
-        <p class="text-meta">CATEGORY</p>
+        <p class="text-meta">{{ 'category.label' | t(currentLocale) | default('CATEGORY') }}</p>
         <h1 class="font-serif" style="font-size: 3rem; margin-top: 0.5rem;">{{ title }}</h1>
         {% if description %}
         <p class="post-excerpt" style="margin: 1rem auto 0; max-width: 32rem;">
@@ -19,20 +22,22 @@ preloadCSS: '/css/blog-home.css'
             <div class="feed-col">
                 <div class="archive-grid" style="grid-template-columns: repeat(2, 1fr); gap: 2rem;">
                     {% set categorySlug = slug | lower %}
+                    {% set postsCollection = collections['posts_' + currentLocale] | default(collections.post) %}
                     {% set count = 0 %}
-                    {% for post in collections.post | reverse %}
+                    {% for post in postsCollection | reverse %}
                         {% set postCategory = post.data.category | lower | default('') %}
                         {% if postCategory == categorySlug %}
                             <a href="{{ post.url }}" class="archive-item group">
                                 <div class="post-image-container aspect-landscape" style="margin-bottom: 1.25rem;">
                                     {% if post.data.image %}
-                                        <img src="{{ post.data.image }}" alt="{{ post.data.imageAlt | default(post.data.blogTitle) }}">
+                                        <img src="{{ post.data.image }}" alt="{{ post.data.imageAlt | default(post.data.title) }}">
                                     {% endif %}
                                 </div>
                                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                                     <span class="text-meta text-accent" style="font-size: 0.625rem;">{{ post.data.category | upper | default('ESSAYS') }}</span>
-                                    <h4 class="archive-title">{{ post.data.blogTitle }}</h4>
-                                    <p class="post-excerpt" style="font-size: 0.875rem;">{{ post.data.blogDescription }}</p>
+                                    <h4 class="archive-title">{{ post.data.title | default(post.data.blogTitle) }}</h4>
+                                    <span class="text-meta" style="color: var(--color-gray-medium);">{{ post.date | postDate }}</span>
+                                    <p class="post-excerpt" style="font-size: 0.875rem;">{{ post.data.description | default(post.data.blogDescription) }}</p>
                                 </div>
                             </a>
                             {% set count = count + 1 %}
@@ -40,7 +45,7 @@ preloadCSS: '/css/blog-home.css'
                     {% endfor %}
                     {% if count == 0 %}
                         <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
-                            <p class="post-excerpt">No posts in this category yet. Check back soon!</p>
+                            <p class="post-excerpt">{{ 'category.noPosts' | t(currentLocale) | default('No posts in this category yet. Check back soon!') }}</p>
                         </div>
                     {% endif %}
                 </div>
@@ -54,12 +59,13 @@ preloadCSS: '/css/blog-home.css'
 
                         <div class="widget-header">
                             <i data-lucide="coffee" class="text-accent" width="20" height="20"></i>
-                            <h3 class="italic" style="font-size: 1.25rem;">Popular Posts</h3>
+                            <h3 class="italic" style="font-size: 1.25rem;">{{ 'blog.popularPosts' | t(currentLocale) }}</h3>
                         </div>
 
                         <ul class="widget-list">
-                            {% if collections.popular and collections.popular | length > 0 %}
-                                {%- for post in collections.popular | reverse | head(5) -%}
+                            {% set popularPosts = collections['popular_' + currentLocale] | default(collections.popular) | default([]) %}
+                            {% if popularPosts | length > 0 %}
+                                {%- for post in popularPosts | reverse | head(5) -%}
                                     {%- set index = loop.index -%}
                                     <li class="group">
                                         <div class="widget-list-meta">
@@ -67,13 +73,13 @@ preloadCSS: '/css/blog-home.css'
                                             <span class="widget-tag">{{ post.data.category | upper | default('BLOG') }}</span>
                                         </div>
                                         <a href="{{ post.url }}">
-                                            <h4 class="widget-title">{{ post.data.blogTitle }}</h4>
+                                            <h4 class="widget-title">{{ post.data.title | default(post.data.blogTitle) }}</h4>
                                         </a>
                                     </li>
                                 {%- endfor -%}
                             {% else %}
                                 <li>
-                                    <p class="post-excerpt" style="font-size: 0.9rem;">Featured reads will appear here once posts are tagged "popular".</p>
+                                    <p class="post-excerpt" style="font-size: 0.9rem;">{{ 'blog.featuredReadsPlaceholder' | t(currentLocale) | default('Featured reads will appear here once posts are tagged "popular".') }}</p>
                                 </li>
                             {% endif %}
                         </ul>
@@ -83,4 +89,3 @@ preloadCSS: '/css/blog-home.css'
         </div>
     </div>
 </div>
-

@@ -43,6 +43,10 @@
     "LIFE": "Life",
     "PHOTOGRAPHY": "Photography"
   },
+  "category": {
+    "label": "CATEGORY",
+    "noPosts": "No posts in this category yet. Check back soon!"
+  },
   "accessibility": {
     "skipToContent": "Click To Skip To Main Content",
     "goToTop": "Go to top",

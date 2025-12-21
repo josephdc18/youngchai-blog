@@ -43,6 +43,10 @@
     "LIFE": "라이프",
     "PHOTOGRAPHY": "사진"
   },
+  "category": {
+    "label": "카테고리",
+    "noPosts": "이 카테고리에 아직 게시물이 없습니다. 곧 다시 확인하세요!"
+  },
   "accessibility": {
     "skipToContent": "본문으로 건너뛰기",
     "goToTop": "맨 위로",
