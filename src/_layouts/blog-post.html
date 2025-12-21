@@ -267,32 +267,35 @@ eleventyComputed:
     {{ 'Exit Focus Mode' if currentLocale == 'en' else '집중 모드 종료' }}
 </button>
 
-<!-- Sticky Comment Bar (with integrated Continue Reading) -->
+<!-- Continue Reading Bar -->
+<div class="continue-reading-bar" id="continue-reading-bar">
+    <div class="continue-reading-info">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span class="continue-reading-text">
+            {{ 'Continue where you left off' if currentLocale == 'en' else '이어서 읽기' }} 
+            (<strong id="saved-progress">0%</strong>)
+        </span>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <button class="continue-btn" id="continue-btn">
+            {{ 'Continue' if currentLocale == 'en' else '계속' }}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </button>
+        <button class="dismiss-continue" id="dismiss-continue" aria-label="Dismiss">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- Sticky Comment Bar -->
 <div class="sticky-comment-bar" id="sticky-comment-bar">
     <div class="sticky-comment-inner">
-        <!-- Continue Reading - shown inline when user has saved progress -->
-        <div class="continue-reading-bar" id="continue-reading-bar">
-            <div class="continue-reading-info">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                </svg>
-                <span class="continue-reading-text">
-                    {{ 'Continue at' if currentLocale == 'en' else '이어서' }} <strong id="saved-progress">0%</strong>
-                </span>
-            </div>
-            <button class="continue-btn" id="continue-btn">
-                {{ 'Go' if currentLocale == 'en' else '이동' }}
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-            </button>
-            <button class="dismiss-continue" id="dismiss-continue" aria-label="Dismiss">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 6L6 18M6 6l12 12"/>
-                </svg>
-            </button>
-        </div>
-        
         <div class="sticky-comment-info">
             <i data-lucide="message-circle" width="18" height="18"></i>
             <span><strong id="sticky-count">0</strong> {{ 'Comments' if currentLocale == 'en' else '댓글' }}</span>
