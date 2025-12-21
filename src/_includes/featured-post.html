@@ -1,30 +1,37 @@
 {% set currentLocale = locale | default('en') %}
 
 <div class="blog-sidebar">
-  <!--Featured-->
-  <div class="blog-featured-group">
-    <span class="blog-header">{{ 'blog.featuredPosts' | t(currentLocale) }}</span>
-    {% set featuredPosts = collections['featured_' + currentLocale] | default(collections.featured) | default([]) %}
-    {%- for post in featuredPosts | reverse -%}
-    <a class="blog-feature" href="{{ post.url }}">
-      <picture class="blog-featureImage">
-        <img
-          src="{{ post.data.image }}"
-          alt="{{ post.data.imageAlt | default(post.data.title) }}"
-          width="60"
-          height="60"
-          decoding="async"
-        />
-      </picture>
-      <div class="content-group">
-        <h3 class="feature-h3">{{ post.data.title | default(post.data.blogTitle) }}</h3>
-        <span class="feature-date">{{ post.date | postDate }}</span>
-      </div>
-    </a>
-    {%- endfor -%}
-    {% if featuredPosts | length == 0 %}
-    <p class="post-excerpt" style="font-size: 0.9rem;">{{ 'blog.noPosts' | t(currentLocale) }}</p>
-    {% endif %}
-  </div>
-  <!--Add anything else in the sidebar below-->
+    <div class="sticky-wrapper">
+        <div class="widget-box">
+            <div class="corner-tr"></div>
+            <div class="corner-bl"></div>
+
+            <div class="widget-header">
+                <i data-lucide="star" class="text-accent" width="20" height="20"></i>
+                <h3 class="italic" style="font-size: 1.25rem;">{{ 'blog.featuredPosts' | t(currentLocale) }}</h3>
+            </div>
+
+            <ul class="widget-list">
+                {% set featuredPosts = collections['featured_' + currentLocale] | default(collections.featured) | default([]) %}
+                {% if featuredPosts | length > 0 %}
+                    {%- for post in featuredPosts | reverse | head(5) -%}
+                        {%- set index = loop.index -%}
+                        <li class="group">
+                            <div class="widget-list-meta">
+                                <span class="widget-num">{{ index | padStart(2, '0') }}</span>
+                                <span class="widget-tag">{{ post.data.category | upper | default('BLOG') }}</span>
+                            </div>
+                            <a href="{{ post.url }}">
+                                <h4 class="widget-title">{{ post.data.title | default(post.data.blogTitle) }}</h4>
+                            </a>
+                        </li>
+                    {%- endfor -%}
+                {% else %}
+                    <li>
+                        <p class="post-excerpt" style="font-size: 0.9rem;">{{ 'blog.noPosts' | t(currentLocale) }}</p>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
 </div>

@@ -1,5 +1,5 @@
 # Decap CMS Configuration for Young Chai Blog
-# Deployed on Cloudflare Pages with GitHub OAuth
+# Deployed on Cloudflare Pages with OAuth
 
 backend:
   name: github
@@ -7,6 +7,8 @@ backend:
   branch: main
   base_url: https://chailikethetea.com
   auth_endpoint: /api/auth
+  # For Google OAuth, we use a custom auth handler
+  # Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in Cloudflare Pages environment
 
 # Enable local backend for development (run: npx decap-server)
 local_backend: true
@@ -95,7 +97,7 @@ collections:
         name: 'tags'
         widget: 'list'
         default: ['post']
-        i18n: duplicate
+        i18n: true
         hint: 'Add "featured" for featured posts, "popular" for popular posts'
       - label: 'Featured Image'
         name: 'image'

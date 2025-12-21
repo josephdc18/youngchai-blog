@@ -227,13 +227,14 @@
   .main-content-wrapper {
     flex-direction: row;
     align-items: flex-start;
-    column-gap: 1.25em;
+    column-gap: 4rem;
   }
 
   .blog-sidebar {
     position: -webkit-sticky;
     position: sticky;
     top: 8rem;
+    max-width: 22.5em;
   }
 }
 /*-- -------------------------- -->
