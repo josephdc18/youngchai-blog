@@ -22,7 +22,10 @@
         </div>
 
         <a href="{{ urlPrefix }}/" class="brand-logo" aria-label="{{ 'accessibility.goToHomepage' | t(currentLocale) }}">
-            <img src="/assets/logo-light.png" alt="{{ client.name | default('Young Chai') }}">
+            {{ client.name | upper | default('YOUNG CHAI') }}
+            <svg class="brand-underline" viewBox="0 0 100 10" preserveAspectRatio="none">
+                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="2" fill="none" />
+            </svg>
         </a>
 
         <!-- Desktop: Right navigation links -->
