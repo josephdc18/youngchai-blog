@@ -1,6 +1,25 @@
 /*-- -------------------------- -->
 <---        Core Styles         -->
 <--- -------------------------- -*/
+
+/* Honeypot field - hidden from users (must be outside media queries) */
+.hp-field {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+/* Turnstile widget spacing */
+.cf-turnstile {
+  margin: 1rem 0;
+}
+
 /* Mobile - 360px */
 @media only screen and (min-width: 0em) {
   :root {
@@ -1246,22 +1265,6 @@
     color: var(--comment-accent);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-  }
-
-  /* Honeypot field - hidden from users */
-  .hp-field {
-    position: absolute;
-    left: -9999px;
-    opacity: 0;
-    height: 0;
-    width: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  /* Turnstile widget */
-  .cf-turnstile {
-    margin-bottom: 1rem;
   }
 
   .comment-submit-btn {

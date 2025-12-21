@@ -413,8 +413,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Reset Turnstile after successful submission
-            if (window.turnstile) {
-                turnstile.reset();
+            const turnstileWidget = document.querySelector('.cf-turnstile');
+            if (window.turnstile && turnstileWidget) {
+                try {
+                    turnstile.reset(turnstileWidget);
+                } catch (e) {
+                    console.log('Turnstile reset skipped:', e.message);
+                }
             }
             
             // Reload comments
