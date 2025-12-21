@@ -7,8 +7,10 @@ backend:
   branch: main
   base_url: https://chailikethetea.com
   auth_endpoint: /api/auth
-  # For Google OAuth, we use a custom auth handler
-  # Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in Cloudflare Pages environment
+
+# Editorial Workflow - enables drafts and review stages
+# Posts are saved as branches until published
+publish_mode: editorial_workflow
 
 # Enable local backend for development (run: npx decap-server)
 local_backend: true
@@ -43,12 +45,18 @@ collections:
     i18n: true
     sortable_fields: ['date', 'title', 'category']
     view_filters:
-      - label: Essays
+      - label: Living
         field: category
-        pattern: 'ESSAY'
+        pattern: 'LIVING'
+      - label: Style
+        field: category
+        pattern: 'STYLE'
       - label: Travel
         field: category
         pattern: 'TRAVEL'
+      - label: Work
+        field: category
+        pattern: 'WORK'
       - label: Food
         field: category
         pattern: 'FOOD'
@@ -73,17 +81,19 @@ collections:
         name: 'category'
         widget: 'select'
         i18n: duplicate
+        hint: 'Main categories are shown first, then subcategories indented'
         options:
-          - { label: 'Essay', value: 'ESSAY' }
-          - { label: 'Travel', value: 'TRAVEL' }
-          - { label: 'Food', value: 'FOOD' }
-          - { label: 'Tech', value: 'TECH' }
-          - { label: 'Interiors', value: 'INTERIORS' }
-          - { label: 'Style', value: 'STYLE' }
-          - { label: 'Wellness', value: 'WELLNESS' }
-          - { label: 'Work', value: 'WORK' }
-          - { label: 'Life', value: 'LIFE' }
-          - { label: 'Photography', value: 'PHOTOGRAPHY' }
+          # Main Categories
+          - { label: '📁 Living', value: 'LIVING' }
+          - { label: '   ↳ Interiors', value: 'INTERIORS' }
+          - { label: '   ↳ Wellness', value: 'WELLNESS' }
+          - { label: '   ↳ Tech', value: 'TECH' }
+          - { label: '📁 Style', value: 'STYLE' }
+          - { label: '   ↳ Photography', value: 'PHOTOGRAPHY' }
+          - { label: '📁 Travel', value: 'TRAVEL' }
+          - { label: '📁 Work', value: 'WORK' }
+          - { label: '   ↳ Essay', value: 'ESSAY' }
+          - { label: '📁 Food', value: 'FOOD' }
       - label: 'Author'
         name: 'author'
         widget: 'string'
@@ -95,15 +105,17 @@ collections:
         i18n: duplicate
       - label: 'Tags'
         name: 'tags'
-        widget: 'list'
+        widget: 'select'
+        multiple: true
         default: ['post']
         i18n: true
-        hint: |
-          Add tags to control where posts appear:
-          • "pinned" - Shows at the very TOP of homepage
-          • "featured" - Shows in Featured Posts sidebar
-          • "popular" - Shows in Popular Posts sidebar
-          • "commented" - Shows in Most Commented section
+        hint: 'Control where posts appear on the site'
+        options:
+          - { label: 'Post (default)', value: 'post' }
+          - { label: '📌 Pinned (Homepage Hero)', value: 'pinned' }
+          - { label: '⭐ Featured (Sidebar)', value: 'featured' }
+          - { label: '🔥 Popular (Homepage Sidebar)', value: 'popular' }
+          - { label: '💬 Most Commented (Homepage Section)', value: 'commented' }
       - label: 'Featured Image'
         name: 'image'
         widget: 'image'
@@ -118,6 +130,38 @@ collections:
         name: 'body'
         widget: 'markdown'
         i18n: true
+
+  # Categories Collection - for managing categories/subcategories
+  - name: 'categories'
+    label: 'Categories'
+    files:
+      - name: 'categories'
+        label: 'Manage Categories'
+        file: 'src/_data/categories.json'
+        fields:
+          - label: 'Categories'
+            name: 'categories'
+            widget: 'list'
+            label_singular: 'Category'
+            summary: '{{fields.name}} ({{fields.slug}})'
+            fields:
+              - { label: 'Name', name: 'name', widget: 'string' }
+              - label: 'Slug'
+                name: 'slug'
+                widget: 'string'
+                hint: 'URL-friendly identifier (uppercase, e.g., LIVING)'
+              - label: 'Subcategories'
+                name: 'subcategories'
+                widget: 'list'
+                label_singular: 'Subcategory'
+                required: false
+                summary: '{{fields.name}}'
+                fields:
+                  - { label: 'Name', name: 'name', widget: 'string' }
+                  - label: 'Slug'
+                    name: 'slug'
+                    widget: 'string'
+                    hint: 'URL-friendly identifier (uppercase, e.g., INTERIORS)'
 
   # Site Settings (single files, no i18n for settings)
   - name: 'settings'
@@ -148,15 +192,18 @@ collections:
               - { label: 'Pinterest', name: 'pinterest', widget: 'string', required: false }
 
       - name: 'topics'
-        label: 'Topics/Categories'
+        label: 'Homepage Topics (Browse by Topic)'
         file: 'src/_data/topics.json'
         fields:
           - label: 'Topics'
             name: 'topics'
             widget: 'list'
+            label_singular: 'Topic'
+            summary: '{{fields.name}}'
+            hint: 'These appear in the "Browse by Topic" section on the homepage'
             fields:
               - { label: 'Name', name: 'name', widget: 'string' }
-              - { label: 'Slug', name: 'slug', widget: 'string' }
+              - { label: 'Slug', name: 'slug', widget: 'string', hint: 'Must match a category slug (lowercase)' }
               - { label: 'Image', name: 'image', widget: 'image' }
 
       - name: 'editorsPicks'
@@ -166,7 +213,9 @@ collections:
           - label: 'Picks'
             name: 'picks'
             widget: 'list'
+            label_singular: 'Pick'
+            summary: '{{fields.title}}'
             fields:
               - { label: 'Title', name: 'title', widget: 'string' }
-              - { label: 'Link', name: 'link', widget: 'string' }
+              - { label: 'Link', name: 'link', widget: 'string', hint: 'URL to the blog post' }
               - { label: 'Image', name: 'image', widget: 'image' }

@@ -1,0 +1,38 @@
+{
+  "categories": [
+    {
+      "name": "Living",
+      "slug": "LIVING",
+      "subcategories": [
+        { "name": "Interiors", "slug": "INTERIORS" },
+        { "name": "Wellness", "slug": "WELLNESS" },
+        { "name": "Tech", "slug": "TECH" }
+      ]
+    },
+    {
+      "name": "Style",
+      "slug": "STYLE",
+      "subcategories": [
+        { "name": "Photography", "slug": "PHOTOGRAPHY" }
+      ]
+    },
+    {
+      "name": "Travel",
+      "slug": "TRAVEL",
+      "subcategories": []
+    },
+    {
+      "name": "Work",
+      "slug": "WORK",
+      "subcategories": [
+        { "name": "Essay", "slug": "ESSAY" }
+      ]
+    },
+    {
+      "name": "Food",
+      "slug": "FOOD",
+      "subcategories": []
+    }
+  ]
+}
+
