@@ -826,8 +826,8 @@
     background: #D48C70;
     color: white;
   }
-  .blog-article .share-copy:hover {
-    background: #666;
+  .blog-article .share-native:hover {
+    background: #007AFF;
     color: white;
   }
   .blog-article .print-btn:hover {
