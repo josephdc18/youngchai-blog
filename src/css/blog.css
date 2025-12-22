@@ -824,8 +824,8 @@
     background: #D48C70;
     color: white;
   }
-  .blog-article .share-sms:hover {
-    background: #25D366;
+  .blog-article .share-copy:hover {
+    background: #666;
     color: white;
   }
   .blog-article .print-btn:hover {

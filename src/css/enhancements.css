@@ -327,112 +327,6 @@ body.reading-mode .exit-reading-mode {
 }
 
 /* ============================================
-   8. Progress Saving (Continue Reading)
-   Attached to top of sticky comment bar
-   ============================================ */
-.continue-reading-bar {
-  position: fixed;
-  bottom: 4rem; /* Position above sticky comment bar */
-  left: 0;
-  right: 0;
-  background: linear-gradient(135deg, rgba(45, 45, 45, 0.97), rgba(35, 35, 35, 0.97));
-  color: white;
-  padding: 0.75rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 149; /* Just below sticky bar */
-  transform: translateY(calc(100% + 4rem));
-  transition: transform 0.3s ease;
-  border-top: 1px solid rgba(212, 140, 112, 0.3);
-  backdrop-filter: blur(8px);
-}
-
-.continue-reading-bar.visible {
-  transform: translateY(0);
-}
-
-.continue-reading-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.continue-reading-info svg {
-  color: var(--color-accent, #D48C70);
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-}
-
-.continue-reading-text {
-  font-size: 0.8rem;
-}
-
-.continue-reading-text strong {
-  color: var(--color-accent, #D48C70);
-}
-
-.continue-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.4rem 0.75rem;
-  background: var(--color-accent, #D48C70);
-  color: white;
-  border: none;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.continue-btn:hover {
-  background: #c67b5c;
-}
-
-.continue-btn svg {
-  width: 12px;
-  height: 12px;
-}
-
-.dismiss-continue {
-  background: transparent;
-  border: none;
-  color: rgba(255,255,255,0.5);
-  cursor: pointer;
-  padding: 0.35rem;
-  margin-left: 0.25rem;
-  display: flex;
-  align-items: center;
-}
-
-.dismiss-continue:hover {
-  color: white;
-}
-
-.dismiss-continue svg {
-  width: 14px;
-  height: 14px;
-}
-
-/* Mobile adjustments for continue bar */
-@media (max-width: 640px) {
-  .continue-reading-bar {
-    padding: 0.6rem 1rem;
-  }
-  
-  .continue-reading-text {
-    font-size: 0.7rem;
-  }
-  
-  .continue-reading-text span:first-child {
-    display: none; /* Hide "Continue where you left off" text on mobile */
-  }
-}
-
-/* ============================================
    iOS Safari Reader Mode Support
    ============================================ */
 /* These styles help Safari detect article content */
@@ -481,10 +375,6 @@ article.blog-article .blog-date {
 
   .read-divider {
     display: none;
-  }
-  
-  .continue-reading-bar {
-    bottom: 3.5rem; /* Adjust for mobile sticky bar height */
   }
 }
 

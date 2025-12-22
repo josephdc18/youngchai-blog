@@ -2,7 +2,6 @@ const menuBtn = document.getElementById('menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
 const menuIconContainer = document.getElementById('menu-icon-container');
 const menuCloseBtn = document.getElementById('menu-close-btn');
-const searchBtnMenu = document.getElementById('search-btn-menu');
 const navbar = document.getElementById('navbar');
 const searchBtn = document.getElementById('search-btn');
 const searchBtnMobile = document.getElementById('search-btn-mobile');
@@ -75,14 +74,6 @@ if (menuBtn) {
 // Close button inside mobile menu
 if (menuCloseBtn) {
     menuCloseBtn.addEventListener('click', () => setMenuState(false));
-}
-
-// Search button inside mobile menu - close menu and open search
-if (searchBtnMenu) {
-    searchBtnMenu.addEventListener('click', () => {
-        setMenuState(false);
-        setTimeout(() => openSearch(), 200);
-    });
 }
 
 if (mobileMenu) {
