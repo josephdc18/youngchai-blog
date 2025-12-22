@@ -807,6 +807,8 @@
     background: #f5f5f5;
     color: #666;
     transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
   }
   .blog-article .share-link:hover {
     transform: translateY(-2px);

@@ -842,7 +842,7 @@ body.no-scroll {
   left: 0;
   right: 0;
   height: auto;
-  max-height: 66vh;
+  max-height: 75vh;
   background: var(--color-bg, #FDFBF7);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   padding: calc(var(--header-height, 80px) + 1rem) 1.5rem 1.5rem;

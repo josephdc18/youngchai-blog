@@ -1428,16 +1428,16 @@ footer#footer,
 }
 
 .desktop-only {
-    display: none;
+    display: none !important;
 }
 
 .mobile-only {
     display: flex;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 80em) {
     .desktop-only {
-        display: flex;
+        display: block !important;
     }
 
     .mobile-only {
