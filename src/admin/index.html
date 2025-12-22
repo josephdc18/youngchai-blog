@@ -8,10 +8,404 @@
       body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       }
+      
+      /* Translation button styles */
+      .translate-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: 8px;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+      }
+      
+      .translate-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+      }
+      
+      .translate-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+      
+      .translate-btn.translating {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+      
+      .translate-btn svg {
+        width: 14px;
+        height: 14px;
+      }
+      
+      /* Translate all button in header */
+      .translate-all-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+      }
+      
+      .translate-all-btn {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(17, 153, 142, 0.4);
+        transition: all 0.2s ease;
+      }
+      
+      .translate-all-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(17, 153, 142, 0.5);
+      }
+      
+      .translate-all-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      
+      /* Toast notifications */
+      .translate-toast {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        background: #333;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+      }
+      
+      .translate-toast.success {
+        background: #10b981;
+      }
+      
+      .translate-toast.error {
+        background: #ef4444;
+      }
+      
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
     </style>
   </head>
   <body>
     <!-- Decap CMS (formerly Netlify CMS) -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    
+    <!-- Translation Helper Script -->
+    <script>
+      (function() {
+        const TRANSLATE_API = '/api/translate';
+        
+        // Detect current language from URL or CMS state
+        function getCurrentLanguage() {
+          // Check for i18n locale in CMS
+          const localeSelector = document.querySelector('[class*="LocaleDropdown"]');
+          if (localeSelector) {
+            const selectedLocale = localeSelector.textContent.toLowerCase();
+            if (selectedLocale.includes('korean') || selectedLocale.includes('ko')) {
+              return 'ko';
+            }
+          }
+          
+          // Check URL for language indicator
+          const url = window.location.href;
+          if (url.includes('/ko/') || url.includes('locale=ko')) {
+            return 'ko';
+          }
+          
+          return 'en';
+        }
+        
+        // Get target language (opposite of current)
+        function getTargetLanguage() {
+          return getCurrentLanguage() === 'en' ? 'ko' : 'en';
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'info') {
+          const existing = document.querySelector('.translate-toast');
+          if (existing) existing.remove();
+          
+          const toast = document.createElement('div');
+          toast.className = `translate-toast ${type}`;
+          toast.textContent = message;
+          document.body.appendChild(toast);
+          
+          setTimeout(() => toast.remove(), 3000);
+        }
+        
+        // Call translation API
+        async function translateText(text, targetLang, fieldType = 'body') {
+          try {
+            const response = await fetch(TRANSLATE_API, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ text, targetLang, fieldType })
+            });
+            
+            if (!response.ok) {
+              throw new Error('Translation failed');
+            }
+            
+            const data = await response.json();
+            return data.translation;
+          } catch (error) {
+            console.error('Translation error:', error);
+            throw error;
+          }
+        }
+        
+        // Find and translate a specific field
+        async function translateField(fieldName, btn) {
+          const targetLang = getTargetLanguage();
+          const originalText = btn.textContent;
+          
+          btn.disabled = true;
+          btn.classList.add('translating');
+          btn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            Translating...
+          `;
+          
+          try {
+            // Find the field's textarea or input
+            const fieldContainer = btn.closest('[class*="ControlContainer"]') || 
+                                   btn.closest('[class*="field"]') ||
+                                   btn.parentElement;
+            
+            const input = fieldContainer.querySelector('textarea, input[type="text"]');
+            
+            if (!input || !input.value.trim()) {
+              showToast('No text to translate', 'error');
+              return;
+            }
+            
+            const translation = await translateText(
+              input.value, 
+              targetLang, 
+              fieldName.includes('title') ? 'title' : 
+              fieldName.includes('description') ? 'description' : 'body'
+            );
+            
+            // Try to find the corresponding field in the other language tab
+            // This is tricky with Decap CMS's React-based UI
+            // For now, copy to clipboard and show notification
+            await navigator.clipboard.writeText(translation);
+            showToast(`✓ Translated to ${targetLang === 'ko' ? 'Korean' : 'English'} - copied to clipboard!`, 'success');
+            
+          } catch (error) {
+            showToast('Translation failed. Check console for details.', 'error');
+          } finally {
+            btn.disabled = false;
+            btn.classList.remove('translating');
+            btn.innerHTML = `
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 8l6 6"/>
+                <path d="M4 14l1-1 7 7 1-1"/>
+                <path d="M14 4l1-1 5 5-1 1"/>
+                <path d="M14 10l6-6"/>
+              </svg>
+              Translate to ${targetLang === 'ko' ? '한국어' : 'EN'}
+            `;
+          }
+        }
+        
+        // Translate entire post content
+        async function translateAll() {
+          const targetLang = getTargetLanguage();
+          const btn = document.querySelector('.translate-all-btn');
+          
+          if (!btn) return;
+          
+          btn.disabled = true;
+          btn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            Translating all fields...
+          `;
+          
+          // Add spinning animation
+          const style = document.createElement('style');
+          style.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .spin { animation: spin 1s linear infinite; }';
+          document.head.appendChild(style);
+          
+          try {
+            // Get all text fields
+            const textareas = document.querySelectorAll('textarea');
+            const inputs = document.querySelectorAll('input[type="text"]');
+            const allFields = [...textareas, ...inputs].filter(f => f.value.trim());
+            
+            let translatedCount = 0;
+            const translations = [];
+            
+            for (const field of allFields) {
+              const value = field.value.trim();
+              if (value && value.length > 0) {
+                try {
+                  const translation = await translateText(value, targetLang, 'body');
+                  translations.push({
+                    original: value,
+                    translation: translation
+                  });
+                  translatedCount++;
+                } catch (e) {
+                  console.error('Failed to translate field:', e);
+                }
+              }
+            }
+            
+            if (translations.length > 0) {
+              // Format translations for clipboard
+              const clipboardText = translations.map((t, i) => 
+                `--- Field ${i + 1} ---\n${t.translation}`
+              ).join('\n\n');
+              
+              await navigator.clipboard.writeText(clipboardText);
+              showToast(`✓ Translated ${translatedCount} fields to ${targetLang === 'ko' ? 'Korean' : 'English'} - copied to clipboard!`, 'success');
+            } else {
+              showToast('No fields to translate', 'error');
+            }
+            
+          } catch (error) {
+            showToast('Translation failed', 'error');
+          } finally {
+            btn.disabled = false;
+            btn.innerHTML = `
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 8l6 6"/>
+                <path d="M4 14l1-1 7 7 1-1"/>
+                <path d="M14 4l1-1 5 5-1 1"/>
+                <path d="M14 10l6-6"/>
+              </svg>
+              Translate All to ${getTargetLanguage() === 'ko' ? '한국어' : 'English'}
+            `;
+            style.remove();
+          }
+        }
+        
+        // Create the floating translate-all button
+        function createTranslateAllButton() {
+          if (document.querySelector('.translate-all-container')) return;
+          
+          const container = document.createElement('div');
+          container.className = 'translate-all-container';
+          
+          const btn = document.createElement('button');
+          btn.className = 'translate-all-btn';
+          btn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 8l6 6"/>
+              <path d="M4 14l1-1 7 7 1-1"/>
+              <path d="M14 4l1-1 5 5-1 1"/>
+              <path d="M14 10l6-6"/>
+            </svg>
+            Translate All to ${getTargetLanguage() === 'ko' ? '한국어' : 'English'}
+          `;
+          btn.onclick = translateAll;
+          
+          container.appendChild(btn);
+          document.body.appendChild(container);
+        }
+        
+        // Inject translate buttons into field labels
+        function injectTranslateButtons() {
+          // Find field labels that are translatable
+          const translatableFields = ['title', 'description', 'body', 'content', 'blogTitle', 'blogDescription'];
+          
+          document.querySelectorAll('[class*="ControlLabel"], label').forEach(label => {
+            const labelText = label.textContent.toLowerCase();
+            const isTranslatable = translatableFields.some(f => labelText.includes(f));
+            
+            if (isTranslatable && !label.querySelector('.translate-btn')) {
+              const btn = document.createElement('button');
+              btn.className = 'translate-btn';
+              btn.type = 'button';
+              btn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 8l6 6"/>
+                  <path d="M4 14l1-1 7 7 1-1"/>
+                  <path d="M14 4l1-1 5 5-1 1"/>
+                  <path d="M14 10l6-6"/>
+                </svg>
+                Translate
+              `;
+              btn.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                translateField(labelText, btn);
+              };
+              label.appendChild(btn);
+            }
+          });
+        }
+        
+        // Initialize when CMS is ready
+        function init() {
+          // Wait for CMS to fully load
+          const observer = new MutationObserver((mutations) => {
+            // Check if we're in the editor view
+            const isEditorView = document.querySelector('[class*="EditorContainer"]') ||
+                                 document.querySelector('[class*="editor"]') ||
+                                 document.querySelector('textarea');
+            
+            if (isEditorView) {
+              createTranslateAllButton();
+              injectTranslateButtons();
+            }
+          });
+          
+          observer.observe(document.body, {
+            childList: true,
+            subtree: true
+          });
+          
+          // Initial check after CMS loads
+          setTimeout(() => {
+            createTranslateAllButton();
+            injectTranslateButtons();
+          }, 2000);
+        }
+        
+        // Start when DOM is ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init);
+        } else {
+          init();
+        }
+      })();
+    </script>
   </body>
 </html>
