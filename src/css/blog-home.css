@@ -97,6 +97,13 @@ h4 {
     padding: 0 1.5rem;
 }
 
+/* Tighter padding on mobile for navbar */
+@media (max-width: 640px) {
+    .navbar .container {
+        padding: 0 0.75rem;
+    }
+}
+
 .grid-layout {
     display: grid;
     gap: 4rem;
@@ -448,34 +455,56 @@ h4 {
 .mobile-menu-content {
     display: flex;
     flex-direction: column;
-    padding: 1.5rem;
+    padding: 0 1.5rem 2rem;
     gap: 0;
 }
 
-/* Category group styling - divider color matches category below */
+/* Category group styling - divider at bottom matching NEXT category color */
 .mobile-nav-group {
-    padding: 1.25rem 0;
+    padding: 1.5rem 0 1.25rem;
     margin-bottom: 0;
-    border-top: 1px solid currentColor;
+    border-bottom: 2px solid transparent;
 }
 
-.mobile-nav-group:first-of-type {
-    border-top: none;
+/* Divider above first category (teal for Living) */
+.mobile-nav-group.first-group {
+    border-top: 2px solid #2D5A4A;
+    padding-top: 1.5rem;
 }
 
-/* Category colors applied to entire group (for divider inheritance) */
-.mobile-nav-group.cat-living { color: #2D5A4A; }  /* Deep green */
-.mobile-nav-group.cat-style { color: #B8860B; }   /* Goldenrod */
-.mobile-nav-group.cat-travel { color: #4169E1; }  /* Royal blue */
-.mobile-nav-group.cat-work { color: #8B4513; }    /* Saddle brown */
-.mobile-nav-group.cat-food { color: #C35831; }    /* Burnt orange */
+/* Category colors applied to entire group */
+.mobile-nav-group.cat-living { 
+    color: #2D5A4A;
+    border-bottom-color: #B8860B; /* Next: Style */
+}
+.mobile-nav-group.cat-style { 
+    color: #B8860B;
+    border-bottom-color: #4169E1; /* Next: Travel */
+}
+.mobile-nav-group.cat-travel { 
+    color: #4169E1;
+    border-bottom-color: #8B4513; /* Next: Work */
+}
+.mobile-nav-group.cat-work { 
+    color: #8B4513;
+    border-bottom-color: #C35831; /* Next: Food */
+}
+.mobile-nav-group.cat-food { 
+    color: #C35831;
+    border-bottom-color: #6B8E23; /* Next: About */
+}
+.mobile-nav-group.cat-about { 
+    color: #6B8E23;  /* Olive green */
+    border-bottom: none;
+}
 
-/* Category heading - smaller, not bold */
+/* Category heading - matches Cup of Jo exactly */
 .mobile-category-heading {
     font-family: var(--font-serif);
-    font-size: 1.25rem;
+    font-size: 1.75rem;
     font-weight: 400;
-    margin-bottom: 0.75rem;
+    font-style: italic;
+    margin-bottom: 1rem;
     line-height: 1.2;
     color: inherit;
     display: block;
@@ -485,7 +514,7 @@ h4 {
 .mobile-subnav {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem 2rem;
+    gap: 1rem 2rem;
     padding-left: 0;
     margin-top: 0;
     overflow: visible;
@@ -502,14 +531,14 @@ h4 {
 
 .mobile-link-sub {
     font-family: var(--font-sans);
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 400;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--color-text);
-    padding: 0.25rem 0;
+    padding: 0.5rem 0;
     display: block;
-    opacity: 0.7;
+    opacity: 0.85;
     transition: color 0.2s, opacity 0.2s;
 }
 
@@ -518,48 +547,10 @@ h4 {
     opacity: 1;
 }
 
-/* Hide the old toggle buttons and row structure */
-.mobile-link-row {
-    display: none;
-}
-
-.mobile-subnav-toggle {
-    display: none;
-}
-
-/* Footer links in mobile menu */
-.mobile-menu-footer {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--color-border);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.mobile-menu-footer .mobile-link {
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-gray-medium);
-    padding: 0.5rem 0;
-    display: block;
-    border: none;
-}
-
-.mobile-menu-footer .mobile-link:hover {
-    color: var(--color-accent);
-}
-
-.mobile-menu-footer .mobile-link {
-    font-size: 1.5rem;
-    padding: 1rem 0;
-    border-bottom: none;
-    border-top: none;
-}
-
+/* Hide unused elements */
+.mobile-link-row,
+.mobile-subnav-toggle,
+.mobile-menu-footer,
 .mobile-link-main {
     display: none;
 }

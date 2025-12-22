@@ -87,13 +87,8 @@
 
 <div id="mobile-menu" class="hidden" aria-hidden="true">
     <nav class="mobile-menu-content" aria-label="Mobile navigation">
-        <!-- Close button at top -->
-        <button id="menu-close-btn" class="mobile-menu-close-inline" aria-label="Close menu">
-            <i data-lucide="x" width="24" height="24"></i>
-        </button>
-
         <!-- Living category -->
-        <div class="mobile-nav-group cat-living">
+        <div class="mobile-nav-group cat-living first-group">
             <a href="{{ urlPrefix }}/blog/living/" class="mobile-category-heading">{{ 'nav.living' | t(currentLocale) }}</a>
             <div class="mobile-subnav">
                 <a href="{{ urlPrefix }}/blog/interiors/" class="mobile-link-sub">{{ 'nav.interiors' | t(currentLocale) }}</a>
@@ -128,10 +123,12 @@
             <a href="{{ urlPrefix }}/blog/food/" class="mobile-category-heading">{{ 'nav.food' | t(currentLocale) }}</a>
         </div>
 
-        <!-- Footer links -->
-        <div class="mobile-menu-footer">
-            <a href="{{ urlPrefix }}/about/" class="mobile-link">{{ 'nav.about' | t(currentLocale) }}</a>
-            <a href="{{ urlPrefix }}/contact/" class="mobile-link">{{ 'nav.contact' | t(currentLocale) }}</a>
+        <!-- About category -->
+        <div class="mobile-nav-group cat-about">
+            <a href="{{ urlPrefix }}/about/" class="mobile-category-heading">{{ 'nav.about' | t(currentLocale) }}</a>
+            <div class="mobile-subnav">
+                <a href="{{ urlPrefix }}/contact/" class="mobile-link-sub">{{ 'nav.contact' | t(currentLocale) }}</a>
+            </div>
         </div>
     </nav>
 </div>
