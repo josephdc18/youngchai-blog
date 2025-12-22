@@ -281,8 +281,8 @@
 /* Mobile - 360px */
 @media only screen and (min-width: 0em) {
   .blog-container {
-    width: 94%;
-    max-width: 70em;
+    width: 96%;
+    max-width: 85em;
     margin: 0 auto;
     padding: clamp(60px, 7vw, 100px) 0rem;
   }
@@ -336,8 +336,8 @@
 @media only screen and (min-width: 80em) {
   .main-content-wrapper-3col {
     display: grid;
-    grid-template-columns: 200px 1fr 280px;
-    column-gap: 2.5rem;
+    grid-template-columns: 220px 1fr 300px;
+    column-gap: 3rem;
     align-items: start;
   }
 
