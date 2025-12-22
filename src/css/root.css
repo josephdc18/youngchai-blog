@@ -841,19 +841,21 @@ body.no-scroll {
   top: 0;
   left: 0;
   right: 0;
-  height: 60vh;
-  max-height: 500px;
+  height: auto;
+  max-height: 66vh;
   background: var(--color-bg, #FDFBF7);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   padding: 5.5rem 1.5rem 2rem;
-  z-index: 45;
+  z-index: 100;
   transition: transform 0.3s ease, opacity 0.3s ease;
   transform: translateY(0);
   opacity: 1;
+  overflow-y: auto;
 }
 
 .search-overlay.hidden {
-  display: none !important;
+  transform: translateY(-100%);
+  opacity: 0;
   pointer-events: none;
 }
 
