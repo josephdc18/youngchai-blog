@@ -149,7 +149,8 @@ function filterPosts(query) {
     const matches = searchPosts.filter((post) => {
         return (post.title && post.title.toLowerCase().includes(normalized)) ||
             (post.description && post.description.toLowerCase().includes(normalized)) ||
-            (post.category && post.category.toLowerCase().includes(normalized));
+            (post.category && post.category.toLowerCase().includes(normalized)) ||
+            (post.content && post.content.toLowerCase().includes(normalized));
     });
     renderSearchResults(matches);
 }

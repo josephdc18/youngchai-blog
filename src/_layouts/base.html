@@ -125,7 +125,8 @@
                     "title": {{ post.data.title | default(post.data.blogTitle) | dump | safe }},
                     "url": "{{ post.url }}",
                     "description": {{ post.data.description | default(post.data.blogDescription) | dump | safe }},
-                    "category": {{ post.data.category | upper | dump | safe }}
+                    "category": {{ post.data.category | upper | dump | safe }},
+                    "content": {{ post.templateContent | striptags | truncate(500) | dump | safe }}
                 }{% if not loop.last %},{% endif %}
             {%- endfor -%}
             ]
