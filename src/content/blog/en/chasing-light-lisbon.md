@@ -7,7 +7,7 @@ author: Young Chai
 date: 2025-12-21T13:40:00.000-06:00
 tags:
   - post
-image: ""
+image: /assets/images/blog/img_6303.jpeg
 imageAlt: ""
 ---
 **The CR Smith Museum** was a hit with the boys. It’s a solid 1~2 hour activity that I would recommend to both adults and kids who like planes or are interested in learning about commercial aviation history. We were lucky enough to visit during their special Lego exhibition, and got to see Lego replicas of planes and destinations around the world.
