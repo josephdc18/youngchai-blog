@@ -853,14 +853,12 @@ body.no-scroll {
 }
 
 .search-overlay.hidden {
-  display: block !important;
-  transform: translateY(-100%);
-  opacity: 0;
+  display: none !important;
   pointer-events: none;
 }
 
-/* Show backdrop behind search */
-.search-overlay::after {
+/* Show backdrop behind search when visible */
+.search-overlay:not(.hidden)::after {
   content: '';
   position: fixed;
   top: 100%;
