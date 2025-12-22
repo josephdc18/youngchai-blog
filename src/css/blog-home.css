@@ -130,7 +130,7 @@ h4 {
 }
 
 .navbar {
-    background-color: rgba(253, 251, 247, 0.85);
+    background-color: rgba(253, 251, 247, 0.95);
     border-bottom: 1px solid transparent;
     backdrop-filter: blur(10px);
     padding: 1.5rem 0 2rem;
@@ -138,7 +138,7 @@ h4 {
     top: 0;
     transition: all .3s ease;
     width: 100%;
-    z-index: 50;
+    z-index: 250;
 }
 
 .navbar.scrolled {
@@ -425,7 +425,7 @@ h4 {
 #mobile-menu {
     background: var(--color-bg);
     position: fixed;
-    top: 0;
+    top: var(--header-height, 80px);
     left: 0;
     right: 0;
     bottom: 0;
@@ -433,36 +433,22 @@ h4 {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     transition: opacity .3s ease;
-    z-index: 200; /* Higher than sticky comment bar */
+    z-index: 200;
 }
 
 #mobile-menu.hidden {
     display: none !important;
 }
 
-/* Inline close button (no header bar) */
+/* Close button hidden since header is visible */
 .mobile-menu-close-inline {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text);
-    transition: color 0.2s;
-    z-index: 10;
-}
-
-.mobile-menu-close-inline:hover {
-    color: var(--color-accent);
+    display: none;
 }
 
 .mobile-menu-content {
     display: flex;
     flex-direction: column;
-    padding: 3.5rem 1.5rem 1.5rem;
+    padding: 1.5rem;
     gap: 0;
 }
 
