@@ -474,8 +474,8 @@
 
 .ko-fi-widget {
     position: fixed;
-    bottom: 6rem;
-    right: 1.5rem;
+    bottom: 24px; /* Same as #go-top default */
+    right: 90px; /* To the left of go-top button (56px width + 24px right + 10px gap) */
     z-index: 100;
 }
 
@@ -508,10 +508,19 @@
     to { transform: rotate(3deg); }
 }
 
+/* Adjust for sticky comment bar on blog posts */
+body:has(.sticky-comment-bar) .ko-fi-widget {
+    bottom: 5.5rem; /* Same as #go-top on blog posts */
+}
+
 @media (max-width: 768px) {
     .ko-fi-widget {
-        bottom: 8rem;
-        right: 1rem;
+        bottom: 24px; /* Same as #go-top default */
+        right: 80px; /* Adjusted for mobile (56px width + 24px right + gap) */
+    }
+    
+    body:has(.sticky-comment-bar) .ko-fi-widget {
+        bottom: 6rem; /* Same as #go-top on blog posts mobile */
     }
     
     .ko-fi-button span {

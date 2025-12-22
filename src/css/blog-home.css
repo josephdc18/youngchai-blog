@@ -11,7 +11,7 @@
     --color-border: #e5e7eb;
     --font-sans: 'DM Sans', sans-serif;
     --font-serif: 'Playfair Display', serif;
-    --container-width: 1280px;
+    --container-width: 1440px;
     --header-height: 80px;
 }
 
@@ -94,13 +94,13 @@ h4 {
 .container {
     margin: 0 auto;
     max-width: var(--container-width);
-    padding: 0 1.5rem;
+    padding: 0 0rem;
 }
 
 /* Tighter padding on mobile for navbar - icons at edge */
 @media (max-width: 640px) {
     .navbar .container {
-        padding: 0 0.5rem;
+        padding: 0 0.25rem;
     }
 }
 
@@ -140,7 +140,7 @@ h4 {
     background-color: rgba(253, 251, 247, 0.95);
     border-bottom: 1px solid transparent;
     backdrop-filter: blur(10px);
-    padding: 1.5rem 0 2rem;
+    padding: 1rem 0;
     position: fixed;
     top: 0;
     transition: all .3s ease;
@@ -151,7 +151,7 @@ h4 {
 .navbar.scrolled {
     background-color: var(--color-bg);
     border-bottom-color: var(--color-border);
-    padding: .75rem 0 1.25rem;
+    padding: 0.75rem 0;
 }
 
 .nav-content {
@@ -159,6 +159,7 @@ h4 {
     display: flex;
     justify-content: space-between;
     position: relative;
+    min-height: 3rem;
 }
 
 .brand-logo {
@@ -197,7 +198,6 @@ h4 {
     .nav-links-left,
     .nav-links-right {
         display: flex;
-        padding-top: 0.35rem;
     }
 }
 
@@ -884,26 +884,28 @@ h4 {
     justify-content: center;
     position: relative;
     width: 100%;
+    padding: 4rem 0;
 }
 
 
 .bg-yellow {
     background-color: var(--color-yellow-bg);
-    min-height: 500px;
+    min-height: auto;
 }
 
 .bg-peach {
     background-color: var(--color-peach-bg);
-    min-height: 500px;
+    min-height: auto;
 }
 
 .section-header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     text-align: center;
 }
 
 .section-header h2 {
     font-size: 2.25rem;
+    margin: 0;
 }
 
 .section-divider {
@@ -915,7 +917,7 @@ h4 {
 
 .section-divider-full {
     border-top: 1px solid var(--color-text);
-    margin: 3rem auto;
+    margin: 2rem auto;
     max-width: 1280px;
     opacity: .8;
     width: 100%;
@@ -1428,7 +1430,7 @@ footer#footer,
 }
 
 .desktop-only {
-    display: none !important;
+    display: none;
 }
 
 .mobile-only {
@@ -1437,7 +1439,7 @@ footer#footer,
 
 @media (min-width: 80em) {
     .desktop-only {
-        display: block !important;
+        display: flex;
     }
 
     .mobile-only {

@@ -114,7 +114,7 @@ eleventyComputed:
 <!--              Main Blog Content               -->
 <!-- ============================================ -->
 
-<div class="blog-container main-content-wrapper-3col">
+<div class="blog-container {% if toc | length > 2 %}main-content-wrapper-3col{% else %}main-content-wrapper-2col{% endif %}">
     <!-- Left Sidebar: Table of Contents (Desktop) -->
     {% if toc | length > 2 %}
     <aside class="toc-sidebar desktop-only" id="toc-sidebar">
