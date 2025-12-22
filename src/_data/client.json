@@ -1,9 +1,19 @@
 {
+  "domain": "chailikethetea.com",
   "name": "Young Chai",
-  "email": "hello@youngchai.com",
+  "webmentionUsername": "",
+  "social": {
+    "instagram": "https://instagram.com/_youngchai_",
+    "twitter": "https://twitter.com/youngchai",
+    "pinterest": "https://pinterest.com/youngchai"
+  },
   "phone": "214-555-0199",
+  "tagline": "Slowing down, blogging, and finding the perfect cup of tea.",
   "phoneFormatted": "(214) 555-0199",
+  "newsletterUsername": "",
   "hours": "Mon–Thu, 10a–4p CT",
+  "profileImage": "/assets/images/blog/1015-joseph-clutts075.png",
+  "turnstileSiteKey": "0x4AAAAAACH2XUFcS5g5heeL",
   "address": {
     "lineOne": "Dallas Studio",
     "city": "Dallas",
@@ -12,16 +22,7 @@
     "region": "Dallas-Fort Worth",
     "mapLink": "https://goo.gl/maps/dfw"
   },
+  "email": "hello@youngchai.com",
   "year": "2025",
-  "domain": "chailikethetea.com",
-  "tagline": "Slowing down, coding, and finding the perfect cup of tea.",
-  "social": {
-    "instagram": "https://instagram.com/youngchai",
-    "twitter": "https://twitter.com/youngchai",
-    "pinterest": "https://pinterest.com/youngchai"
-  },
-  "turnstileSiteKey": "0x4AAAAAACH2XUFcS5g5heeL",
-  "kofiUsername": "",
-  "newsletterUsername": "",
-  "webmentionUsername": ""
+  "kofiUsername": "josephdc18"
 }
