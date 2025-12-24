@@ -42,16 +42,6 @@
           "slug": "ESSAY"
         }
       ]
-    },
-    {
-      "name": "Food",
-      "slug": "FOOD",
-      "subcategories": [
-        {
-          "name": "Korean Food",
-          "slug": "KOREAN-FOOD"
-        }
-      ]
     }
   ]
 }
